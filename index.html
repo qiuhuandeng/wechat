@@ -1,89 +1,217 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>导航页面</title>
-    <style>
-        /* 这里的代码用来给网页加版权，不用管它 */
-        body { margin: 0; display: flex; flex-direction: column; height: 100vh; font-family: sans-serif; }
-        .menu { background: #333; padding: 10px; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; }
-        .menu a { color: white; text-decoration: none; padding: 10px 20px; margin: 0 5px; background: #444; border-radius: 4px; }
-        .menu a:hover { background: #666; }
-        iframe { flex: 1; border: none; width: 100%; height: 100%; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企微客服</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --panel: #ffffff;
+      --text: #202a3a;
+      --muted: #738198;
+      --line: #d8e2f1;
+      --line-strong: #cfdced;
+      --shadow: 0 24px 58px rgba(45, 64, 96, .11);
+    }
 
-        /* ==================== 修复并优化的“更多”下拉菜单样式 ==================== */
-        /* 保持下拉容器作为 flex 子项，并清除默认块级间距 */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            margin: 0; /* 移除外边距，由内部 a 标签控制 */
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* 专门让“更多”这个按钮的样式与左边普通 a 标签完全一致 */
-        .dropdown .dropbtn {
-            display: inline-block;
-            box-sizing: border-box;
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
 
-        /* 隐藏实际的下拉内容 */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #333; /* 保持和导航栏一致的深色背景 */
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 999; /* 提高层级，防止被 iframe 遮挡 */
-            border-radius: 4px;
-            margin-top: 2px; /* 紧贴上方导航按钮 */
-            left: 5px; /* 稍微向右偏移，对齐按钮边缘 */
-        }
+    .portal-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 18px;
+    }
 
-        /* 下拉菜单里面的子链接样式 */
-        .dropdown-content a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            margin: 5px;
-            text-align: left;
-            background: transparent; /* 下拉列表内默认透明背景 */
-        }
+    .portal-panel {
+      width: min(452px, 100%);
+      min-height: 500px;
+      padding: 38px 40px 34px;
+      background: var(--panel);
+      border: 1px solid var(--line-strong);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
 
-        /* 鼠标悬停在下拉列表选项上时的背景变亮 */
-        .dropdown-content a:hover {
-            background-color: #666;
-        }
+    .portal-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-align: center;
+    }
 
-        /* 当鼠标悬停在“更多”容器上时，显示下拉菜单内容 */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+    .portal-subtitle {
+      margin: 14px 0 40px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-align: center;
+    }
 
-        /* 当下拉菜单激活时，“更多”按钮自身保持高亮 */
-        .dropdown:hover .dropbtn {
-            background-color: #666;
-        }
-        /* ================================================================ */
-    </style>
+    .portal-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .portal-selection {
+      display: none;
+    }
+
+    .portal-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 74px;
+      padding: 15px 20px 14px 24px;
+      color: inherit;
+      text-decoration: none;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(216, 226, 241, .35);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .portal-card:hover {
+      transform: translateY(-1px);
+      border-color: #c5d3e6;
+      box-shadow: inset 0 0 0 1px rgba(197, 211, 230, .55), 0 8px 20px rgba(45, 64, 96, .06);
+    }
+
+    .portal-card-title,
+    .portal-card-desc {
+      display: block;
+    }
+
+    .portal-card-title {
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .portal-card-desc {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.45;
+    }
+
+    .portal-card-arrow {
+      width: 25px;
+      height: 34px;
+      flex: 0 0 auto;
+      position: relative;
+    }
+
+    .portal-card-arrow::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-top: 3px solid #6d7a8d;
+      border-right: 3px solid #6d7a8d;
+      transform: rotate(45deg);
+    }
+
+    .portal-footer {
+      margin-top: 38px;
+      color: #738198;
+      font-size: 9px;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: .8px;
+      line-height: 1.7;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 560px) {
+      .portal-panel {
+        min-height: auto;
+        padding: 34px 22px 30px;
+        border-radius: 18px;
+      }
+
+      .portal-title {
+        font-size: 23px;
+      }
+
+      .portal-subtitle {
+        margin-bottom: 32px;
+        font-size: 12px;
+      }
+
+      .portal-card {
+        min-height: 78px;
+        padding: 16px 18px 15px 20px;
+      }
+
+      .portal-card-title {
+        font-size: 15px;
+      }
+
+      .portal-card-desc {
+        font-size: 12px;
+      }
+
+      .portal-footer {
+        letter-spacing: .3px;
+        font-size: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main class="portal-page">
+    <section class="portal-panel">
+      <h1 class="portal-title">企微客服</h1>
+      <p class="portal-subtitle">QIWEI CUSTOMER SERVICE · SUPPORT PORTAL</p>
 
-<div class="menu">
-    <a href="pc端床位设置.html" target="content">pc端床位设置</a>
-    <a href="移动端床位设置.html" target="content">移动端床位设置</a>
-    <a href="智能排客.html" target="content">智能排客</a>
- 
-    <div class="dropdown">
-        <a href="javascript:void(0)" class="dropbtn">更多 ▾</a>
-        <div class="dropdown-content">
-            <a href="其他页面1.html" target="content">其他页面1</a>
-            <a href="其他页面2.html" target="content">其他页面2</a>
-            <a href="其他页面3.html" target="content">其他页面3</a>
-        </div>
-    </div>
-</div>
+      <div class="portal-grid">
+        <span class="portal-selection" aria-hidden="true"></span>
+        <a class="portal-card" href="ai规则.html">
+          <span>
+            <span class="portal-card-title">企微客服-电脑端</span>
+            <span class="portal-card-desc">AI规则配置与电脑端客服工作台</span>
+          </span>
+          <span class="portal-card-arrow" aria-hidden="true"></span>
+        </a>
+        <a class="portal-card" href="智能客服移动端.html">
+          <span>
+            <span class="portal-card-title">企微客服-移动端</span>
+            <span class="portal-card-desc">智能客服移动端会话处理与客户跟进</span>
+          </span>
+          <span class="portal-card-arrow" aria-hidden="true"></span>
+        </a>
+        <a class="portal-card" href="operator/login.html">
+          <span>
+            <span class="portal-card-title">运营管理后台</span>
+            <span class="portal-card-desc">客服运营配置与全局数据管理</span>
+          </span>
+          <span class="portal-card-arrow" aria-hidden="true"></span>
+        </a>
+      </div>
 
-<iframe name="content" src="pc端床位设置.html"></iframe>
-
+      <footer class="portal-footer">© 2026 QIWEI CUSTOMER SERVICE. ALL RIGHTS RESERVED.</footer>
+    </section>
+  </main>
 </body>
 </html>
