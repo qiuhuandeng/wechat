@@ -9,9 +9,265 @@
     <!-- 引入 Inter 和 PingFang 字体优化 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        :root {
+            --pc-bg: #f5f7fb;
+            --pc-panel: #ffffff;
+            --pc-line: #e6edf5;
+            --pc-line-strong: #dbe5f1;
+            --pc-text: #202a3a;
+            --pc-muted: #7b8798;
+            --pc-blue: #2563eb;
+            --pc-soft-blue: #edf5ff;
+            --pc-bubble: #eef6ff;
+            --pc-shadow: 0 10px 28px rgba(31, 45, 67, .05);
         }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--pc-bg);
+            color: var(--pc-text);
+            font-size: 13px;
+        }
+
+        body > .flex {
+            background: var(--pc-bg);
+        }
+
+        body > .flex > div:nth-child(1) {
+            width: 254px !important;
+            background: var(--pc-panel) !important;
+            border-color: var(--pc-line) !important;
+        }
+
+        body > .flex > div:nth-child(1) > div:first-child > div:first-child {
+            height: 60px;
+            padding: 0 16px !important;
+            border-color: var(--pc-line) !important;
+        }
+
+        body > .flex > div:nth-child(1) > div:first-child > div:first-child > div:first-child {
+            display: none;
+        }
+
+        body > .flex > div:nth-child(1) h1 {
+            font-size: 16px;
+            font-weight: 650;
+            letter-spacing: 0;
+        }
+
+        body > .flex > div:nth-child(1) h1 + span {
+            display: none;
+        }
+
+        body > .flex > div:nth-child(1) .rounded-2xl {
+            border-radius: 16px !important;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+        }
+
+        body > .flex > div:nth-child(1) .text-3xl {
+            font-size: 24px !important;
+            font-weight: 650 !important;
+        }
+
+        body > .flex > div:nth-child(1) .tracking-wider {
+            letter-spacing: 0 !important;
+        }
+
+        body > .flex > div:nth-child(1) button.rounded-xl {
+            border-radius: 10px !important;
+        }
+
+        body > .flex > div:nth-child(2) {
+            width: 320px !important;
+            background: var(--pc-panel) !important;
+            border-color: var(--pc-line) !important;
+        }
+
+        body > .flex > div:nth-child(2) > div:first-child {
+            background: #fff;
+            border-color: var(--pc-line) !important;
+            padding: 16px !important;
+        }
+
+        body > .flex > div:nth-child(2) > div:first-child > div:first-child {
+            background: #f3f6fa !important;
+            border-radius: 12px !important;
+            padding: 4px !important;
+        }
+
+        body > .flex > div:nth-child(2) > div:first-child > div:first-child button {
+            height: 32px;
+            border-radius: 9px !important;
+            font-weight: 500 !important;
+        }
+
+        body > .flex > div:nth-child(2) input {
+            height: 36px;
+            background: #f1f4f8 !important;
+            border-radius: 8px !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        body > .flex > div:nth-child(3) {
+            background: #f7f9fd !important;
+        }
+
+        body > .flex > div:nth-child(3) > div:first-child {
+            height: 48px !important;
+            padding: 0 16px !important;
+            border-color: var(--pc-line) !important;
+            box-shadow: 0 1px 0 rgba(226,232,240,.55);
+        }
+
+        #active-user-avatar {
+            width: 36px !important;
+            height: 36px !important;
+            box-shadow: none !important;
+        }
+
+        #active-user-name {
+            font-size: 13px !important;
+            font-weight: 650 !important;
+        }
+
+        #ai-managed-banner {
+            background: #eef6ff !important;
+            border-color: #d7e8ff !important;
+            padding: 8px 24px !important;
+        }
+
+        #chat-messages-container {
+            background: #f7f9fd !important;
+            padding: 24px !important;
+        }
+
+        .pc-session-item {
+            min-height: 76px;
+            padding: 14px 16px !important;
+            border-left-width: 0 !important;
+            border-bottom: 1px solid #edf1f6;
+            transition: background .16s ease;
+        }
+
+        .pc-session-item:hover {
+            background: #f8fafc !important;
+        }
+
+        .pc-session-active {
+            background: #f2f6fb !important;
+        }
+
+        .pc-session-alert {
+            border-left: 3px solid #ef4444 !important;
+        }
+
+        .pc-avatar {
+            border-radius: 10px !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: none !important;
+            font-weight: 600 !important;
+        }
+
+        .pc-bubble {
+            border: 1px solid var(--pc-line);
+            border-radius: 14px !important;
+            padding: 10px 16px !important;
+            box-shadow: none !important;
+            font-size: 13px !important;
+            line-height: 1.65 !important;
+            font-weight: 400 !important;
+        }
+
+        .pc-bubble-other {
+            background: #fff !important;
+            border-color: #e2e8f0 !important;
+            color: var(--pc-text) !important;
+        }
+
+        .pc-bubble-ai {
+            background: var(--pc-bubble) !important;
+            border-color: #b9d7ff !important;
+            color: var(--pc-text) !important;
+        }
+
+        .pc-bubble-human {
+            background: var(--pc-bubble) !important;
+            border-color: #b9d7ff !important;
+            color: var(--pc-text) !important;
+        }
+
+        body > .flex > div:nth-child(3) > div:last-child {
+            height: 172px;
+            padding: 0 !important;
+            border-color: var(--pc-line) !important;
+            background: #fff !important;
+        }
+
+        body > .flex > div:nth-child(3) > div:last-child > div:first-child {
+            height: 44px;
+            margin: 0 !important;
+            padding: 8px 16px !important;
+            border-color: #edf1f6 !important;
+        }
+
+        body > .flex > div:nth-child(3) > div:last-child button:not([onclick]) {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #66758a;
+        }
+
+        body > .flex > div:nth-child(3) > div:last-child button:not([onclick]):hover {
+            background: #f2f5f9;
+            color: #1f2937;
+        }
+
+        #text-input {
+            height: 78px;
+            padding: 12px 16px;
+            font-size: 13px !important;
+            line-height: 1.6;
+        }
+
+        #text-input + div {
+            padding: 0 16px 12px;
+            margin-top: 0 !important;
+        }
+
+        body > .flex > div:nth-child(4) {
+            width: 320px !important;
+            background: #f8fafc !important;
+            color: var(--pc-text) !important;
+            border-color: var(--pc-line) !important;
+            box-shadow: none !important;
+        }
+
+        body > .flex > div:nth-child(4) .bg-slate-950,
+        body > .flex > div:nth-child(4) .bg-slate-900,
+        body > .flex > div:nth-child(4) .bg-slate-800,
+        body > .flex > div:nth-child(4) .bg-black\/40 {
+            background: #fff !important;
+            border-color: var(--pc-line) !important;
+            color: var(--pc-text) !important;
+            box-shadow: var(--pc-shadow);
+        }
+
+        body > .flex > div:nth-child(4) .text-white,
+        body > .flex > div:nth-child(4) .text-slate-300,
+        body > .flex > div:nth-child(4) .text-slate-400,
+        body > .flex > div:nth-child(4) .text-slate-500 {
+            color: var(--pc-muted) !important;
+        }
+
+        body > .flex > div:nth-child(4) .border-slate-800,
+        body > .flex > div:nth-child(4) .border-slate-700 {
+            border-color: var(--pc-line) !important;
+        }
+
         /* 呼吸灯动画效果，用于敏感词极速警报 */
         @keyframes subtle-pulse {
             0%, 100% {
@@ -539,25 +795,25 @@
                 }
 
                 // 侧栏紧急状态背景
-                let bgStyle = isActive ? "bg-slate-100/80 border-l-4 border-blue-600" : "hover:bg-slate-50 border-l-4 border-transparent";
+                let bgStyle = isActive ? "pc-session-active" : "hover:bg-slate-50";
                 if (session.hasSensitiveAlert) {
-                    bgStyle = isActive ? "sensitive-alert-active ring-1 ring-red-400" : "bg-red-50/70 hover:bg-red-100/80 sensitive-alert-active";
+                    bgStyle = isActive ? "pc-session-active pc-session-alert sensitive-alert-active ring-1 ring-red-400" : "pc-session-alert bg-red-50/70 hover:bg-red-100/80 sensitive-alert-active";
                 }
 
                 // 渲染未读红点
                 const unreadBadge = session.unread > 0 ? `<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">${session.unread}</span>` : '';
 
                 const itemHtml = `
-                    <div onclick="selectSession('${session.id}')" class="p-4 cursor-pointer transition-all flex items-start space-x-3 ${bgStyle}">
+                    <div onclick="selectSession('${session.id}')" class="pc-session-item cursor-pointer transition-all flex items-start space-x-3 ${bgStyle}">
                         <div class="relative shrink-0">
-                            <div class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center font-bold text-slate-600 text-xs border border-slate-300">
+                            <div class="pc-avatar w-10 h-10 bg-slate-200 flex items-center justify-center font-bold text-slate-600 text-xs border border-slate-300">
                                 ${session.avatar}
                             </div>
                             ${unreadBadge}
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-slate-800 truncate">${session.name}</span>
+                                <span class="text-sm font-semibold text-slate-800 truncate">${session.name}</span>
                                 <span class="text-[10px] text-slate-400">${session.time}</span>
                             </div>
                             <p class="text-[11px] text-slate-500 truncate mt-1">${session.lastMsg}</p>
@@ -635,11 +891,11 @@
                     // 客户消息
                     const bubbleHtml = `
                         <div class="flex items-start space-x-3">
-                            <div class="w-9 h-9 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0 font-bold text-slate-600 text-xs">
+                            <div class="w-9 h-9 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0 font-semibold text-slate-600 text-xs">
                                 ${session.avatar}
                             </div>
-                            <div class="max-w-lg">
-                                <div class="bg-white px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 text-sm text-slate-800 leading-relaxed font-normal">
+                            <div class="max-w-[64%]">
+                                <div class="pc-bubble pc-bubble-other">
                                     ${msg.text}
                                 </div>
                                 <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
@@ -651,8 +907,8 @@
                     // AI 回复
                     const bubbleHtml = `
                         <div class="flex items-start justify-end space-x-3">
-                            <div class="max-w-lg text-right">
-                                <div class="bg-blue-50 px-4 py-2.5 rounded-2xl rounded-tr-sm border border-blue-100 text-sm text-slate-800 leading-relaxed font-normal text-left inline-block">
+                            <div class="max-w-[64%] text-right">
+                                <div class="pc-bubble pc-bubble-ai text-left inline-block">
                                     ${msg.text}
                                     <div class="mt-1.5 pt-1.5 border-t border-blue-100/50 flex items-center justify-between text-[10px] text-blue-500 font-medium">
                                         <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg> AI自动托管回复</span>
@@ -661,7 +917,7 @@
                                 </div>
                                 <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
                             </div>
-                            <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white font-bold text-xs shadow-md shadow-blue-100">
+                            <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white font-semibold text-xs">
                                 AI
                             </div>
                         </div>
@@ -682,17 +938,17 @@
                     // 人工客服亲自回复的
                     const bubbleHtml = `
                         <div class="flex items-start justify-end space-x-3">
-                            <div class="max-w-lg text-right">
-                                <div class="bg-indigo-600 px-4 py-2.5 rounded-2xl rounded-tr-sm text-sm text-white leading-relaxed font-normal text-left inline-block shadow-md shadow-indigo-100">
+                            <div class="max-w-[64%] text-right">
+                                <div class="pc-bubble pc-bubble-human text-left inline-block">
                                     ${msg.text}
-                                    <div class="mt-1.5 pt-1.5 border-t border-indigo-500/50 flex items-center justify-between text-[10px] text-indigo-200 font-medium">
+                                    <div class="mt-1.5 pt-1.5 border-t border-blue-100/70 flex items-center justify-between text-[10px] text-blue-500 font-medium">
                                         <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> 专属人工客服介入中</span>
                                         <span>已发送</span>
                                     </div>
                                 </div>
                                 <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
                             </div>
-                            <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 border border-indigo-300 text-indigo-700 font-bold text-xs shadow-md">
+                            <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 border border-indigo-300 text-indigo-700 font-semibold text-xs">
                                 田
                             </div>
                         </div>
