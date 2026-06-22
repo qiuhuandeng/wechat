@@ -3,215 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企微会话中心 - 智能敏感词转人工管理系统</title>
-    <!-- 引入 Tailwind CSS 构建现代、高端企业 UI 界面 -->
+    <title>企微会话中心 - 多选转发与消息引用回复演示</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Inter 和 PingFang 字体优化 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wechat: {
+                            green: '#07C160',
+                            greenHover: '#06B054',
+                            bg: '#F3F3F3',
+                            border: '#E2E2E2',
+                            textDark: '#333333',
+                            textGray: '#999999',
+                            activeBlue: '#C5D9E8',
+                            lightBlue: '#F2F6F9',
+                            bubbleSelf: '#C6E6FC',
+                            bubbleOther: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         :root {
-            --pc-bg: #f5f7fb;
-            --pc-panel: #ffffff;
-            --pc-line: #e6edf5;
-            --pc-line-strong: #dbe5f1;
-            --pc-text: #202a3a;
-            --pc-muted: #7b8798;
-            --pc-blue: #2563eb;
-            --pc-soft-blue: #edf5ff;
-            --pc-bubble: #eef6ff;
-            --pc-shadow: 0 10px 28px rgba(31, 45, 67, .05);
+            --ui-bg: #f5f7fb;
+            --ui-panel: #ffffff;
+            --ui-subtle: #f8fafc;
+            --ui-line: #e7edf5;
+            --ui-line-strong: #dbe5f1;
+            --ui-text: #202a3a;
+            --ui-muted: #7a879a;
+            --ui-blue: #2563eb;
+            --ui-blue-soft: #edf5ff;
+            --ui-bubble: #eef6ff;
+            --ui-green: #12c678;
+            --ui-shadow: 0 12px 30px rgba(31, 45, 67, .05);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--pc-bg);
-            color: var(--pc-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--ui-bg);
+            color: var(--ui-text);
             font-size: 13px;
         }
 
-        body > .flex {
-            background: var(--pc-bg);
-        }
-
-        body > .flex > div:nth-child(1) {
-            width: 254px !important;
-            background: var(--pc-panel) !important;
-            border-color: var(--pc-line) !important;
-        }
-
-        body > .flex > div:nth-child(1) > div:first-child > div:first-child {
-            height: 60px;
-            padding: 0 16px !important;
-            border-color: var(--pc-line) !important;
-        }
-
-        body > .flex > div:nth-child(1) > div:first-child > div:first-child > div:first-child {
+        /* 隐藏滚动条但保留滚动功能 */
+        .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
-
-        body > .flex > div:nth-child(1) h1 {
-            font-size: 16px;
-            font-weight: 650;
-            letter-spacing: 0;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        /* 多选模式下的动画 */
+        .checkbox-container {
+            transition: width 0.2s ease, opacity 0.2s ease;
         }
 
-        body > .flex > div:nth-child(1) h1 + span {
-            display: none;
+        .pc-side-panel {
+            background: var(--ui-panel);
+            border-color: var(--ui-line);
         }
 
-        body > .flex > div:nth-child(1) .rounded-2xl {
-            border-radius: 16px !important;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+        .pc-chat-panel {
+            background: #f7f9fd;
         }
 
-        body > .flex > div:nth-child(1) .text-3xl {
-            font-size: 24px !important;
-            font-weight: 650 !important;
+        .pc-section-title {
+            color: #8a97aa;
+            font-size: 12px;
+            font-weight: 500;
         }
 
-        body > .flex > div:nth-child(1) .tracking-wider {
-            letter-spacing: 0 !important;
+        .pc-stat-card {
+            border-radius: 16px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55);
         }
 
-        body > .flex > div:nth-child(1) button.rounded-xl {
-            border-radius: 10px !important;
+        .pc-round-icon {
+            border-radius: 999px;
         }
 
-        body > .flex > div:nth-child(2) {
-            width: 320px !important;
-            background: var(--pc-panel) !important;
-            border-color: var(--pc-line) !important;
-        }
-
-        body > .flex > div:nth-child(2) > div:first-child {
-            background: #fff;
-            border-color: var(--pc-line) !important;
-            padding: 16px !important;
-        }
-
-        body > .flex > div:nth-child(2) > div:first-child > div:first-child {
-            background: #f3f6fa !important;
-            border-radius: 12px !important;
-            padding: 4px !important;
-        }
-
-        body > .flex > div:nth-child(2) > div:first-child > div:first-child button {
-            height: 32px;
-            border-radius: 9px !important;
-            font-weight: 500 !important;
-        }
-
-        body > .flex > div:nth-child(2) input {
+        .pc-search-input {
             height: 36px;
-            background: #f1f4f8 !important;
-            border-radius: 8px !important;
-            border-color: transparent !important;
-            box-shadow: none !important;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: #f1f4f8;
+            color: var(--ui-text);
         }
 
-        body > .flex > div:nth-child(3) {
-            background: #f7f9fd !important;
+        .pc-search-input:focus {
+            background: #fff;
+            border-color: #b9d0ff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .08);
         }
 
-        body > .flex > div:nth-child(3) > div:first-child {
-            height: 48px !important;
-            padding: 0 16px !important;
-            border-color: var(--pc-line) !important;
-            box-shadow: 0 1px 0 rgba(226,232,240,.55);
+        .pc-account-item {
+            border-radius: 8px;
+            transition: background .16s ease, border-color .16s ease;
         }
 
-        #active-user-avatar {
-            width: 36px !important;
-            height: 36px !important;
-            box-shadow: none !important;
+        .pc-account-active {
+            background: #edf5ff;
+            border: 1px solid #bfdbfe;
         }
 
-        #active-user-name {
-            font-size: 13px !important;
-            font-weight: 650 !important;
+        .pc-filter-panel {
+            background: #fff;
+            border-bottom: 1px solid var(--ui-line);
         }
 
-        #ai-managed-banner {
-            background: #eef6ff !important;
-            border-color: #d7e8ff !important;
-            padding: 8px 24px !important;
+        .pc-segment {
+            background: #f3f6fa;
+            border-radius: 12px;
+            padding: 4px;
         }
 
-        #chat-messages-container {
-            background: #f7f9fd !important;
-            padding: 24px !important;
+        .pc-segment button {
+            height: 32px;
+            border-radius: 9px;
+            font-weight: 500;
         }
 
-        .pc-session-item {
-            min-height: 76px;
-            padding: 14px 16px !important;
-            border-left-width: 0 !important;
-            border-bottom: 1px solid #edf1f6;
+        .conv-item {
+            min-height: 96px;
+            border-color: #edf1f6;
             transition: background .16s ease;
         }
 
-        .pc-session-item:hover {
-            background: #f8fafc !important;
+        .pc-contact-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #e6edf5;
+            overflow: hidden;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 650;
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(31, 45, 67, .06);
         }
 
-        .pc-session-active {
-            background: #f2f6fb !important;
+        .pc-thumb-warm {
+            background:
+                radial-gradient(circle at 32% 30%, rgba(255,255,255,.8) 0 12%, transparent 13%),
+                radial-gradient(circle at 64% 42%, rgba(255,255,255,.5) 0 16%, transparent 17%),
+                linear-gradient(135deg, #e97f5d, #22324c);
         }
 
-        .pc-session-alert {
-            border-left: 3px solid #ef4444 !important;
+        .pc-thumb-blue {
+            background:
+                radial-gradient(circle at 34% 28%, rgba(255,255,255,.75) 0 13%, transparent 14%),
+                linear-gradient(135deg, #60a5fa, #1e3a8a);
         }
 
-        .pc-avatar {
-            border-radius: 10px !important;
-            border-color: #e2e8f0 !important;
-            box-shadow: none !important;
-            font-weight: 600 !important;
+        .pc-thumb-rose {
+            background:
+                radial-gradient(circle at 36% 30%, rgba(255,255,255,.75) 0 13%, transparent 14%),
+                linear-gradient(135deg, #fb7185, #7f1d1d);
         }
 
-        .pc-bubble {
-            border: 1px solid var(--pc-line);
-            border-radius: 14px !important;
-            padding: 10px 16px !important;
-            box-shadow: none !important;
-            font-size: 13px !important;
-            line-height: 1.65 !important;
-            font-weight: 400 !important;
+        .pc-thumb-green {
+            background:
+                radial-gradient(circle at 36% 32%, rgba(255,255,255,.7) 0 12%, transparent 13%),
+                linear-gradient(135deg, #86efac, #166534);
         }
 
-        .pc-bubble-other {
-            background: #fff !important;
-            border-color: #e2e8f0 !important;
-            color: var(--pc-text) !important;
+        .pc-thumb-purple {
+            background:
+                radial-gradient(circle at 36% 30%, rgba(255,255,255,.7) 0 13%, transparent 14%),
+                linear-gradient(135deg, #c084fc, #4c1d95);
         }
 
-        .pc-bubble-ai {
-            background: var(--pc-bubble) !important;
-            border-color: #b9d7ff !important;
-            color: var(--pc-text) !important;
+        .pc-thumb-slate {
+            background:
+                radial-gradient(circle at 35% 32%, rgba(255,255,255,.7) 0 12%, transparent 13%),
+                linear-gradient(135deg, #94a3b8, #334155);
         }
 
-        .pc-bubble-human {
-            background: var(--pc-bubble) !important;
-            border-color: #b9d7ff !important;
-            color: var(--pc-text) !important;
+        .conv-item:hover {
+            background: #f8fafc;
         }
 
-        body > .flex > div:nth-child(3) > div:last-child {
+        .conv-item.bg-slate-100\/80 {
+            background: #f2f6fb;
+        }
+
+        .pc-chat-header {
+            height: 48px;
+            border-color: var(--ui-line);
+            box-shadow: 0 1px 0 rgba(226, 232, 240, .55);
+        }
+
+        .pc-header-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid #e6edf5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 650;
+            color: #fff;
+            background: linear-gradient(135deg, #e97f5d, #22324c);
+        }
+
+        #chat-messages-container {
+            background: #f7f9fd;
+        }
+
+        .message-row {
+            font-size: 13px;
+        }
+
+        .message-row .rounded-lg {
+            border-radius: 14px;
+        }
+
+        .message-row .shadow-sm {
+            box-shadow: none;
+        }
+
+        .message-action-popover {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(6px);
+            transition: opacity .14s ease, transform .14s ease;
+        }
+
+        .message-action-popover.is-open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .wechat-message-menu {
+            width: 108px;
+            padding: 6px 0;
+            background: #fff;
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .18), 0 1px 2px rgba(15, 23, 42, .08);
+            color: #111827;
+            font-size: 13px;
+            line-height: 1;
+            z-index: 9999;
+        }
+
+        .wechat-message-menu button {
+            width: 100%;
+            height: 28px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+
+        .wechat-message-menu button:hover {
+            background: #f5f6f7;
+        }
+
+        .wechat-message-menu .menu-divider {
+            height: 1px;
+            margin: 5px 10px;
+            background: #edf0f3;
+        }
+
+        .pc-message-bubble {
+            border: 1px solid var(--ui-line);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: var(--ui-text);
+            line-height: 1.65;
+            box-shadow: none;
+        }
+
+        .pc-message-self {
+            background: var(--ui-bubble);
+            border-color: #b9d7ff;
+        }
+
+        .pc-message-other {
+            background: #fff;
+            border-color: #e2e8f0;
+        }
+
+        .pc-input-panel {
             height: 172px;
-            padding: 0 !important;
-            border-color: var(--pc-line) !important;
-            background: #fff !important;
+            border-color: var(--ui-line);
+            background: #fff;
         }
 
-        body > .flex > div:nth-child(3) > div:last-child > div:first-child {
-            height: 44px;
-            margin: 0 !important;
-            padding: 8px 16px !important;
-            border-color: #edf1f6 !important;
-        }
-
-        body > .flex > div:nth-child(3) > div:last-child button:not([onclick]) {
+        .pc-tool-button {
             width: 28px;
             height: 28px;
             display: inline-flex;
@@ -219,1093 +328,1261 @@
             justify-content: center;
             border-radius: 8px;
             color: #66758a;
+            transition: background .16s ease, color .16s ease;
         }
 
-        body > .flex > div:nth-child(3) > div:last-child button:not([onclick]):hover {
+        .pc-tool-button:hover {
             background: #f2f5f9;
             color: #1f2937;
         }
 
-        #text-input {
-            height: 78px;
-            padding: 12px 16px;
-            font-size: 13px !important;
-            line-height: 1.6;
+        .pc-detail-tabs {
+            background: #fff;
+            border-bottom: 1px solid var(--ui-line);
         }
 
-        #text-input + div {
-            padding: 0 16px 12px;
-            margin-top: 0 !important;
+        .pc-detail-tabs button {
+            color: #8a97aa;
+            font-size: 11px;
+            height: 52px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            border-bottom: 2px solid transparent;
         }
 
-        body > .flex > div:nth-child(4) {
-            width: 320px !important;
-            background: #f8fafc !important;
-            color: var(--pc-text) !important;
-            border-color: var(--pc-line) !important;
-            box-shadow: none !important;
+        .pc-detail-tabs button:first-child {
+            color: var(--ui-blue);
+            border-color: var(--ui-blue);
         }
 
-        body > .flex > div:nth-child(4) .bg-slate-950,
-        body > .flex > div:nth-child(4) .bg-slate-900,
-        body > .flex > div:nth-child(4) .bg-slate-800,
-        body > .flex > div:nth-child(4) .bg-black\/40 {
-            background: #fff !important;
-            border-color: var(--pc-line) !important;
-            color: var(--pc-text) !important;
-            box-shadow: var(--pc-shadow);
+        .pc-detail-tabs svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 1.9;
         }
 
-        body > .flex > div:nth-child(4) .text-white,
-        body > .flex > div:nth-child(4) .text-slate-300,
-        body > .flex > div:nth-child(4) .text-slate-400,
-        body > .flex > div:nth-child(4) .text-slate-500 {
-            color: var(--pc-muted) !important;
-        }
-
-        body > .flex > div:nth-child(4) .border-slate-800,
-        body > .flex > div:nth-child(4) .border-slate-700 {
-            border-color: var(--pc-line) !important;
-        }
-
-        /* 呼吸灯动画效果，用于敏感词极速警报 */
-        @keyframes subtle-pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.4);
-                background-color: rgba(254, 242, 242, 1);
-            }
-            50% {
-                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.1);
-                background-color: rgba(254, 226, 226, 1);
-            }
-        }
-        .sensitive-alert-active {
-            animation: subtle-pulse 2s infinite ease-in-out;
-            border-left: 4px solid #ef4444 !important;
-        }
-        /* 闪烁圆点 */
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        .indicator-blink {
-            animation: blink 1s infinite;
+        .pc-detail-card {
+            background: #fff;
+            border: 1px solid var(--ui-line);
+            border-radius: 12px;
+            box-shadow: var(--ui-shadow);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
+<body class="font-sans overflow-hidden h-screen w-screen flex flex-col select-none">
 
-    <div class="flex h-full w-full overflow-hidden">
+    <!-- 全局轻提示 (Toast) -->
+    <div id="toast" class="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 text-white px-4 py-2 rounded-md shadow-lg flex items-center space-x-2 transition-all duration-300 opacity-0 pointer-events-none scale-90">
+        <svg class="w-5 h-5 text-wechat-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span id="toast-text">已成功转发</span>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="flex flex-1 overflow-hidden h-full">
         
-        <!-- ==================== LEFTMOST SIDEBAR (主导航区) ==================== -->
-        <div class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0">
-            <div>
-                <!-- 系统 Logo -->
-                <div class="p-6 border-b border-slate-100 flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-blue-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
+        <!-- ==================== 第一栏：企微会话中心 (左侧栏) ==================== -->
+        <div class="w-[254px] pc-side-panel border-r flex flex-col flex-shrink-0">
+            <!-- 头部 -->
+            <div class="px-4 py-5 border-b border-slate-100">
+                <h1 class="text-base font-semibold text-slate-800">企微会话中心</h1>
+            </div>
+            
+            <!-- 待跟进会话指标 -->
+            <div class="px-4 py-4 space-y-3">
+                <div class="pc-stat-card bg-emerald-50 border border-emerald-100 p-4 flex items-center justify-between">
                     <div>
-                        <h1 class="font-bold text-slate-800 tracking-wide text-md">企微会话中心</h1>
-                        <span class="text-xs text-slate-400 font-medium">智能AI交互控制台</span>
+                        <div class="text-xs text-emerald-600 font-medium">待跟进会话总量</div>
+                        <div class="text-2xl font-semibold text-emerald-800 mt-0.5">30 <span class="text-xs font-normal text-emerald-600">个客户</span></div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-100/80 flex items-center justify-center text-emerald-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                 </div>
-
-                <!-- 待处理全局统计 -->
-                <div class="p-5">
-                    <div class="bg-emerald-50/70 border border-emerald-100 rounded-2xl p-4 relative overflow-hidden transition-all hover:shadow-sm">
-                        <div class="text-xs font-semibold text-emerald-700 tracking-wider uppercase">待跟进会话总量</div>
-                        <div class="flex items-baseline space-x-2 mt-1">
-                            <span class="text-3xl font-bold text-emerald-800 tracking-tight" id="total-pending-count">203</span>
-                            <span class="text-xs text-emerald-600 font-medium">个客户</span>
-                        </div>
-                        <div class="absolute right-3 top-3 w-10 h-10 bg-emerald-100/50 rounded-full flex items-center justify-center text-emerald-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        </div>
+                
+                <div class="pc-stat-card bg-rose-50 border border-rose-100 p-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-rose-600 font-medium">敏感词伴转人工待办</div>
+                        <div class="text-2xl font-semibold text-rose-800 mt-0.5">0 <span class="text-xs font-normal text-rose-600">急需人工接入</span></div>
                     </div>
-
-                    <!-- 升级警报：新增敏感词转人工统计组件 -->
-                    <div class="bg-rose-50 border border-rose-100 rounded-2xl p-4 mt-3 relative overflow-hidden transition-all cursor-pointer hover:border-rose-300 active:scale-95" onclick="filterBySensitiveOnly()">
-                        <div class="text-xs font-semibold text-rose-700 tracking-wider uppercase flex items-center">
-                            <span class="w-2 h-2 rounded-full bg-rose-500 mr-2 indicator-blink"></span>
-                            敏感词转人工待办
-                        </div>
-                        <div class="flex items-baseline space-x-2 mt-1">
-                            <span class="text-3xl font-bold text-rose-800 tracking-tight" id="sensitive-pending-count">1</span>
-                            <span class="text-xs text-rose-600 font-medium">急需人工接入</span>
-                        </div>
-                        <div class="absolute right-3 top-3 w-10 h-10 bg-rose-100/60 rounded-full flex items-center justify-center text-rose-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        </div>
+                    <div class="w-10 h-10 rounded-full bg-rose-100/80 flex items-center justify-center text-rose-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     </div>
-                </div>
-
-                <!-- 账号视图筛选器 -->
-                <div class="px-3 space-y-1">
-                    <button class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left bg-blue-50 text-blue-700 font-medium text-sm transition-all">
-                        <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">全</span>
-                        <div class="flex-1">
-                            <div class="text-xs font-semibold">全部账号</div>
-                            <div class="text-[10px] text-blue-500">2个账号 · 在线 106</div>
-                        </div>
-                    </button>
-                    
-                    <button class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left hover:bg-slate-50 text-slate-600 font-medium text-sm transition-all">
-                        <span class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">配</span>
-                        <div class="flex-1">
-                            <div class="text-xs font-semibold">会话分配</div>
-                            <div class="text-[10px] text-slate-400">3个客服处理中</div>
-                        </div>
-                    </button>
-
-                    <button class="w-full flex items-center space-x-3 px-4 py-2 rounded-xl text-left hover:bg-slate-50 text-slate-600 text-sm transition-all">
-                        <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs">田</span>
-                        <div class="flex-1 overflow-hidden">
-                            <div class="text-xs font-semibold truncate">田忠涛-SL0777</div>
-                            <div class="text-[10px] text-emerald-500 flex items-center">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>
-                                设备在线 · 企微已登录
-                            </div>
-                        </div>
-                    </button>
                 </div>
             </div>
 
-            <!-- 底部客服人员个人信息 -->
-            <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                <div class="flex items-center space-x-2.5">
-                    <div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden border border-slate-300 flex items-center justify-center text-xs font-bold text-slate-600">
-                        客服
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold text-slate-800">田忠涛-SL0777</div>
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-800">
-                           <span class="w-1 h-1 rounded-full bg-emerald-500 mr-1"></span> 在线接单
-                        </span>
-                    </div>
-                </div>
-                <button class="text-xs text-slate-400 hover:text-rose-600 font-medium">退出</button>
-            </div>
-        </div>
-
-        <!-- ==================== MIDDLE SIDEBAR (会话列表区) ==================== -->
-        <div class="w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 h-full">
-            <!-- 过滤器面板 -->
-            <div class="p-4 border-b border-slate-100 space-y-3">
-                <div class="bg-slate-100 p-0.5 rounded-lg flex text-xs">
-                    <button id="tab-all-modes" onclick="filterByMode('all')" class="flex-1 py-1.5 rounded-md text-center font-medium transition-all bg-white text-slate-800 shadow-sm">全部</button>
-                    <button id="tab-human" onclick="filterByMode('human')" class="flex-1 py-1.5 rounded-md text-center font-medium text-slate-500 hover:text-slate-800 transition-all">人工处理</button>
-                    <button id="tab-ai" onclick="filterByMode('ai')" class="flex-1 py-1.5 rounded-md text-center font-medium text-slate-500 hover:text-slate-800 transition-all">AI处理</button>
-                    <button id="tab-sensitive" onclick="filterByMode('sensitive')" class="flex-1 py-1.5 rounded-md text-center font-medium text-rose-500 hover:bg-rose-50 transition-all flex items-center justify-center space-x-0.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 indicator-blink"></span>
-                        <span>敏感</span>
-                    </button>
-                </div>
-
-                <div class="flex space-x-1.5 text-xs">
-                    <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-600">未读</button>
-                    <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-600">待回复</button>
-                    <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-600">超时未回</button>
-                </div>
-
-                <!-- 搜索框 -->
+            <!-- 搜索 -->
+            <div class="px-4 py-2">
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </span>
-                    <input type="text" placeholder="搜索好友、会话、聊天记录..." class="w-full pl-9 pr-3 py-2 bg-slate-100 rounded-lg text-xs border border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all">
+                    <input type="text" placeholder="搜索账号/企微ID" class="pc-search-input w-full pl-8 pr-3 text-xs focus:outline-none">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
 
-            <!-- 会话列表滚动容器 -->
-            <div class="flex-1 overflow-y-auto divide-y divide-slate-100" id="session-list-container">
-                <!-- 列表项会通过 JS 动态渲染以支持模拟更新，此处预置图片中的会话状态 -->
-            </div>
-            
-            <div class="p-3 text-center border-t border-slate-50 bg-slate-50/50">
-                <span class="text-xs text-slate-400">继续加载更多会话...</span>
+            <!-- 账号视图 -->
+            <div class="flex-1 overflow-y-auto px-4 space-y-1 mt-2">
+                <div class="pc-section-title px-1 py-1">账号视图</div>
+                
+                <div class="pc-account-item pc-account-active flex items-center space-x-3 p-2.5 text-sky-800 font-medium cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs font-semibold">全</div>
+                    <div class="flex-1 text-xs">全部账号 <span class="text-[10px] text-sky-600 block font-normal">3个账号·有未读</span></div>
+                </div>
+
+                <div class="pc-account-item flex items-center space-x-3 p-2.5 hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                    <div class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs font-semibold">会</div>
+                    <div class="flex-1 text-xs">会话分配 <span class="text-[10px] text-slate-400 block">1个会话</span></div>
+                </div>
+
+                <div class="h-[1px] bg-slate-200 my-2 mx-2"></div>
+
+                <!-- 账号列表 -->
+                <div class="space-y-1">
+                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
+                            <div class="w-full h-full bg-gradient-to-tr from-blue-500 to-indigo-400 flex items-center justify-center text-white text-[10px] font-bold">王</div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-medium text-slate-700 truncate">王智杰</div>
+                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                        </div>
+                    </div>
+
+                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
+                            <div class="w-full h-full bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white text-[10px] font-bold">余</div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-medium text-slate-700 truncate">余佳亮战队-周晓盈</div>
+                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                        </div>
+                    </div>
+
+                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
+                            <div class="w-full h-full bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-white text-[10px] font-bold">子</div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-medium text-slate-700 truncate">子画</div>
+                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ==================== RIGHT PANEL (核心会话聊天区) ==================== -->
-        <div class="flex-1 bg-white flex flex-col h-full relative overflow-hidden">
-            
-            <!-- 客户会话页眉 -->
-            <div class="h-16 border-b border-slate-200 px-6 flex items-center justify-between bg-white z-10 shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="relative">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-center font-semibold text-slate-700 shadow-sm" id="active-user-avatar">
-                            田
-                        </div>
-                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+        <!-- ==================== 第二栏：聊天会话列表 (中间偏左) ==================== -->
+        <div class="w-[320px] pc-side-panel border-r flex flex-col flex-shrink-0">
+            <!-- 切换页签 -->
+            <div class="pc-filter-panel p-4">
+                <div class="pc-segment flex text-xs">
+                    <button class="flex-1 py-1 text-center font-medium rounded-md bg-white shadow-sm text-slate-800">全部</button>
+                    <button class="flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">人工处理</button>
+                    <button class="flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800">AI处理</button>
+                    <button class="flex-1 py-1 text-center font-medium rounded-md text-slate-500 hover:text-slate-800 text-rose-500">*敏感</button>
+                </div>
+                
+                <!-- 搜索会话 -->
+                <div class="relative mt-2.5">
+                    <input type="text" placeholder="搜索全部好友、会话或聊天记录..." class="pc-search-input w-full pl-8 pr-3 text-xs focus:outline-none">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+
+            <!-- 会话列表 -->
+            <div class="flex-1 overflow-y-auto" id="conversation-list">
+                <!-- 删26.3.20🌹Jua (当前活跃) -->
+                <div onclick="selectConversation('jua')" id="conv-jua" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer bg-slate-100/80 hover:bg-slate-50">
+                    <!-- 头像 -->
+                    <div class="pc-contact-thumb pc-thumb-warm">
+                        J
                     </div>
-                    <div>
+                    <!-- 详情 -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">删26.3.20🌹Jua</span>
+                            <span class="text-[10px] text-slate-400">11:02</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">犹豫一千次，不如行动一次！不去尝试...</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-600 rounded border border-emerald-100">已回复</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 26.06.10#TOP -->
+                <div onclick="selectConversation('top')" id="conv-top" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer hover:bg-slate-50 transition">
+                    <div class="pc-contact-thumb pc-thumb-blue">
+                        T
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">26.06.10#TOP</span>
+                            <span class="text-[10px] text-slate-400">11:14</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">门店位置：厦门百草德雷站</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-600 rounded border border-emerald-100">已回复</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 骆姐 -->
+                <div onclick="selectConversation('luojie')" id="conv-luojie" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer hover:bg-slate-50 transition">
+                    <div class="pc-contact-thumb pc-thumb-rose">
+                        骆
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">骆姐</span>
+                            <span class="text-[10px] text-slate-400">10:05</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">我没有听</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-red-50 text-red-600 rounded border border-red-100">1小时15分未回复</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 开10.3 -->
+                <div onclick="selectConversation('kai')" id="conv-kai" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer hover:bg-slate-50 transition">
+                    <div class="pc-contact-thumb pc-thumb-green">
+                        开
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">开10.3</span>
+                            <span class="text-[10px] text-slate-400">09:52</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">我们明天去</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-red-50 text-red-600 rounded border border-red-100">1小时28分未回复</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.26 -->
+                <div onclick="selectConversation('two')" id="conv-two" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer hover:bg-slate-50 transition">
+                    <div class="pc-contact-thumb pc-thumb-purple">
+                        二
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">2.26</span>
+                            <span class="text-[10px] text-slate-400">09:51</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">这个是门店位置您看看对不对</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-600 rounded border border-emerald-100">已回复</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9.27 -->
+                <div onclick="selectConversation('nine')" id="conv-nine" class="conv-item p-4 border-b flex items-start space-x-3 cursor-pointer hover:bg-slate-50 transition">
+                    <div class="pc-contact-thumb pc-thumb-slate">
+                        九
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-slate-800 truncate">9.27</span>
+                            <span class="text-[10px] text-slate-400">09:34</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 truncate mt-0.5">[图片消息]</div>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] px-1 py-0.2 bg-orange-50 text-orange-600 rounded border border-orange-100">人工处理</span>
+                            <span class="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-600 rounded border border-emerald-100">已回复</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 第三栏：主聊天视窗 (中间) ==================== -->
+        <div class="flex-1 pc-chat-panel flex flex-col min-w-0 relative h-full">
+            
+            <!-- 聊天头部 -->
+            <div class="pc-chat-header border-b bg-white px-4 flex items-center justify-between flex-shrink-0 z-10">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <div id="active-chat-avatar" class="pc-header-avatar">J</div>
+                    <div class="min-w-0">
                         <div class="flex items-center space-x-2">
-                            <span class="font-semibold text-slate-800 text-sm" id="active-user-name">26.5.27不发</span>
-                            <span class="text-[10px] text-slate-400">ID: wmy2HgJw...</span>
+                            <span id="active-chat-name" class="font-semibold text-slate-800">删26.3.20🌹Jua</span>
+                            <span class="text-xs bg-rose-50 text-rose-600 px-1.5 py-0.5 rounded border border-rose-100 font-medium">人工</span>
                         </div>
-                        <div class="text-[10px] text-slate-400 flex items-center space-x-2">
-                            <span>设备: 96583777ba4f9e3e</span>
-                        </div>
+                        <div class="text-[10px] text-slate-400 truncate">D:...wmy2HgJwAAyH_k50cbMIIQjco_XslWOw</div>
                     </div>
                 </div>
-
-                <!-- 模式状态选择器 (升级敏感词提醒核心开关) -->
-                <div class="flex items-center space-x-2">
-                    <div class="flex bg-slate-100 p-0.5 rounded-lg text-xs mr-2">
-                        <button id="toggle-ai-response" class="px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium transition-all bg-white text-blue-600 shadow-sm">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500" id="ai-active-indicator"></span>
-                            <span>AI回复中</span>
-                        </button>
-                        <button id="toggle-ai-trustee" class="px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium text-slate-500 hover:text-slate-800 transition-all bg-transparent">
-                            <span>AI托管</span>
-                        </button>
-                    </div>
-
-                    <!-- 人工介入开关（敏感词警报时将触发闪烁，提示客服点击接管） -->
-                    <button id="btn-manual-takeover" onclick="manualTakeover()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-md shadow-indigo-100 hover:shadow-indigo-200 active:scale-95 transition-all flex items-center space-x-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                        <span>接管此会话</span>
+                <div class="flex items-center space-x-3">
+                    <span class="text-[10px] text-slate-400">设备: 4c852df023c1779f</span>
+                    <!-- 退出多选按钮 (仅多选模式下显示) -->
+                    <button id="exit-multiselect-btn" onclick="exitMultiSelectMode()" class="hidden text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1 rounded-md border border-slate-200 transition">
+                        退出多选
                     </button>
+                    <button class="text-xs text-slate-500 hover:text-slate-800 flex items-center space-x-1">
+                        <span>test2</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <button class="text-xs text-slate-500 hover:text-rose-600">退出登录</button>
                 </div>
             </div>
 
-            <!-- ==================== 智能敏感词触发 - 极速警报横幅 (重点新增设计) ==================== -->
-            <div id="sensitive-alert-banner" class="hidden bg-gradient-to-r from-red-500 to-rose-600 px-6 py-3.5 flex items-center justify-between shadow-lg shadow-red-100 z-20 animate-fade-in">
-                <div class="flex items-center space-x-3 text-white">
-                    <div class="w-9 h-9 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white shrink-0 animate-bounce">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="text-xs font-bold uppercase tracking-wider text-rose-100 flex items-center">
-                            <span class="w-1.5 h-1.5 rounded-full bg-white mr-1.5 indicator-blink"></span>
-                            紧急情况：自动阻断并已切换到人工
-                        </div>
-                        <div class="text-sm font-semibold text-white mt-0.5">
-                            客户触发敏感词: <span class="bg-white/20 px-2 py-0.5 rounded text-xs font-mono font-bold" id="triggered-keyword-label">"骗子、投诉"</span>。AI 自动回复已冻结挂起。
-                        </div>
-                    </div>
+            <!-- 聊天正文滚动区域 (增加 pt-8 确保第一条消息的 hover 浮窗完全可见) -->
+            <div id="chat-messages-container" class="flex-1 overflow-y-auto p-6 pt-8 space-y-5 relative">
+                <!-- 消息内容将由 JavaScript 渲染 -->
+            </div>
+
+            <!-- ==================== 底部：多选模式专属操作栏 (Slide-up Action Bar) ==================== -->
+            <div id="multiselect-action-bar" class="absolute bottom-[160px] left-0 right-0 h-12 bg-[#F5F5F5] border-t border-slate-200 px-4 flex items-center justify-between transform translate-y-12 opacity-0 pointer-events-none transition-all duration-200 shadow-inner z-20">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-wechat-green animate-pulse"></span>
+                    <span id="selected-count-label" class="text-xs font-medium text-slate-700">已选择 1 条消息</span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button onclick="dismissBanner()" class="px-3 py-1.5 bg-black/10 hover:bg-black/20 text-white rounded-lg text-xs font-medium transition-all">
-                        暂不处理
+                    <button id="forward-individual-btn" onclick="openForwardModal('individual')" class="px-3 py-1 bg-white hover:bg-slate-100 text-slate-700 rounded text-xs border border-slate-300 font-medium transition">
+                        逐条转发
                     </button>
-                    <button onclick="manualTakeover()" class="px-4 py-1.5 bg-white text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-bold shadow-md hover:shadow-lg active:scale-95 transition-all">
-                        立刻介入处理
+                    <button id="forward-combined-btn" onclick="openForwardModal('combined')" class="px-3 py-1 bg-wechat-green hover:bg-wechat-greenHover text-white rounded text-xs font-medium transition shadow-sm">
+                        合并转发
+                    </button>
+                    <button onclick="exitMultiSelectMode()" class="px-3 py-1 bg-white hover:bg-slate-100 text-slate-500 rounded text-xs border border-slate-300 transition">
+                        取消
                     </button>
                 </div>
             </div>
 
-            <!-- AI 托管说明条 -->
-            <div id="ai-managed-banner" class="bg-blue-50/70 border-b border-blue-100 px-6 py-2.5 flex items-center space-x-2 shrink-0">
-                <span class="flex h-2 w-2 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                <span class="text-xs text-blue-700 font-medium">AI 正在处理这条回复 - 系统已经开始处理客户刚发来的消息，生成完成后会自动发送流程。</span>
-            </div>
-
-            <!-- 聊天记录区域 -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30" id="chat-messages-container">
-                <!-- 消息内容将由 JS 渲染 -->
-            </div>
-
-            <!-- 工具栏与输入控制区 -->
-            <div class="border-t border-slate-200 bg-white p-4 shrink-0">
-                <!-- 聊天工具快捷键 -->
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-                    <div class="flex items-center space-x-3.5 text-slate-400">
-                        <button class="hover:text-slate-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </button>
-                        <button class="hover:text-slate-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </button>
-                        <button class="hover:text-slate-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        </button>
-                        <button class="hover:text-slate-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                        </button>
-                        <button class="hover:text-slate-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                        </button>
-                    </div>
-                    <div class="text-[10px] text-slate-400">
-                        按下 <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-200">Enter</kbd> 发送消息，<kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-200">Shift + Enter</kbd> 换行
+            <!-- 输入区域 -->
+            <div class="pc-input-panel border-t flex flex-col flex-shrink-0 relative">
+                <!-- 工具栏 -->
+                <div class="px-4 py-2 flex items-center justify-between border-b border-slate-100 flex-shrink-0">
+                    <div class="flex items-center space-x-2 text-slate-500">
+                        <!-- 表情 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
+                        <!-- 图片 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></button>
+                        <!-- 剪切/截屏 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.24 9.12H18a2 2 0 110 4h-2.76M9 9.12H6.24a2 2 0 100 4H9M12 2v20m0-20H6.24m5.76 0H18"></path></svg></button>
+                        <!-- 文件 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
+                        <!-- 语音/麦克风 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg></button>
+                        <!-- 手册 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5.5A2.5 2.5 0 016.5 3H20v16H6.5A2.5 2.5 0 004 21.5v-16zM8 7h8M8 11h6"></path></svg></button>
+                        <!-- 电话 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5.5A2.5 2.5 0 015.5 3h2L10 8l-1.7 1.7a13 13 0 006 6L16 14l5 2.5v2A2.5 2.5 0 0118.5 21h-.5C9.7 21 3 14.3 3 6v-.5z"></path></svg></button>
+                        <!-- 视频 -->
+                        <button class="pc-tool-button"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.5-2.6A1 1 0 0121 8.3v7.4a1 1 0 01-1.5.9L15 14M5 6h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"></path></svg></button>
                     </div>
                 </div>
 
-                <!-- 消息文本输入框 -->
-                <div class="relative">
-                    <textarea id="text-input" rows="3" placeholder="输入消息，支持图片、视频、文件混排。或在此处输入触发敏感词测试（包含'退钱','投诉','骗子','垃圾'等将启动全局警报转人工）" class="w-full text-sm outline-none resize-none placeholder-slate-400 text-slate-700"></textarea>
-                    
-                    <div class="flex items-center justify-between mt-2">
-                        <span class="text-xs text-slate-400">媒体可以直接拖入输入框，可在中后删除，双击图片/视频可预览</span>
-                        <div class="flex space-x-2">
-                            <button onclick="clearInput()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-lg transition-all">清空</button>
-                            <button onclick="handleSendMessage()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-md shadow-blue-100 transition-all">发送</button>
-                        </div>
-                    </div>
+                <!-- 引用回复预览栏 -->
+                <div id="reply-preview-bar" class="hidden px-4 py-1.5 bg-slate-100 border-b border-slate-100 flex items-center justify-between text-xs text-slate-600 select-none flex-shrink-0 transition-all">
+                    <span id="reply-preview-text" class="truncate flex-1 pr-4">回复 删26.3.20🌹Jua：犹豫一千次，不如行动一次！</span>
+                    <button onclick="cancelReply()" class="text-slate-400 hover:text-slate-600 flex-shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- 文本编辑 -->
+                <div class="flex-1 p-3 overflow-hidden">
+                    <textarea id="chat-textarea" placeholder="输入消息，支持图片、视频、文件混排，Enter 发送，Shift + Enter 换行" class="w-full h-full bg-transparent border-none outline-none resize-none text-xs text-slate-800 leading-relaxed placeholder-slate-400 focus:ring-0"></textarea>
+                </div>
+                <!-- 发送按钮 -->
+                <div class="absolute bottom-2 right-4 flex space-x-2">
+                    <button onclick="clearTextarea()" class="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded-lg text-xs border border-slate-200 transition">清空</button>
+                    <button onclick="sendMessage()" class="px-5 py-1.5 bg-slate-300 hover:bg-slate-400 text-white font-medium rounded-lg text-xs transition shadow-sm">发送</button>
                 </div>
             </div>
+
         </div>
 
-        <!-- ==================== SIMULATION SIDEBAR (模拟测试控制中心) ==================== -->
-        <div class="w-80 bg-slate-900 border-l border-slate-800 text-slate-300 flex flex-col justify-between shrink-0 z-30 shadow-2xl">
-            <div>
-                <div class="p-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
-                    <div class="flex items-center space-x-2 text-rose-400">
-                        <span class="w-2.5 h-2.5 bg-rose-500 rounded-full indicator-blink"></span>
-                        <h2 class="font-bold text-sm tracking-wider uppercase text-white">模拟测试后台</h2>
-                    </div>
-                    <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">开发者模式</span>
-                </div>
-
-                <div class="p-5 space-y-4">
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        您好！为了方便您<b>直观感知与展示</b>新设计的敏感词过滤警报机制，可在此控制面板模拟客户发送对应类型的内容，查看页面响应：
-                    </p>
-
-                    <!-- 敏感词定义卡 -->
-                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-                        <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">当前系统敏感监控词</div>
-                        <div class="flex flex-wrap gap-1.5 mt-2">
-                            <span class="px-2 py-0.5 bg-rose-950/50 border border-rose-900 text-rose-300 rounded text-[10px] font-mono font-medium">骗子</span>
-                            <span class="px-2 py-0.5 bg-rose-950/50 border border-rose-900 text-rose-300 rounded text-[10px] font-mono font-medium">投诉</span>
-                            <span class="px-2 py-0.5 bg-rose-950/50 border border-rose-900 text-rose-300 rounded text-[10px] font-mono font-medium">退钱</span>
-                            <span class="px-2 py-0.5 bg-rose-950/50 border border-rose-900 text-rose-300 rounded text-[10px] font-mono font-medium">垃圾</span>
-                            <span class="px-2 py-0.5 bg-rose-950/50 border border-rose-900 text-rose-300 rounded text-[10px] font-mono font-medium">起诉</span>
-                        </div>
-                    </div>
-
-                    <!-- 模拟按钮专区 -->
-                    <div class="space-y-2.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">一键模拟快捷键：</label>
-                        
-                        <!-- 按钮：模拟敏感消息 -->
-                        <button onclick="simulateCustomerMessage('效果一点也不好，你们就像骗子一样！我要投诉！')" class="w-full p-3 bg-gradient-to-r from-rose-950 to-red-900 hover:from-rose-900 hover:to-red-800 border border-rose-800 rounded-xl text-left text-white transition-all transform active:scale-95 group shadow-lg shadow-rose-950/20">
-                            <div class="text-xs font-bold text-rose-300 flex items-center justify-between">
-                                <span>模拟客户发送【敏感消息】</span>
-                                <span class="bg-rose-500 text-white text-[9px] px-1 py-0.1 rounded uppercase group-hover:scale-105 transition-all">触发极速警报</span>
-                            </div>
-                            <p class="text-[11px] text-slate-300 mt-1 truncate">“效果一点也不好，你们就像骗子一样！我要投诉！”</p>
-                        </button>
-
-                        <!-- 按钮：模拟普通咨询 -->
-                        <button onclick="simulateCustomerMessage('请问你们门店的老师什么时候有空呢？我想带朋友过去体验下。')" class="w-full p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl text-left transition-all transform active:scale-95 group">
-                            <div class="text-xs font-semibold text-emerald-400 flex items-center justify-between">
-                                <span>模拟客户发送【普通消息】</span>
-                                <span class="bg-blue-600 text-white text-[9px] px-1 py-0.1 rounded uppercase">AI全托管应答</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 mt-1 truncate">“请问你们门店的老师什么时候有空呢？...”</p>
-                        </button>
-
-                        <!-- 按钮：重置所有会话 -->
-                        <button onclick="resetDemoState()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg text-xs font-medium transition-all text-center flex items-center justify-center space-x-1.5">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 4H15"></path></svg>
-                            <span>恢复演示初始状态</span>
-                        </button>
-                    </div>
-
-                    <!-- 工作流日志 -->
-                    <div class="border-t border-slate-800 pt-4 space-y-2">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">系统后台事件流监控：</label>
-                        <div class="bg-black/40 rounded-xl p-3 h-36 overflow-y-auto text-[10px] font-mono space-y-1.5 border border-slate-800" id="sim-log-panel">
-                            <!-- 日志将被 JS 动态注入 -->
-                        </div>
-                    </div>
-                </div>
+        <!-- ==================== 第四栏：客户详情及设置 (右侧栏) ==================== -->
+        <div class="w-[320px] pc-side-panel border-l flex flex-col flex-shrink-0 h-full">
+            <!-- 切换标签 -->
+            <div class="pc-detail-tabs grid grid-cols-4 text-xs text-center">
+                <button class="font-medium">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19a6 6 0 10-6 0m6 0a6 6 0 01-6 0m6 0h3.5A2.5 2.5 0 0021 16.5v-1A4.5 4.5 0 0016.5 11h-9A4.5 4.5 0 003 15.5v1A2.5 2.5 0 005.5 19H9"/></svg>
+                    <span>客户详情</span>
+                </button>
+                <button class="text-slate-400 hover:text-slate-700">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V4m8 3V4M5 10h14M6.5 21h11A2.5 2.5 0 0020 18.5v-11A2.5 2.5 0 0017.5 5h-11A2.5 2.5 0 004 7.5v11A2.5 2.5 0 006.5 21z"/></svg>
+                    <span>预约开单</span>
+                </button>
+                <button class="text-slate-400 hover:text-slate-700">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 6h9M8 12h9M8 18h5M5 6h.01M5 12h.01M5 18h.01"/></svg>
+                    <span>订单轨迹</span>
+                </button>
+                <button class="text-slate-400 hover:text-slate-700">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20s7-4.5 7-10a4 4 0 00-7-2.65A4 4 0 005 10c0 5.5 7 10 7 10z"/></svg>
+                    <span>发起回访</span>
+                </button>
             </div>
 
-            <!-- 底栏版权说明 -->
-            <div class="p-5 border-t border-slate-800 bg-slate-950 text-[11px] text-slate-500 text-center leading-relaxed">
-                智能转接客服控制系统演示 2026 版<br>
-                <span>采用 Web Audio 动态声学警报系统</span>
+            <!-- 详情面板滚动区 -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+                
+                <!-- 个人名片 -->
+                <div class="pc-detail-card flex flex-col items-center text-center p-5">
+                    <div id="detail-customer-avatar" class="w-16 h-16 rounded-full bg-amber-100 border-2 border-white overflow-hidden shadow-sm flex items-center justify-center font-bold text-amber-800 text-xl">
+                        J
+                    </div>
+                    <h2 id="detail-customer-name" class="text-base font-semibold text-slate-800 mt-3">删26.3.20🌹Jua</h2>
+                    <span class="text-[10px] text-slate-400 mt-0.5">企微ID: s12580</span>
+                </div>
+
+                <!-- 客户基本信息 -->
+                <div class="pc-detail-card p-4 space-y-3">
+                    <div class="text-xs font-semibold text-slate-600 border-b border-slate-100 pb-2">客户信息</div>
+                    
+                    <div class="space-y-2.5">
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">微信名称:</span>
+                            <span id="detail-wechat-name" class="text-slate-700 flex-1 text-right truncate font-medium">🌹Jua</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">顾客ID:</span>
+                            <span class="text-slate-700 flex-1 text-right break-all text-[10px]">wmy2HgJwAAyH_k50cbMIIQjco_XslWOw</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">设备ID:</span>
+                            <span class="text-slate-700 flex-1 text-right truncate">4c852df023c1779f</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">在线状态:</span>
+                            <span class="text-rose-600 font-medium">离线</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs group border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">客户备注名:</span>
+                            <span id="detail-remark-name" class="text-slate-700 flex-1 text-right truncate font-medium group-hover:text-wechat-green cursor-pointer">删26.3.20🌹Jua ✏️</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">客户描述:</span>
+                            <span class="text-slate-400 flex-1 text-right">--</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">手机号:</span>
+                            <span class="text-slate-400 flex-1 text-right">--</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs border-b border-slate-100 pb-2">
+                            <span class="text-slate-400 w-24">备注备用电话:</span>
+                            <span class="text-slate-400 flex-1 text-right">--</span>
+                        </div>
+                        <div class="flex items-start justify-between text-xs">
+                            <span class="text-slate-400 w-24">标签:</span>
+                            <span class="text-slate-400 flex-1 text-right">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 会话状态管理 -->
+                <div class="pc-detail-card p-4">
+                    <div class="text-xs font-semibold text-slate-600 pb-3">会话状态</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-1 bg-orange-50 text-orange-600 rounded text-[10px] border border-orange-100 font-medium">人工处理</span>
+                        <span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded text-[10px] border border-emerald-100 font-medium">已读</span>
+                        <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] border border-blue-100 font-medium">已回复</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
     </div>
 
-    <!-- ==================== JAVASCRIPT SYSTEM LOGIC ==================== -->
+    <!-- ==================== 企业微信标准双栏转发模态弹窗 (Modal) ==================== -->
+    <div id="forward-modal" class="fixed inset-0 z-40 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+        <!-- 遮罩层 -->
+        <div class="absolute inset-0 bg-black/40" onclick="closeForwardModal()"></div>
+        
+        <!-- 弹窗卡片 -->
+        <div class="bg-white w-[640px] h-[460px] rounded-lg shadow-2xl flex flex-col overflow-hidden relative z-50 transform scale-95 transition-all duration-300">
+            <!-- 弹窗头部 -->
+            <div class="h-12 border-b border-slate-200 px-4 flex items-center justify-between flex-shrink-0 bg-slate-50">
+                <span class="font-bold text-slate-800 text-sm flex items-center space-x-2">
+                    <span>选择联系人</span>
+                    <span id="forward-type-badge" class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.2 rounded font-normal">合并转发</span>
+                </span>
+                <button onclick="closeForwardModal()" class="text-slate-400 hover:text-slate-700 p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- 弹窗双栏内容 -->
+            <div class="flex flex-1 overflow-hidden">
+                
+                <!-- 左栏: 搜索与最近客户 (60% 宽度) -->
+                <div class="w-[60%] flex flex-col h-full border-r border-slate-200">
+                    <!-- 搜索框 -->
+                    <div class="p-3 flex-shrink-0">
+                        <div class="relative">
+                            <input id="modal-search-input" oninput="filterModalClients()" type="text" placeholder="🔍 搜索最近聊天的客户..." class="w-full pl-8 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-wechat-green focus:bg-white transition">
+                        </div>
+                    </div>
+                    
+                    <!-- 客户列表 -->
+                    <div class="flex-1 overflow-y-auto px-1" id="modal-client-list">
+                        <!-- 由 JavaScript 动态填充以保持交互最新 -->
+                    </div>
+                </div>
+
+                <!-- 右栏: 已选择预览 (40% 宽度) -->
+                <div class="w-[40%] flex flex-col h-full bg-slate-50">
+                    <div class="p-3 text-xs font-bold text-slate-400 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <span>已选择的联系人</span>
+                        <span id="selected-recipients-count" class="text-wechat-green">0</span>
+                    </div>
+                    
+                    <!-- 已选人列表 -->
+                    <div class="flex-1 overflow-y-auto p-2 space-y-1.5" id="modal-selected-list">
+                        <!-- 动态展示已勾选联系人 -->
+                        <div class="text-xs text-slate-400 text-center py-8" id="empty-selected-state">暂无选择联系人</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 弹窗底部操作栏 -->
+            <div class="h-14 border-t border-slate-200 px-4 flex items-center justify-end space-x-2 bg-slate-50 flex-shrink-0">
+                <button onclick="closeForwardModal()" class="px-4 py-1.5 bg-white hover:bg-slate-100 text-slate-600 rounded text-xs border border-slate-300 transition">
+                    取消
+                </button>
+                <button id="modal-confirm-btn" onclick="executeForwarding()" disabled class="px-5 py-1.5 bg-wechat-green hover:bg-wechat-greenHover text-white text-xs font-bold rounded transition shadow-sm disabled:bg-slate-300 disabled:cursor-not-allowed disabled:shadow-none">
+                    确定(0)
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== JavaScript 核心交互逻辑 ==================== -->
     <script>
-        // 1. 初始化会话池原始数据
-        let sessions = [
-            {
-                id: "s1",
-                name: "26.5.27不发",
-                lastMsg: "效果一点也不好 像骗子一样",
-                time: "18:28",
-                avatar: "不",
-                mode: "ai",            // ai (AI回复), human (人工处理), sensitive (敏感词转人工处理中)
-                statusText: "AI处理中",
-                unread: 0,
-                device: "96583777ba4f9e3e",
-                gender: "male",
-                hasSensitiveAlert: false, // 是否已经触发敏感警报
-                triggeredKeyword: "",
-                chatHistory: [
-                    { sender: "ai", text: "特别理解您现在的疑惑，您到店之后可以和门店的老师详细沟通，他们会把相关的报价明细给您解释清楚的哦~", time: "2026/6/1 18:26:03" },
-                    { sender: "customer", text: "你们把10块钱退给我", time: "2026/6/1 18:26:21" },
-                    { sender: "customer", text: "不然我要投诉你们", time: "2026/6/1 18:27:49" },
-                    { sender: "ai", text: "实在不好意思让您这么不愉快！麻烦您说下这10元对应的具体情况好吗？我这边立刻给您处理~", time: "2026/6/1 18:28:24" },
-                    { sender: "customer", text: "效果一点也不好 像骗子一样", time: "2026/6/1 18:28:51" }
+        // 1. 系统数据定义
+        const conversations = {
+            jua: {
+                name: '删26.3.20🌹Jua',
+                id: 's12580',
+                wechat: '🌹Jua',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw',
+                device: '4c852df023c1779f',
+                status: '离线',
+                messages: [
+                    { type: 'other', sender: '删26.3.20🌹Jua', time: '2026/6/11 11:02:10', content: '犹豫一千次，不如行动一次！<br><br>不去尝试，拿什么看到效果😡专注做十多年，技术效果不会让你失望[强]<br><br>到店赠送美白补水一次✨' },
+                    { type: 'self', sender: '子画', time: '2026/6/11 11:02:10', content: '夏天折扣终点黄金周期 ⏰<br><br>六一特惠价只需 <strong class="text-rose-600 font-bold">179元</strong><br><br>预留名额长期有效不涨价<br><br>定金10 🪙 即可登记<br><br>赶快预留一个吧？？<br><span class="text-xs text-slate-500">(179今天最后一天 晚上12点结束)</span>' },
+                    { type: 'self', sender: '子画', time: '2026/6/11 11:02:10', content: 'image-placeholder' }
                 ]
             },
-            {
-                id: "s2",
-                name: "26.5.27",
-                lastMsg: "你看本周六或者周日，聊天有空到店...",
-                time: "18:27",
-                avatar: "27",
-                mode: "ai",
-                statusText: "资料待完善 · 已回复",
-                unread: 0,
-                device: "a1a2b3c4d5e6f7g8",
-                chatHistory: [
-                    { sender: "customer", text: "我想本周过去咨询下。", time: "2026/6/1 18:25:00" },
-                    { sender: "ai", text: "随时恭候您！请问周六和周日哪天比较方便呢？", time: "2026/6/1 18:27:00" }
+            top: {
+                name: '26.06.10#TOP',
+                id: 's12581',
+                wechat: '#TOP',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw_top',
+                device: '8a852df023c177aa',
+                status: '在线',
+                messages: [
+                    { type: 'other', sender: '26.06.10#TOP', time: '2026/6/11 11:10:00', content: '你好，请问厦门百草德雷站在哪里？' },
+                    { type: 'self', sender: '子画', time: '2026/6/11 11:14:00', content: '门店位置：厦门百草德雷站。地图定位已发送，期待您的光临！' }
                 ]
             },
-            {
-                id: "s3",
-                name: "命运已造",
-                lastMsg: "要是后续需要改约或者取消，您直...",
-                time: "18:07",
-                avatar: "命",
-                mode: "ai",
-                statusText: "资料待完善 · 已回复",
-                unread: 0,
-                device: "ff34ff89aef7738c",
-                chatHistory: [
-                    { sender: "customer", text: "我需要改期。", time: "2026/6/1 18:06:00" },
-                    { sender: "ai", text: "要是后续需要改约或者取消，您直接发消息告诉我就行，我会帮您登记的。", time: "2026/6/1 18:07:00" }
+            luojie: {
+                name: '骆姐',
+                id: 's12582',
+                wechat: '骆姐',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw_luo',
+                device: '9c852df023c177ab',
+                status: '离线',
+                messages: [
+                    { type: 'other', sender: '骆姐', time: '2026/6/11 10:05:00', content: '我没有听到语音，能打字吗？' }
                 ]
             },
-            {
-                id: "s4",
-                name: "26.5.31朝阳",
-                lastMsg: "可以的呀",
-                time: "18:06",
-                avatar: "朝",
-                mode: "human",
-                statusText: "已回复",
-                unread: 0,
-                device: "7a8b9c0d1e2f3a4b",
-                chatHistory: [
-                    { sender: "customer", text: "明天安排吗？", time: "2026/6/1 18:05:00" },
-                    { sender: "human", text: "可以的呀", time: "2026/6/1 18:06:00" }
+            kai: {
+                name: '开10.3',
+                id: 's12583',
+                wechat: '开',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw_kai',
+                device: '7b852df023c177ac',
+                status: '在线',
+                messages: [
+                    { type: 'other', sender: '开10.3', time: '2026/6/11 09:50:00', content: '我们明天下午两点过去，能帮我们预约一个老师吗？' },
+                    { type: 'self', sender: '子画', time: '2026/6/11 09:52:00', content: '收到！我们明天去。已帮您登记明天下午两点的席位。' }
                 ]
             },
-            {
-                id: "s5",
-                name: "26.5.26西宁",
-                lastMsg: "姓胡, 15110947373",
-                time: "18:04",
-                avatar: "西",
-                mode: "human",
-                statusText: "24分未回复",
-                unread: 7,
-                device: "b1c2d3e4f5a6b7c8",
-                chatHistory: [
-                    { sender: "customer", text: "姓胡, 15110947373", time: "2026/6/1 18:04:00" }
+            two: {
+                name: '2.26',
+                id: 's12584',
+                wechat: '二点二六',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw_two',
+                device: '5f852df023c177ad',
+                status: '离线',
+                messages: [
+                    { type: 'other', sender: '2.26', time: '2026/6/11 09:48:00', content: '你们门店到底在几楼啊？' },
+                    { type: 'self', sender: '子画', time: '2026/6/11 09:51:00', content: '这个是门店位置您看看对不对，是在商场三楼电梯口右转。' }
                 ]
             },
-            {
-                id: "s6",
-                name: "26.5.31遂宁",
-                lastMsg: "[图片消息]",
-                time: "18:03",
-                avatar: "遂",
-                mode: "ai",
-                statusText: "AI处理中",
-                unread: 19,
-                device: "9f8e7d6c5b4a3c2b",
-                chatHistory: [
-                    { sender: "customer", text: "[图片消息]", time: "2026/6/1 18:03:00" }
+            nine: {
+                name: '9.27',
+                id: 's12585',
+                wechat: '九二十七',
+                guid: 'wmy2HgJwAAyH_k50cbMIIQjco_XslWOw_nine',
+                device: '2d852df023c177ae',
+                status: '在线',
+                messages: [
+                    { type: 'other', sender: '9.27', time: '2026/6/11 09:34:00', content: '[图片消息]' }
                 ]
             }
-        ];
+        };
 
-        // 当前选中的会话
-        let activeSessionId = "s1";
-        // 当前过滤器状态
-        let currentFilterMode = "all"; // all, human, ai, sensitive
+        // 当前选中的会话 Key
+        let activeConvKey = 'jua';
+        
+        // 多选模式状态变量
+        let isMultiSelectMode = false;
+        let selectedMessageIndexes = [];
+        let lastSelectedIdx = null; // 用于 Shift 连选
 
-        // 2. 页面加载完毕执行初始化
-        window.onload = function() {
-            logEvent("系统", "智能转人工中心已成功运行。");
-            renderSessionList();
-            renderActiveChat();
-            updateGlobalCounters();
-        }
+        // 转发弹窗的状态变量
+        let forwardType = 'combined'; // 'individual' (逐条) 或 'combined' (合并)
+        let selectedRecipients = []; // 存储选中的接收人 Key 列表
 
-        // 3. 记录日志函数
-        function logEvent(source, text) {
-            const container = document.getElementById("sim-log-panel");
-            const timeStr = new Date().toTimeString().split(' ')[0];
-            let color = "text-slate-400";
-            if (source === "系统警告" || source === "人工干预") {
-                color = "text-rose-400 font-semibold";
-            } else if (source === "客户") {
-                color = "text-blue-300";
-            } else if (source === "AI") {
-                color = "text-cyan-400";
+        // 引用回复状态变量
+        let replyTarget = null; // 存储当前引用的消息数据: { sender, content }
+        let activeActionMessageIndex = null; // 当前点击后展开操作条的消息索引
+        let activeActionMenuPosition = { x: 0, y: 0 };
+
+        // 2. 初始化与会话切换
+        function selectConversation(key) {
+            if (isMultiSelectMode) {
+                if(!confirm('切换联系人将退出当前多选状态，是否继续？')) {
+                    return;
+                }
+                exitMultiSelectMode();
             }
-            container.innerHTML += `<div class="leading-relaxed"><span class="text-slate-500">[${timeStr}]</span> <span class="${color}">${source}: ${text}</span></div>`;
-            container.scrollTop = container.scrollHeight;
-        }
 
-        // 4. 渲染左侧会话列表
-        function renderSessionList() {
-            const listContainer = document.getElementById("session-list-container");
-            listContainer.innerHTML = "";
+            // 切换聊天时自动取消当前聊天累积的引用回复
+            cancelReply();
+            closeMessageActions();
 
-            // 过滤列表
-            const filteredSessions = sessions.filter(s => {
-                if (currentFilterMode === "all") return true;
-                if (currentFilterMode === "human") return s.mode === "human";
-                if (currentFilterMode === "ai") return s.mode === "ai";
-                if (currentFilterMode === "sensitive") return s.hasSensitiveAlert === true;
-                return true;
+            activeConvKey = key;
+            const conv = conversations[key];
+
+            // 更新聊天列表选中态样式
+            document.querySelectorAll('.conv-item').forEach(item => {
+                item.classList.remove('bg-slate-100/80');
             });
+            document.getElementById(`conv-${key}`).classList.add('bg-slate-100/80');
 
-            if (filteredSessions.length === 0) {
-                listContainer.innerHTML = `<div class="p-8 text-center text-xs text-slate-400">无匹配此过滤条件的会话</div>`;
+            // 更新顶部 Header
+            document.getElementById('active-chat-name').innerHTML = conv.name;
+            document.getElementById('active-chat-avatar').innerText = conv.name.charAt(0);
+
+            // 更新右侧客户详情
+            document.getElementById('detail-customer-name').innerText = conv.name;
+            document.getElementById('detail-wechat-name').innerText = conv.wechat;
+            document.getElementById('detail-remark-name').innerText = conv.name + ' ✏️';
+            document.getElementById('detail-customer-avatar').innerText = conv.name.charAt(0);
+
+            // 重新渲染聊天信息流
+            renderChatMessages();
+            scrollToBottom();
+        }
+
+        // 3. 动态渲染当前聊天信息流
+        function renderChatMessages() {
+            const container = document.getElementById('chat-messages-container');
+            const conv = conversations[activeConvKey];
+            container.innerHTML = '';
+
+            conv.messages.forEach((msg, idx) => {
+                // 如果是撤回等系统消息，渲染为居中胶囊提示
+                if (msg.type === 'system') {
+                    const systemRow = document.createElement('div');
+                    systemRow.className = 'flex justify-center my-3';
+                    systemRow.innerHTML = `
+                        <div class="bg-slate-200/50 text-slate-500 text-[11px] px-3 py-1 rounded-full border border-slate-200/20 select-none">
+                            ${msg.content}
+                        </div>
+                    `;
+                    container.appendChild(systemRow);
+                    return;
+                }
+
+                const isSelf = msg.type === 'self';
+                const avatarChar = isSelf ? '子' : conv.name.charAt(0);
+                const avatarBg = isSelf ? 'bg-blue-500 text-white' : 'bg-amber-100 text-amber-800';
+                
+                // 核心：构建引用消息样式 (若该消息带有引用回复数据)
+                let replyQuoteHtml = '';
+                if (msg.replyTo) {
+                    if (isSelf) {
+                        // 自己的消息引用：右侧蓝色主题
+                        replyQuoteHtml = `
+                            <div class="border-l-2 border-sky-400/60 pl-2.5 mb-2 text-sky-800/80 text-[11px] leading-relaxed select-none break-all text-left">
+                                ${msg.replyTo.sender}：${msg.replyTo.content}
+                            </div>
+                        `;
+                    } else {
+                        // 他人的消息引用：左侧灰色主题
+                        replyQuoteHtml = `
+                            <div class="border-l-2 border-slate-300 pl-2.5 mb-2 text-slate-500 text-[11px] leading-relaxed select-none break-all text-left">
+                                ${msg.replyTo.sender}：${msg.replyTo.content}
+                            </div>
+                        `;
+                    }
+                }
+
+                // 构建主消息体
+                let messageContentHtml = '';
+                if (msg.content === 'image-placeholder') {
+                    messageContentHtml = `
+                        <div class="bg-white border border-slate-200 rounded-lg p-4 text-slate-800 text-left leading-relaxed shadow-sm flex flex-col items-center justify-center space-y-2 border-dashed border-2 w-64 h-36">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-xs text-slate-400">图片消息不可预览</span>
+                        </div>
+                    `;
+                } else {
+                    const bubbleBg = isSelf ? 'pc-message-self' : 'pc-message-other';
+                    messageContentHtml = `
+                        <div class="pc-message-bubble ${bubbleBg} text-left">
+                            ${replyQuoteHtml}
+                            <div class="break-all">${msg.content}</div>
+                        </div>
+                    `;
+                }
+
+                // 创建消息容器行
+                const messageRow = document.createElement('div');
+                messageRow.className = `message-row flex items-start ${isSelf ? 'justify-end' : ''} space-x-3 group relative`;
+                messageRow.setAttribute('data-index', idx);
+
+                // 根据是否处于多选状态设定圆圈勾选框的样式
+                const checkboxWidthClass = isMultiSelectMode ? 'w-10 opacity-100' : 'w-0 opacity-0';
+                const isChecked = selectedMessageIndexes.includes(idx);
+                const actionOpenClass = activeActionMessageIndex === idx && !isMultiSelectMode ? 'is-open' : '';
+                const actionStyle = activeActionMessageIndex === idx ? `style="left:${activeActionMenuPosition.x}px; top:${activeActionMenuPosition.y}px;"` : '';
+
+                // 组装完整的贴合版 HTML 结构 (支持回复操作)
+                messageRow.innerHTML = `
+                    ${!isSelf ? `
+                        <!-- 左侧圆圈勾选框 -->
+                        <div class="checkbox-container ${checkboxWidthClass} flex items-center justify-center self-center transition-all duration-200 overflow-hidden flex-shrink-0">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} class="message-checkbox w-4 h-4 rounded-full border-slate-300 text-wechat-green focus:ring-wechat-green cursor-pointer" onchange="handleCheckboxChange(${idx}, event)">
+                        </div>
+                    ` : ''}
+
+                    <!-- 消息核心包裹 -->
+                    ${isSelf ? `
+                        <!-- 右侧消息 (自己发送) -->
+                        <div class="max-w-[64%] text-right relative">
+                            <div class="flex items-center justify-end space-x-2 text-[10px] text-slate-400 mb-1">
+                                <span>${msg.time}</span>
+                                <span class="font-bold text-slate-600">${msg.sender}</span>
+                            </div>
+                            
+                            <!-- 气泡与点击操作条包裹区 -->
+                            <div class="relative inline-block text-left" onclick="toggleMessageActions(${idx}, event)">
+                                ${messageContentHtml}
+                                
+                                <!-- 点击后停留显示的操作条 -->
+                                <div class="message-action-popover ${actionOpenClass} wechat-message-menu fixed select-none ${isMultiSelectMode ? 'hidden' : ''}" ${actionStyle} onclick="event.stopPropagation()">
+                                    <button onclick="startReply(${idx}); closeMessageActions();">回复</button>
+                                    <button onclick="forwardSingleMessage(${idx}); closeMessageActions();">转发</button>
+                                    <button onclick="enterMultiSelectMode(${idx}); closeMessageActions();">多选</button>
+                                    <button onclick="recallMessage(${idx}); closeMessageActions();">撤回</button>
+                                    <button onclick="closeMessageActions();">...</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 头像 -->
+                        <div class="w-9 h-9 rounded-full ${avatarBg} overflow-hidden flex-shrink-0 border border-slate-200 flex items-center justify-center font-semibold">
+                            ${avatarChar}
+                        </div>
+
+                        <!-- 右侧圆圈勾选框 -->
+                        <div class="checkbox-container ${checkboxWidthClass} flex items-center justify-center self-center transition-all duration-200 overflow-hidden flex-shrink-0">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} class="message-checkbox w-4 h-4 rounded-full border-slate-300 text-wechat-green focus:ring-wechat-green cursor-pointer" onchange="handleCheckboxChange(${idx}, event)">
+                        </div>
+                    ` : `
+                        <!-- 左侧消息 (客户发送) -->
+                        <div class="w-9 h-9 rounded-full ${avatarBg} overflow-hidden flex-shrink-0 border border-slate-200 flex items-center justify-center font-semibold">
+                            ${avatarChar}
+                        </div>
+
+                        <div class="max-w-[64%] relative">
+                            <div class="flex items-center space-x-2 text-[10px] text-slate-400 mb-1">
+                                <span class="font-bold text-slate-600">${msg.sender}</span>
+                                <span>${msg.time}</span>
+                            </div>
+                            
+                            <!-- 气泡与点击操作条包裹区 -->
+                            <div class="relative inline-block" onclick="toggleMessageActions(${idx}, event)">
+                                ${messageContentHtml}
+                                
+                                <!-- 点击后停留显示的操作条 -->
+                                <div class="message-action-popover ${actionOpenClass} wechat-message-menu fixed select-none ${isMultiSelectMode ? 'hidden' : ''}" ${actionStyle} onclick="event.stopPropagation()">
+                                    <button onclick="startReply(${idx}); closeMessageActions();">回复</button>
+                                    <button onclick="forwardSingleMessage(${idx}); closeMessageActions();">转发</button>
+                                    <button onclick="enterMultiSelectMode(${idx}); closeMessageActions();">多选</button>
+                                    <button onclick="recallMessage(${idx}); closeMessageActions();">撤回</button>
+                                    <button onclick="closeMessageActions();">...</button>
+                                </div>
+                            </div>
+                        </div>
+                    `}
+                `;
+
+                container.appendChild(messageRow);
+            });
+        }
+
+        function toggleMessageActions(idx, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            if (isMultiSelectMode) return;
+            if (activeActionMessageIndex === idx) {
+                activeActionMessageIndex = null;
+                renderChatMessages();
                 return;
             }
 
-            filteredSessions.forEach(session => {
-                const isActive = session.id === activeSessionId;
-                
-                // 确定徽标样式与指示点
-                let modeBadge = '';
-                if (session.hasSensitiveAlert) {
-                    modeBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-rose-100 text-rose-800 border border-rose-200 indicator-blink">⚠️ 敏感词转人工</span>`;
-                } else if (session.mode === "ai") {
-                    modeBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-100">AI托管中</span>`;
-                } else if (session.mode === "human") {
-                    modeBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">人工处理中</span>`;
-                }
+            const trigger = event ? event.currentTarget : null;
+            const rect = trigger ? trigger.getBoundingClientRect() : { right: 0, top: 0, bottom: 0 };
+            const menuWidth = 108;
+            const menuHeight = 322;
+            const margin = 8;
+            let x = rect.right - menuWidth;
+            let y = rect.top + 28;
 
-                // 侧栏紧急状态背景
-                let bgStyle = isActive ? "pc-session-active" : "hover:bg-slate-50";
-                if (session.hasSensitiveAlert) {
-                    bgStyle = isActive ? "pc-session-active pc-session-alert sensitive-alert-active ring-1 ring-red-400" : "pc-session-alert bg-red-50/70 hover:bg-red-100/80 sensitive-alert-active";
-                }
+            x = Math.max(margin, Math.min(x, window.innerWidth - menuWidth - margin));
+            y = Math.max(margin, Math.min(y, window.innerHeight - menuHeight - margin));
 
-                // 渲染未读红点
-                const unreadBadge = session.unread > 0 ? `<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">${session.unread}</span>` : '';
-
-                const itemHtml = `
-                    <div onclick="selectSession('${session.id}')" class="pc-session-item cursor-pointer transition-all flex items-start space-x-3 ${bgStyle}">
-                        <div class="relative shrink-0">
-                            <div class="pc-avatar w-10 h-10 bg-slate-200 flex items-center justify-center font-bold text-slate-600 text-xs border border-slate-300">
-                                ${session.avatar}
-                            </div>
-                            ${unreadBadge}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold text-slate-800 truncate">${session.name}</span>
-                                <span class="text-[10px] text-slate-400">${session.time}</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 truncate mt-1">${session.lastMsg}</p>
-                            <div class="flex items-center space-x-1.5 mt-2">
-                                ${modeBadge}
-                                <span class="text-[9px] text-slate-400 truncate">${session.statusText}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                listContainer.innerHTML += itemHtml;
-            });
+            activeActionMenuPosition = { x, y };
+            activeActionMessageIndex = idx;
+            renderChatMessages();
         }
 
-        // 5. 切换选中的会话
-        function selectSession(id) {
-            activeSessionId = id;
-            renderSessionList();
-            renderActiveChat();
+        function closeMessageActions() {
+            if (activeActionMessageIndex === null) return;
+            activeActionMessageIndex = null;
+            renderChatMessages();
         }
 
-        // 6. 渲染右侧当前聊天窗口
-        function renderActiveChat() {
-            const session = sessions.find(s => s.id === activeSessionId);
-            if (!session) return;
+        // 4. 撤回消息功能 (企微经典的胶囊提示)
+        function recallMessage(idx) {
+            const conv = conversations[activeConvKey];
+            const msg = conv.messages[idx];
+            const isSelf = msg.type === 'self';
 
-            // 更新页眉名
-            document.getElementById("active-user-name").innerText = session.name;
-            document.getElementById("active-user-avatar").innerText = session.avatar;
-
-            // 控制顶部警报横幅
-            const alertBanner = document.getElementById("sensitive-alert-banner");
-            const aiBanner = document.getElementById("ai-managed-banner");
-            const aiResponseBtn = document.getElementById("toggle-ai-response");
-            const aiTrusteeBtn = document.getElementById("toggle-ai-trustee");
-            const aiIndicator = document.getElementById("ai-active-indicator");
-
-            if (session.hasSensitiveAlert) {
-                // 显示警报横幅，渲染触发的敏感词
-                alertBanner.classList.remove("hidden");
-                document.getElementById("triggered-keyword-label").innerText = `"${session.triggeredKeyword}"`;
-                
-                // 警报下，AI 暂时挂起，改变状态标签颜色为非托管样式
-                aiBanner.classList.add("hidden");
-                
-                aiResponseBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium bg-red-100 text-red-600 shadow-sm";
-                aiTrusteeBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium text-slate-400 bg-transparent";
-                aiIndicator.className = "w-1.5 h-1.5 rounded-full bg-red-500 indicator-blink";
-                aiResponseBtn.querySelector('span:not(#ai-active-indicator)').innerText = "AI挂起转人工";
-            } else {
-                // 普通托管模式
-                alertBanner.classList.add("hidden");
-                
-                if (session.mode === "ai") {
-                    aiBanner.classList.remove("hidden");
-                    aiResponseBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium bg-white text-blue-600 shadow-sm";
-                    aiTrusteeBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium text-slate-500 hover:text-slate-800 transition-all bg-transparent";
-                    aiIndicator.className = "w-1.5 h-1.5 rounded-full bg-blue-500";
-                    aiResponseBtn.querySelector('span:not(#ai-active-indicator)').innerText = "AI回复中";
-                } else {
-                    aiBanner.classList.add("hidden");
-                    aiResponseBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium text-slate-400 bg-transparent";
-                    aiTrusteeBtn.className = "px-2.5 py-1 rounded-md flex items-center space-x-1 font-medium bg-white text-indigo-600 shadow-sm";
-                    aiIndicator.className = "hidden";
-                }
+            // 无论在什么状态下，撤回都将退出多选模式，防止索引移位
+            if (isMultiSelectMode) {
+                exitMultiSelectMode();
             }
 
-            // 渲染聊天历史气泡
-            const chatContainer = document.getElementById("chat-messages-container");
-            chatContainer.innerHTML = "";
+            // 修改该项消息为系统灰色胶囊格式
+            conv.messages[idx] = {
+                type: 'system',
+                content: isSelf ? '你撤回了一条消息' : '对方撤回了一条消息'
+            };
 
-            session.chatHistory.forEach((msg, index) => {
-                // 判断发送人
-                if (msg.sender === "customer") {
-                    // 客户消息
-                    const bubbleHtml = `
-                        <div class="flex items-start space-x-3">
-                            <div class="w-9 h-9 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0 font-semibold text-slate-600 text-xs">
-                                ${session.avatar}
-                            </div>
-                            <div class="max-w-[64%]">
-                                <div class="pc-bubble pc-bubble-other">
-                                    ${msg.text}
-                                </div>
-                                <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
-                            </div>
-                        </div>
-                    `;
-                    chatContainer.innerHTML += bubbleHtml;
-                } else if (msg.sender === "ai") {
-                    // AI 回复
-                    const bubbleHtml = `
-                        <div class="flex items-start justify-end space-x-3">
-                            <div class="max-w-[64%] text-right">
-                                <div class="pc-bubble pc-bubble-ai text-left inline-block">
-                                    ${msg.text}
-                                    <div class="mt-1.5 pt-1.5 border-t border-blue-100/50 flex items-center justify-between text-[10px] text-blue-500 font-medium">
-                                        <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg> AI自动托管回复</span>
-                                        <span>已发送</span>
-                                    </div>
-                                </div>
-                                <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
-                            </div>
-                            <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white font-semibold text-xs">
-                                AI
-                            </div>
-                        </div>
-                    `;
-                    chatContainer.innerHTML += bubbleHtml;
-                } else if (msg.sender === "system") {
-                    // 系统事件日志（如转人工提示）
-                    const bubbleHtml = `
-                        <div class="flex justify-center my-2">
-                            <div class="bg-red-50 border border-red-200/60 px-4 py-2 rounded-xl text-[11px] text-red-700 flex items-center space-x-2 shadow-sm animate-pulse">
-                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                <span>${msg.text}</span>
-                            </div>
-                        </div>
-                    `;
-                    chatContainer.innerHTML += bubbleHtml;
-                } else if (msg.sender === "human") {
-                    // 人工客服亲自回复的
-                    const bubbleHtml = `
-                        <div class="flex items-start justify-end space-x-3">
-                            <div class="max-w-[64%] text-right">
-                                <div class="pc-bubble pc-bubble-human text-left inline-block">
-                                    ${msg.text}
-                                    <div class="mt-1.5 pt-1.5 border-t border-blue-100/70 flex items-center justify-between text-[10px] text-blue-500 font-medium">
-                                        <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> 专属人工客服介入中</span>
-                                        <span>已发送</span>
-                                    </div>
-                                </div>
-                                <span class="text-[10px] text-slate-400 mt-1 block">${msg.time}</span>
-                            </div>
-                            <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 border border-indigo-300 text-indigo-700 font-semibold text-xs">
-                                田
-                            </div>
-                        </div>
-                    `;
-                    chatContainer.innerHTML += bubbleHtml;
-                }
-            });
+            // 重新渲染聊天面板
+            renderChatMessages();
 
-            // 自动滚到聊天底部
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            // 弹出全局气泡提示
+            showToast(isSelf ? '已撤回该消息' : '消息已成功撤回');
         }
 
-        // 7. 更新全局未读与警报计数器
-        function updateGlobalCounters() {
-            // 计算全局待处理量
-            const total = sessions.length + 197; // 模拟高数据量
-            document.getElementById("total-pending-count").innerText = total;
+        // 5. 触发引用回复功能 (回复栏交互)
+        function startReply(idx) {
+            const conv = conversations[activeConvKey];
+            const msg = conv.messages[idx];
 
-            // 计算包含敏感词突发的数量
-            const sensitiveCount = sessions.filter(s => s.hasSensitiveAlert === true).length;
-            document.getElementById("sensitive-pending-count").innerText = sensitiveCount;
-        }
-
-        // 8. 智能声学系统（通过浏览器代码合成警告音，保证客服在后台能被震荡性提醒）
-        function playAlertSound() {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                
-                // 第一声短音 440Hz
-                let osc1 = ctx.createOscillator();
-                let gain1 = ctx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 调
-                gain1.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-                osc1.connect(gain1);
-                gain1.connect(ctx.destination);
-                osc1.start();
-                osc1.stop(ctx.currentTime + 0.3);
-
-                // 第二声长强音 880Hz (起到警示作用，双音协奏，悦耳但具有穿透力)
-                setTimeout(() => {
-                    let osc2 = ctx.createOscillator();
-                    let gain2 = ctx.createGain();
-                    osc2.type = 'triangle';
-                    osc2.frequency.setValueAtTime(880, ctx.currentTime); // A5 警示音
-                    gain2.gain.setValueAtTime(0.2, ctx.currentTime);
-                    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
-                    osc2.connect(gain2);
-                    gain2.connect(ctx.destination);
-                    osc2.start();
-                    osc2.stop(ctx.currentTime + 0.6);
-                }, 120);
-
-            } catch (e) {
-                console.log("音频引擎无法在未经交互前播放声音:", e);
+            let contentText = msg.content;
+            if (contentText === 'image-placeholder') {
+                contentText = '[图片消息]';
             }
+
+            // 过滤文本，提取纯文字以便缩略展示在回复引用区
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = contentText;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+
+            // 保存全局引用状态
+            replyTarget = {
+                sender: msg.sender,
+                content: plainText.length > 25 ? plainText.substring(0, 25) + '...' : plainText
+            };
+
+            // 在输入区域正上方划出引用回复提示栏
+            const replyBar = document.getElementById('reply-preview-bar');
+            const replyText = document.getElementById('reply-preview-text');
+            replyText.innerText = `回复 ${replyTarget.sender}：${replyTarget.content}`;
+            replyBar.classList.remove('hidden');
+
+            // 文本编辑框获取焦点
+            document.getElementById('chat-textarea').focus();
         }
 
-        // 9. 输入框发送消息事件
-        function handleSendMessage() {
-            const input = document.getElementById("text-input");
-            const text = input.value.trim();
+        // 6. 取消引用回复
+        function cancelReply() {
+            replyTarget = null;
+            const replyBar = document.getElementById('reply-preview-bar');
+            replyBar.classList.add('hidden');
+        }
+
+        // 7. 发送消息逻辑
+        function sendMessage() {
+            const textarea = document.getElementById('chat-textarea');
+            const text = textarea.value.trim();
             if (!text) return;
 
-            // 人工输入发送消息
-            const session = sessions.find(s => s.id === activeSessionId);
-            if (!session) return;
+            const conv = conversations[activeConvKey];
 
-            // 如果当前触发了敏感警报，发送此条意味着人工客服直接承接并自动解除了警报
-            if (session.hasSensitiveAlert) {
-                session.hasSensitiveAlert = false;
-                session.mode = "human"; // 改为人工接管
-                session.statusText = "客服处理中";
-                logEvent("人工干预", `客服主动发送消息，系统警报撤销，完全转由人工控制。`);
+            // 创建新的发送端消息对象
+            const newMsg = {
+                type: 'self',
+                sender: '子画',
+                time: getFormattedTime(),
+                content: text.replace(/\n/g, '<br>') // 支持多行换行
+            };
+
+            // 携带引用回复数据
+            if (replyTarget) {
+                newMsg.replyTo = {
+                    sender: replyTarget.sender,
+                    content: replyTarget.content
+                };
+                cancelReply(); // 发送成功后自动重置引用栏
             }
 
+            conv.messages.push(newMsg);
+
+            // 清空 textarea 内容
+            textarea.value = '';
+
+            // 重新渲染聊天窗口并滚动
+            renderChatMessages();
+            scrollToBottom();
+            showToast('消息已发送');
+        }
+
+        // 8. 辅助函数：获取格式化的当前系统时间
+        function getFormattedTime() {
             const now = new Date();
-            const timeStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.toTimeString().split(' ')[0]}`;
-
-            // 推入人工消息
-            session.chatHistory.push({
-                sender: "human",
-                text: text,
-                time: timeStr
-            });
-
-            session.lastMsg = text;
-            session.time = `${now.getHours()}:${now.getMinutes() < 10 ? '0'+now.getMinutes() : now.getMinutes()}`;
-
-            input.value = "";
-            renderSessionList();
-            renderActiveChat();
-            updateGlobalCounters();
-            logEvent("客服", `发送消息: "${text}"`);
+            const y = now.getFullYear();
+            const m = now.getMonth() + 1;
+            const d = now.getDate();
+            const h = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            return `${y}/${m}/${d} ${h}:${min}:${s}`;
         }
 
-        function clearInput() {
-            document.getElementById("text-input").value = "";
+        // 9. 辅助函数：自动滚动到底部
+        function scrollToBottom() {
+            const container = document.getElementById('chat-messages-container');
+            container.scrollTop = container.scrollHeight;
         }
 
-        // 10. 模拟客户发消息（核心演示体验交互）
-        function simulateCustomerMessage(customText) {
-            const session = sessions.find(s => s.id === activeSessionId);
-            if (!session) return;
-
-            const text = customText || "我要投诉你们！垃圾平台，我要退钱！";
-            const now = new Date();
-            const timeStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.toTimeString().split(' ')[0]}`;
-
-            // 新增客户聊天记录
-            session.chatHistory.push({
-                sender: "customer",
-                text: text,
-                time: timeStr
-            });
-
-            session.lastMsg = text;
-            session.time = `${now.getHours()}:${now.getMinutes() < 10 ? '0'+now.getMinutes() : now.getMinutes()}`;
-
-            logEvent("客户", `发送内容: "${text}"`);
-
-            // 敏感词拦截匹配
-            const keywords = ["骗子", "投诉", "退钱", "垃圾", "起诉", "虚假"];
-            let foundKeywords = [];
-            keywords.forEach(keyword => {
-                if (text.includes(keyword)) {
-                    foundKeywords.push(keyword);
-                }
-            });
-
-            if (foundKeywords.length > 0) {
-                // 触发警报！
-                session.hasSensitiveAlert = true;
-                session.triggeredKeyword = foundKeywords.join("、");
-                session.mode = "human"; // 强制由AI转人工
-                session.statusText = "⚠️ 敏感词触发极速跟进";
-                
-                // 聊天记录追加系统红色提示
-                session.chatHistory.push({
-                    sender: "system",
-                    text: `[系统警报] 客户触发敏感词 "${session.triggeredKeyword}"，AI 智能回复已被中断封锁，自动切为人工响应。`,
-                    time: timeStr
-                });
-
-                logEvent("系统警告", `检测到敏感词: [${session.triggeredKeyword}]。自动冻结 AI 自动托管回复，播放客服终端声音警报，强制切换到人工客服序列。`);
-                
-                // 触发声音警告
-                playAlertSound();
-            } else {
-                // 属于普通会话，如果现在是 AI 处理状态，进行模拟自动生成
-                if (session.mode === "ai" && !session.hasSensitiveAlert) {
-                    logEvent("系统", "智能检测：没有发现敏感词，即将让 AI 自动托管编写回复...");
-                    
-                    // 模拟机器人延迟一秒回复
-                    setTimeout(() => {
-                        const aiNow = new Date();
-                        const aiTimeStr = `${aiNow.getFullYear()}/${aiNow.getMonth()+1}/${aiNow.getDate()} ${aiNow.toTimeString().split(' ')[0]}`;
-                        
-                        const aiReplies = [
-                            "感谢您的反馈！我们的专业顾问老师很快就会给您发送具体的排期安排，请问还有什么能帮到您的？",
-                            "我们已经记录了您的服务偏好！店面一般在下午14:00~17:00之间有充裕档期，建议提前半小时到店哦~",
-                            "您的专属服务档案已更新，若有变更需要请随时联系人工客服跟进。"
-                        ];
-                        const randomReply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
-
-                        session.chatHistory.push({
-                            sender: "ai",
-                            text: randomReply,
-                            time: aiTimeStr
-                        });
-                        session.lastMsg = randomReply;
-                        
-                        logEvent("AI", `托管应答: "${randomReply}"`);
-                        
-                        // 刷新
-                        if (activeSessionId === session.id) {
-                            renderActiveChat();
-                        }
-                        renderSessionList();
-                    }, 1500);
-                }
-            }
-
-            // 全局刷新渲染
-            renderSessionList();
-            renderActiveChat();
-            updateGlobalCounters();
+        // 10. 辅助函数：清空输入框
+        function clearTextarea() {
+            document.getElementById('chat-textarea').value = '';
         }
 
-        // 11. 选项卡分类过滤
-        function filterByMode(mode) {
-            currentFilterMode = mode;
+        // 11. 进入多选模式
+        function enterMultiSelectMode(initialIndex) {
+            activeActionMessageIndex = null;
+            isMultiSelectMode = true;
+            selectedMessageIndexes = [initialIndex];
+            lastSelectedIdx = initialIndex;
+
+            // 显示“退出多选”按钮
+            document.getElementById('exit-multiselect-btn').classList.remove('hidden');
+
+            // 聊天区域展示多选样式
+            renderChatMessages();
+
+            // 滑出底部操作栏
+            const actionBar = document.getElementById('multiselect-action-bar');
+            actionBar.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
             
-            // 样式高亮切换
-            const tabs = ["all-modes", "human", "ai", "sensitive"];
-            tabs.forEach(t => {
-                const el = document.getElementById("tab-" + t);
-                if (t === mode || (t === "all-modes" && mode === "all")) {
-                    if (t === "sensitive") {
-                        el.className = "flex-1 py-1.5 rounded-md text-center font-bold text-white bg-rose-600 shadow-sm transition-all flex items-center justify-center space-x-0.5";
+            updateSelectedCountLabel();
+        }
+
+        // 12. 退出多选模式
+        function exitMultiSelectMode() {
+            activeActionMessageIndex = null;
+            isMultiSelectMode = false;
+            selectedMessageIndexes = [];
+            lastSelectedIdx = null;
+
+            // 隐藏退出按钮
+            document.getElementById('exit-multiselect-btn').classList.add('hidden');
+
+            // 渲染复原
+            renderChatMessages();
+
+            // 滑下并隐藏底部操作栏
+            const actionBar = document.getElementById('multiselect-action-bar');
+            actionBar.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+        }
+
+        // 13. 处理消息勾选/取消勾选 (支持 Shift 连选)
+        function handleCheckboxChange(index, event) {
+            const checkbox = event.target;
+            const isChecked = checkbox.checked;
+
+            if (event.shiftKey && lastSelectedIdx !== null) {
+                // Shift 键连选逻辑
+                const start = Math.min(lastSelectedIdx, index);
+                const end = Math.max(lastSelectedIdx, index);
+                
+                // 将区间内的所有消息根据首个选中状态统一
+                for (let i = start; i <= end; i++) {
+                    if (isChecked) {
+                        if (!selectedMessageIndexes.includes(i)) {
+                            selectedMessageIndexes.push(i);
+                        }
                     } else {
-                        el.className = "flex-1 py-1.5 rounded-md text-center font-medium bg-white text-slate-800 shadow-sm transition-all";
+                        selectedMessageIndexes = selectedMessageIndexes.filter(item => item !== i);
+                    }
+                }
+                
+                // 同步 UI 状态
+                renderChatMessages();
+            } else {
+                // 普通单选
+                if (isChecked) {
+                    if (!selectedMessageIndexes.includes(index)) {
+                        selectedMessageIndexes.push(index);
                     }
                 } else {
-                    if (t === "sensitive") {
-                        el.className = "flex-1 py-1.5 rounded-md text-center font-medium text-rose-500 hover:bg-rose-50 transition-all flex items-center justify-center space-x-0.5";
-                    } else {
-                        el.className = "flex-1 py-1.5 rounded-md text-center font-medium text-slate-500 hover:text-slate-800 transition-all";
-                    }
+                    selectedMessageIndexes = selectedMessageIndexes.filter(item => item !== index);
+                }
+                lastSelectedIdx = index;
+            }
+
+            updateSelectedCountLabel();
+        }
+
+        // 14. 更新多选计数和按钮激活态
+        function updateSelectedCountLabel() {
+            const count = selectedMessageIndexes.length;
+            document.getElementById('selected-count-label').innerText = `已选择 ${count} 条消息`;
+
+            // 如果选择了 0 条消息，置灰转发按钮
+            const indBtn = document.getElementById('forward-individual-btn');
+            const combBtn = document.getElementById('forward-combined-btn');
+            if (count === 0) {
+                indBtn.disabled = true;
+                combBtn.disabled = true;
+                indBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                combBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                indBtn.disabled = false;
+                combBtn.disabled = false;
+                indBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                combBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // 15. 快速单条消息转发
+        function forwardSingleMessage(index) {
+            // 单条转发等同于单选多选，并直接唤起弹窗
+            enterMultiSelectMode(index);
+            openForwardModal('individual');
+        }
+
+        // 16. 打开转发联系人弹窗
+        function openForwardModal(type) {
+            forwardType = type;
+            selectedRecipients = []; // 重置已选择人
+
+            // 更新弹窗标题徽章
+            document.getElementById('forward-type-badge').innerText = type === 'combined' ? '合并转发' : '逐条转发';
+
+            // 渲染左侧搜索及客户列表 (只拉取聊天列表的人)
+            renderModalClientList();
+
+            // 渲染右侧选择结果
+            renderModalSelectedList();
+
+            // 显示 Modal 动画
+            const modal = document.getElementById('forward-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.remove('scale-95');
+            modal.querySelector('.transform').classList.add('scale-100');
+        }
+
+        // 17. 关闭转发联系人弹窗
+        function closeForwardModal() {
+            const modal = document.getElementById('forward-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.transform').classList.add('scale-95');
+            modal.querySelector('.transform').classList.remove('scale-100');
+            
+            // 清空搜索框
+            document.getElementById('modal-search-input').value = '';
+        }
+
+        // 18. 渲染弹窗左侧列表
+        function renderModalClientList(filterText = '') {
+            const container = document.getElementById('modal-client-list');
+            container.innerHTML = '';
+
+            const lowercaseFilter = filterText.toLowerCase();
+
+            Object.keys(conversations).forEach(key => {
+                const conv = conversations[key];
+                
+                // 模糊过滤匹配
+                if (filterText && !conv.name.toLowerCase().includes(lowercaseFilter)) {
+                    return;
+                }
+
+                const isChecked = selectedRecipients.includes(key);
+                const avatarChar = conv.name.charAt(0);
+
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-3 px-4 py-2.5 hover:bg-slate-50 cursor-pointer border-b border-slate-50";
+                item.onclick = () => toggleModalRecipient(key);
+
+                item.innerHTML = `
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} class="rounded-full border-slate-300 text-wechat-green focus:ring-wechat-green pointer-events-none">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-100 flex items-center justify-center font-bold text-slate-700 text-xs">
+                        ${avatarChar}
+                    </div>
+                    <span class="text-xs font-medium text-slate-800">${conv.name}</span>
+                `;
+
+                container.appendChild(item);
+            });
+
+            if (container.children.length === 0) {
+                container.innerHTML = `<div class="text-xs text-slate-400 text-center py-8">无匹配客户</div>`;
+            }
+        }
+
+        // 19. 弹窗内搜索客户
+        function filterModalClients() {
+            const searchVal = document.getElementById('modal-search-input').value;
+            renderModalClientList(searchVal);
+        }
+
+        // 20. 选择/取消选择接收人
+        function toggleModalRecipient(key) {
+            const idx = selectedRecipients.indexOf(key);
+            if (idx === -1) {
+                selectedRecipients.push(key);
+            } else {
+                selectedRecipients.splice(idx, 1);
+            }
+
+            // 同步刷新左侧列表的 Checkbox 和右侧已选择面板
+            renderModalClientList(document.getElementById('modal-search-input').value);
+            renderModalSelectedList();
+        }
+
+        // 21. 渲染弹窗右侧已选面板
+        function renderModalSelectedList() {
+            const container = document.getElementById('modal-selected-list');
+            const emptyState = document.getElementById('empty-selected-state');
+            const countLabel = document.getElementById('selected-recipients-count');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+
+            // 清理动态数据
+            const dynamicItems = container.querySelectorAll('.selected-recipient-item');
+            dynamicItems.forEach(el => el.remove());
+
+            const count = selectedRecipients.length;
+            countLabel.innerText = count;
+
+            if (count === 0) {
+                emptyState.classList.remove('hidden');
+                confirmBtn.disabled = true;
+                confirmBtn.innerText = '确定(0)';
+            } else {
+                emptyState.classList.add('hidden');
+                confirmBtn.disabled = false;
+                confirmBtn.innerText = `确定(${count})`;
+
+                // 渲染已选列表
+                selectedRecipients.forEach(key => {
+                    const conv = conversations[key];
+                    const avatarChar = conv.name.charAt(0);
+
+                    const el = document.createElement('div');
+                    el.className = "selected-recipient-item flex items-center justify-between p-2 rounded-md hover:bg-slate-200/50 group transition";
+                    el.innerHTML = `
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center font-bold text-slate-600 text-[10px]">
+                                ${avatarChar}
+                            </div>
+                            <span class="text-xs font-medium text-slate-700">${conv.name}</span>
+                        </div>
+                        <button onclick="toggleModalRecipient('${key}')" class="text-slate-400 hover:text-slate-600 p-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    `;
+
+                    // 在空状态指示器前插入
+                    container.insertBefore(el, emptyState);
+                });
+            }
+        }
+
+        // 22. 执行转发逻辑并完成闭环
+        function executeForwarding() {
+            const selectedMsgCount = selectedMessageIndexes.length;
+            const recipientNames = selectedRecipients.map(key => conversations[key].name).join(', ');
+            const typeText = forwardType === 'combined' ? '合并转发' : '逐条转发';
+
+            // 展示成功提示 Toast
+            showToast(`已成功将 ${selectedMsgCount} 条消息 ${typeText} 给: ${recipientNames}`);
+
+            // 延迟关闭和恢复界面
+            closeForwardModal();
+            exitMultiSelectMode();
+        }
+
+        // 23. 轻提示 Toast 组件
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            
+            toastText.innerText = text;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'scale-90');
+            toast.classList.add('opacity-100', 'scale-100');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+                toast.classList.remove('opacity-100', 'scale-100');
+            }, 3000);
+        }
+
+        // 初始化载入
+        window.onload = function() {
+            // 首次选择 Jua 
+            selectConversation('jua');
+
+            // 绑定 Textarea 的 Enter 发送事件 (不带 Shift 为直接发送)
+            document.getElementById('chat-textarea').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault(); // 阻止原生换行
+                    sendMessage();
                 }
             });
 
-            renderSessionList();
-        }
-
-        // 一键筛选急需转人工的敏感会话
-        function filterBySensitiveOnly() {
-            filterByMode('sensitive');
-        }
-
-        // 12. 人工接管解除警报逻辑
-        function manualTakeover() {
-            const session = sessions.find(s => s.id === activeSessionId);
-            if (!session) return;
-
-            session.hasSensitiveAlert = false;
-            session.mode = "human";
-            session.statusText = "客服处理中";
-            
-            logEvent("人工干预", `客服主动接管了与 [${session.name}] 的会话。系统解除敏感词触发封锁状态，现完全交接。`);
-            
-            renderSessionList();
-            renderActiveChat();
-            updateGlobalCounters();
-        }
-
-        // 关闭/搁置警告条
-        function dismissBanner() {
-            const alertBanner = document.getElementById("sensitive-alert-banner");
-            alertBanner.classList.add("hidden");
-            logEvent("系统警告", "客服暂时忽略并关闭了顶部全局红色警告栏，但侧栏高亮报警依然保留。");
-        }
-
-        // 13. 重置系统状态为演示初始状态
-        function resetDemoState() {
-            sessions = [
-                {
-                    id: "s1",
-                    name: "26.5.27不发",
-                    lastMsg: "效果一点也不好 像骗子一样",
-                    time: "18:28",
-                    avatar: "不",
-                    mode: "ai",
-                    statusText: "AI处理中",
-                    unread: 0,
-                    device: "96583777ba4f9e3e",
-                    gender: "male",
-                    hasSensitiveAlert: false,
-                    triggeredKeyword: "",
-                    chatHistory: [
-                        { sender: "ai", text: "特别理解您现在的疑惑，您到店之后可以和门店的老师详细沟通，他们会把相关的报价明细给您解释清楚的哦~", time: "2026/6/1 18:26:03" },
-                        { sender: "customer", text: "你们把10块钱退给我", time: "2026/6/1 18:26:21" },
-                        { sender: "customer", text: "不然我要投诉你们", time: "2026/6/1 18:27:49" },
-                        { sender: "ai", text: "实在不好意思让您这么不愉快！麻烦您说下这10元对应的具体情况好吗？我这边立刻给您处理~", time: "2026/6/1 18:28:24" },
-                        { sender: "customer", text: "效果一点也不好 像骗子一样", time: "2026/6/1 18:28:51" }
-                    ]
-                },
-                {
-                    id: "s2",
-                    name: "26.5.27",
-                    lastMsg: "你看本周六或者周日，聊天有空到店...",
-                    time: "18:27",
-                    avatar: "27",
-                    mode: "ai",
-                    statusText: "资料待完善 · 已回复",
-                    unread: 0,
-                    device: "a1a2b3c4d5e6f7g8",
-                    chatHistory: [
-                        { sender: "customer", text: "我想本周过去咨询下。", time: "2026/6/1 18:25:00" },
-                        { sender: "ai", text: "随时恭候您！请问周六和周日哪天比较方便呢？", time: "2026/6/1 18:27:00" }
-                    ]
-                },
-                {
-                    id: "s3",
-                    name: "命运已造",
-                    lastMsg: "要是后续需要改约或者取消，您直...",
-                    time: "18:07",
-                    avatar: "命",
-                    mode: "ai",
-                    statusText: "资料待完善 · 已回复",
-                    unread: 0,
-                    device: "ff34ff89aef7738c",
-                    chatHistory: [
-                        { sender: "customer", text: "我需要改期。", time: "2026/6/1 18:06:00" },
-                        { sender: "ai", text: "要是后续需要改约或者取消，您直接发消息告诉我就行，我会帮您登记的。", time: "2026/6/1 18:07:00" }
-                    ]
-                },
-                {
-                    id: "s4",
-                    name: "26.5.31朝阳",
-                    lastMsg: "可以的呀",
-                    time: "18:06",
-                    avatar: "朝",
-                    mode: "human",
-                    statusText: "已回复",
-                    unread: 0,
-                    device: "7a8b9c0d1e2f3a4b",
-                    chatHistory: [
-                        { sender: "customer", text: "明天安排吗？", time: "2026/6/1 18:05:00" },
-                        { sender: "human", text: "可以的呀", time: "2026/6/1 18:06:00" }
-                    ]
-                },
-                {
-                    id: "s5",
-                    name: "26.5.26西宁",
-                    lastMsg: "姓胡, 15110947373",
-                    time: "18:04",
-                    avatar: "西",
-                    mode: "human",
-                    statusText: "24分未回复",
-                    unread: 7,
-                    device: "b1c2d3e4f5a6b7c8",
-                    chatHistory: [
-                        { sender: "customer", text: "姓胡, 15110947373", time: "2026/6/1 18:04:00" }
-                    ]
-                },
-                {
-                    id: "s6",
-                    name: "26.5.31遂宁",
-                    lastMsg: "[图片消息]",
-                    time: "18:03",
-                    avatar: "遂",
-                    mode: "ai",
-                    statusText: "AI处理中",
-                    unread: 19,
-                    device: "9f8e7d6c5b4a3c2b",
-                    chatHistory: [
-                        { sender: "customer", text: "[图片消息]", time: "2026/6/1 18:03:00" }
-                    ]
-                }
-            ];
-            activeSessionId = "s1";
-            currentFilterMode = "all";
-            
-            // 重置过滤高亮
-            filterByMode('all');
-            
-            const logContainer = document.getElementById("sim-log-panel");
-            logContainer.innerHTML = "";
-            logEvent("系统", "演示数据与交互组件状态已重置恢复。");
-            
-            renderSessionList();
-            renderActiveChat();
-            updateGlobalCounters();
+            document.addEventListener('click', function() {
+                closeMessageActions();
+            });
         }
     </script>
 </body>
