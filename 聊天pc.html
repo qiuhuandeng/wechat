@@ -203,6 +203,76 @@
                 linear-gradient(135deg, #94a3b8, #334155);
         }
 
+        .pc-staff-avatar {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            flex: 0 0 auto;
+        }
+
+        .pc-staff-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, .14);
+            background: #f1f5f9;
+        }
+
+        .pc-staff-ai {
+            position: absolute;
+            left: -3px;
+            top: -4px;
+            min-width: 20px;
+            height: 15px;
+            padding: 0 4px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            color: #fff;
+            font-size: 9px;
+            line-height: 1;
+            font-weight: 700;
+            border: 1.5px solid #fff;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, .25);
+        }
+
+        .pc-staff-online {
+            position: absolute;
+            right: 0;
+            bottom: 1px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2px solid #fff;
+        }
+
+        .pc-account-status-dot {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2px solid #fff;
+        }
+
+        .pc-staff-meta {
+            color: #94a3b8;
+            font-size: 10px;
+            line-height: 1.15;
+            margin-top: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .conv-item:hover {
             background: #f8fafc;
         }
@@ -428,46 +498,61 @@
                 <div class="pc-section-title px-1 py-1">账号视图</div>
                 
                 <div class="pc-account-item pc-account-active flex items-center space-x-3 p-2.5 text-sky-800 font-medium cursor-pointer">
-                    <div class="w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs font-semibold">全</div>
-                    <div class="flex-1 text-xs">全部账号 <span class="text-[10px] text-sky-600 block font-normal">3个账号·有未读</span></div>
+                    <div class="relative w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-semibold">
+                        全
+                        <span class="pc-account-status-dot"></span>
+                    </div>
+                    <div class="flex-1 text-xs">全部账号 <span class="text-[10px] text-sky-600 block font-normal">3个账号 · 未读 0</span></div>
                 </div>
 
                 <div class="pc-account-item flex items-center space-x-3 p-2.5 hover:bg-slate-50 text-slate-600 cursor-pointer transition">
-                    <div class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs font-semibold">会</div>
-                    <div class="flex-1 text-xs">会话分配 <span class="text-[10px] text-slate-400 block">1个会话</span></div>
+                    <div class="relative w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-semibold">
+                        会
+                        <span class="pc-account-status-dot"></span>
+                    </div>
+                    <div class="flex-1 text-xs">会话分配 <span class="text-[10px] text-slate-400 block">5 个会话</span></div>
                 </div>
 
                 <div class="h-[1px] bg-slate-200 my-2 mx-2"></div>
 
                 <!-- 账号列表 -->
                 <div class="space-y-1">
-                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
-                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
-                            <div class="w-full h-full bg-gradient-to-tr from-blue-500 to-indigo-400 flex items-center justify-center text-white text-[10px] font-bold">王</div>
+                    <div class="pc-account-item flex items-center space-x-2.5 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="pc-staff-avatar">
+                            <img src="https://i.pravatar.cc/80?img=47" alt="王智杰">
+                            <span class="pc-staff-ai">AI</span>
+                            <span class="pc-staff-online"></span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-medium text-slate-700 truncate">王智杰</div>
-                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                            <div class="pc-staff-meta">企微ID: CS001 · 设备: wang</div>
+                            <div class="text-[10px] text-emerald-600 flex items-center gap-1 mt-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block flex-shrink-0"></span>设备在线 · 企微已登录</div>
                         </div>
                     </div>
 
-                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
-                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
-                            <div class="w-full h-full bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white text-[10px] font-bold">余</div>
+                    <div class="pc-account-item flex items-center space-x-2.5 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="pc-staff-avatar">
+                            <img src="https://i.pravatar.cc/80?img=32" alt="余佳亮战队-周晓盈">
+                            <span class="pc-staff-ai">AI</span>
+                            <span class="pc-staff-online"></span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-medium text-slate-700 truncate">余佳亮战队-周晓盈</div>
-                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                            <div class="pc-staff-meta">企微ID: CS002 · 设备: zimo</div>
+                            <div class="text-[10px] text-emerald-600 flex items-center gap-1 mt-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block flex-shrink-0"></span>设备在线 · 企微已登录</div>
                         </div>
                     </div>
 
-                    <div class="pc-account-item flex items-center space-x-2 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
-                        <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden flex-shrink-0">
-                            <div class="w-full h-full bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-white text-[10px] font-bold">子</div>
+                    <div class="pc-account-item flex items-center space-x-2.5 p-2 rounded-md hover:bg-slate-50 text-slate-600 cursor-pointer transition">
+                        <div class="pc-staff-avatar">
+                            <img src="https://i.pravatar.cc/80?img=5" alt="子画">
+                            <span class="pc-staff-ai">AI</span>
+                            <span class="pc-staff-online"></span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-medium text-slate-700 truncate">子画</div>
-                            <div class="text-[9px] text-emerald-600 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>设备在线</div>
+                            <div class="pc-staff-meta">企微ID: CS003 · 设备: zhua</div>
+                            <div class="text-[10px] text-emerald-600 flex items-center gap-1 mt-1 truncate"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block flex-shrink-0"></span>设备在线 · 企微已登录</div>
                         </div>
                     </div>
                 </div>
