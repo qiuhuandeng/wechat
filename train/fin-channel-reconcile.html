@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>渠道对账 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="fin-channel-reconcile" data-title="渠道对账">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">CHANNEL RECONCILIATION</div>
+      <h1>渠道对账</h1>
+      <p>按渠道与月份核对订单金额、渠道回传金额和返佣差异。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="对账明细已导出">导出</button>
+      <button class="button primary" type="button" data-toast="对账单已生成">生成对账单</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <label class="field">
+        <span>渠道</span>
+        <select>
+          <option>康辉旅行社</option>
+          <option>众信旅游</option>
+          <option>中青旅</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>对账周期</span>
+        <select>
+          <option>2026年6月</option>
+          <option>2026年7月</option>
+          <option>2026年8月</option>
+        </select>
+      </label>
+      <button class="button secondary" type="button" data-toast="已刷新渠道对账数据">刷新数据</button>
+    </div>
+  </section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">成</span><div><span>本期成交</span><strong>¥320000</strong><small>渠道成交金额</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">我</span><div><span>我方记录笔数</span><strong>18</strong><small>ERP订单记录</small></div></article>
+    <article class="metric-card"><span class="metric-icon purple">渠</span><div><span>渠道记录笔数</span><strong>18</strong><small>渠道回传记录</small></div></article>
+    <article class="metric-card"><span class="metric-icon red">差</span><div><span>差异笔数</span><strong class="text-red-600">1</strong><small>需人工核对</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>对账明细</h2>
+        <p>差异行已红色高亮，确认后可生成正式对账单。</p>
+      </div>
+      <span class="badge blue">8条</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="channelReconcileTable">
+        <thead>
+          <tr>
+            <th>订单号</th>
+            <th>产品班期</th>
+            <th>我方金额</th>
+            <th>渠道金额</th>
+            <th>差异</th>
+            <th>返佣金额</th>
+            <th>对账状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="selected">
+            <td>DD20260901</td>
+            <td>环云南9天 09-25</td>
+            <td>¥25998</td>
+            <td>¥25998</td>
+            <td>¥0</td>
+            <td>¥1299</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260902</td>
+            <td>环云南9天 09-25</td>
+            <td>¥51996</td>
+            <td>¥51996</td>
+            <td>¥0</td>
+            <td>¥2599</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr style="background:#fff1f2;box-shadow:inset 3px 0 #ff4d4f;">
+            <td>DD20260903</td>
+            <td>环云南9天 09-25</td>
+            <td>¥38997</td>
+            <td>¥39097</td>
+            <td><span class="text-red-600 font-semibold">¥100</span></td>
+            <td>¥1950</td>
+            <td><span class="badge red">差异</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记待核对">标记</button><button class="button ghost small" type="button" data-toast="差异详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260904</td>
+            <td>环云南9天 09-25</td>
+            <td>¥25998</td>
+            <td>¥25998</td>
+            <td>¥0</td>
+            <td>¥1299</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260905</td>
+            <td>环云南9天 10-17</td>
+            <td>¥63990</td>
+            <td>¥63990</td>
+            <td>¥0</td>
+            <td>¥3199</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260906</td>
+            <td>环云南9天 10-17</td>
+            <td>¥82990</td>
+            <td>¥82990</td>
+            <td>¥0</td>
+            <td>¥4149</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260907</td>
+            <td>环云南9天 11-14</td>
+            <td>¥47992</td>
+            <td>¥47992</td>
+            <td>¥0</td>
+            <td>¥2400</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+          <tr>
+            <td>DD20260908</td>
+            <td>环云南9天 12-19</td>
+            <td>¥71994</td>
+            <td>¥71994</td>
+            <td>¥0</td>
+            <td>¥3600</td>
+            <td><span class="badge green">一致</span></td>
+            <td><button class="button ghost small" type="button" data-toast="已标记一致">标记</button><button class="button ghost small" type="button" data-toast="订单详情已打开">查看</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex flex-wrap justify-between gap-3 border-t border-slate-100 px-1 pt-4">
+      <div class="text-sm text-slate-500">共 8 条 · 差异 1 条 · 每页 10 条</div>
+      <div class="flex flex-wrap gap-2">
+        <button class="button secondary" type="button" data-toast="对账单已生成">生成对账单</button>
+        <button class="button secondary" type="button" data-toast="渠道对账已导出">导出</button>
+        <button class="button primary" type="button" data-toast="本周期已确认对账">确认对账</button>
+      </div>
+    </div>
+    <div class="pagination"><span>共 8 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

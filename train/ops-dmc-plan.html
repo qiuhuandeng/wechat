@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>下达计划 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .plan-note { padding:12px 14px; border:1px solid #f3d2aa; border-radius:12px; color:#7f4c17; background:#fff8ef; font-size:12px; }
+  </style>
+</head>
+<body data-page="ops-dmc-plan" data-title="下达计划">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">DMC PLAN</div>
+      <h1>下达计划</h1>
+      <p>向落地地接社下发接待计划(班期固定，批量下达)。</p>
+    </div>
+    <div class="page-actions">
+      <label class="field" style="margin:0;min-width:230px;"><span>班期</span><select><option>KM20260925</option><option>KM20261017</option></select></label>
+      <label class="field" style="margin:0;min-width:180px;"><span>团</span><select><option>1团</option><option>2团</option></select></label>
+      <button class="button primary" type="button" data-toast="地接计划已下达">下达地接</button>
+    </div>
+  </header>
+
+  <section class="panel"><div class="plan-note">向落地地接社下发接待计划(班期固定，批量下达)</div></section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>接待计划表单</h2><p>保存草稿后可继续调整，正式下达后同步给地接社。</p></div>
+      <span class="badge blue">KM20260925 · 1团</span>
+    </div>
+    <div class="form-grid cols-3">
+      <label class="field"><span>地接社*</span><select required><option>昆明国旅地接</option><option>云南康辉地接</option><option>大理春城地接</option></select></label>
+      <label class="field"><span>对接人</span><input value="刘经理"></label>
+      <label class="field"><span>接待日期*</span><input value="2026-09-25至10-03" required></label>
+      <label class="field"><span>出行人数(自动带出)</span><input value="48" readonly></label>
+      <label class="field"><span>用车需求</span><input value="44座空调巴士×2"></label>
+      <label class="field"><span>住宿需求</span><input value="车下2晚高品质酒店(双标间)"></label>
+      <label class="field full"><span>用餐安排</span><textarea rows="3">含8正餐，1桌宴，忌口见名单</textarea></label>
+      <label class="field full"><span>导游/讲解要求</span><textarea rows="3">全程不换导游</textarea></label>
+      <label class="field"><span>医护/保险</span><input value="随车医护1名，全程旅游保险"></label>
+      <label class="field"><span>结算价约定</span><input type="number" value="1580"></label>
+      <label class="field full"><span>备注</span><textarea rows="3" placeholder="补充特殊接待、交通限制、老年客照护说明等"></textarea></label>
+    </div>
+    <div class="modal-foot">
+      <button class="button secondary" type="button" data-toast="已附出行名单">附出行名单</button>
+      <button class="button secondary" type="button" data-toast="草稿已保存">保存草稿</button>
+      <button class="button primary" type="button" data-toast="地接计划已下达">下达地接</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>已下达计划记录</h2><p>计划状态包括已下达、已确认和已调整。</p></div><span class="badge green">5条记录</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="dmcPlanTable">
+        <thead><tr><th>计划单号</th><th>地接社</th><th>班期/团</th><th>接待日期</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td>JH20260925-1</td><td>昆明国旅地接</td><td>KM20260925 1团</td><td>2026-09-25至10-03</td><td><span class="badge blue">已下达</span></td><td><button class="button ghost small" data-toast="计划详情已打开">查看</button><button class="button ghost small" data-confirm="确认撤回该计划？" data-confirm-success="计划已撤回">撤回</button></td></tr>
+          <tr><td>JH20260925-2</td><td>昆明国旅地接</td><td>KM20260925 2团</td><td>2026-09-25至10-03</td><td><span class="badge green">已确认</span></td><td><button class="button ghost small" data-toast="计划详情已打开">查看</button><button class="button ghost small" data-confirm="确认撤回该计划？" data-confirm-success="计划已撤回">撤回</button></td></tr>
+          <tr><td>JH20260925-3</td><td>云南康辉地接</td><td>KM20260925 3团</td><td>2026-09-25至10-03</td><td><span class="badge purple">已调整</span></td><td><button class="button ghost small" data-toast="计划详情已打开">查看</button><button class="button ghost small" data-confirm="确认撤回该计划？" data-confirm-success="计划已撤回">撤回</button></td></tr>
+          <tr><td>JH20261017-1</td><td>大理春城地接</td><td>KM20261017 1团</td><td>2026-10-17至10-25</td><td><span class="badge blue">已下达</span></td><td><button class="button ghost small" data-toast="计划详情已打开">查看</button><button class="button ghost small" data-confirm="确认撤回该计划？" data-confirm-success="计划已撤回">撤回</button></td></tr>
+          <tr><td>JH20261114-1</td><td>丽江古城接待</td><td>KM20261114 1团</td><td>2026-11-14至11-22</td><td><span class="badge green">已确认</span></td><td><button class="button ghost small" data-toast="计划详情已打开">查看</button><button class="button ghost small" data-confirm="确认撤回该计划？" data-confirm-success="计划已撤回">撤回</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 5 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

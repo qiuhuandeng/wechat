@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>证件复核 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="ops-doc-recheck" data-title="证件复核">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">DOCUMENT RECHECK</div>
+      <h1>证件复核</h1>
+      <p>发团前计调对出行人证件做最后齐备度复核。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="已催办缺失证件">催办缺失</button>
+      <button class="button primary" type="button" data-toast="已完成一键复核">一键复核</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <label class="field"><span>班期</span><select><option>KM20260925</option><option>KM20261017</option></select></label>
+      <label class="field"><span>团</span><select><option>1团</option><option>2团</option></select></label>
+    </div>
+  </section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">核</span><div><span>应核</span><strong>48</strong><small>本团出行人</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">已</span><div><span>已核</span><strong>46</strong><small>复核通过</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">缺</span><div><span>缺失</span><strong>2</strong><small>需催办补充</small></div></article>
+    <article class="metric-card"><span class="metric-icon red">异</span><div><span>异常</span><strong>0</strong><small>无异常证件</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>证件复核列表</h2><p>发团前最后一次核验证件有效期与齐备状态。</p></div><span class="badge blue">KM20260925 · 1团</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="docRecheckTable">
+        <thead><tr><th>出行人</th><th>订单号</th><th>证件类型</th><th>证件号</th><th>证件有效期</th><th>齐备状态</th><th>复核结果</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected" data-status="已核"><td><b>王建国</b></td><td>DD20260901</td><td>身份证</td><td>5301****1234</td><td>2030-03-12</td><td><span class="badge green">已核</span></td><td><span class="badge green">通过</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="已核"><td><b>李秀兰</b></td><td>DD20260901</td><td>身份证</td><td>5301****2234</td><td>2031-06-20</td><td><span class="badge green">已核</span></td><td><span class="badge green">通过</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="待补"><td><b>赵玉芬</b></td><td>DD20260902</td><td>身份证</td><td>5301****3234</td><td>2029-10-08</td><td><span class="badge orange">待补</span></td><td><span class="badge red">退回</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="已核"><td><b>张伟</b></td><td>DD20260903</td><td>护照</td><td>E123****88</td><td>2032-04-18</td><td><span class="badge green">已核</span></td><td><span class="badge green">通过</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="已核"><td><b>陈桂英</b></td><td>DD20260904</td><td>身份证</td><td>5301****5234</td><td>2030-01-15</td><td><span class="badge green">已核</span></td><td><span class="badge green">通过</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="待补"><td><b>刘建华</b></td><td>DD20260905</td><td>身份证</td><td>5301****6234</td><td>2028-12-28</td><td><span class="badge orange">待补</span></td><td><span class="badge red">退回</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="已核"><td><b>周玉芬</b></td><td>DD20260906</td><td>身份证</td><td>5301****7234</td><td>2031-03-09</td><td><span class="badge green">已核</span></td><td><span class="badge green">通过</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+          <tr data-status="异常"><td><b>马国强</b></td><td>DD20260907</td><td>护照</td><td>E987****66</td><td>2033-08-30</td><td><span class="badge red">异常</span></td><td><span class="badge red">退回</span></td><td><button class="button ghost small" data-toast="已复核通过">复核通过</button><button class="button ghost small" data-toast="已退回补充">退回补充</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 8 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>行前提醒 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="ops-pre-notice" data-title="行前提醒">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">PRE-TRIP NOTICE</div>
+      <h1>行前提醒</h1>
+      <p>按班期和团队发送集合、物品、天气等行前通知。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button primary" type="button" data-toast="新建提醒已打开">新建提醒</button>
+      <button class="button primary" type="button" data-toast="提醒已发送">发送提醒</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <label class="field"><span>班期</span><select><option>KM20260925</option><option>KM20261017</option></select></label>
+      <label class="field"><span>团</span><select><option>1团</option><option>2团</option><option>全部团队</option></select></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>提醒配置</h2><p>支持立即发送或定时发送到短信、公众号和小程序。</p></div><span class="badge blue">KM20260925 · 1团</span></div>
+    <div class="form-grid cols-3">
+      <label class="field"><span>提醒模板*</span><select required><option>行前须知</option><option>集合通知</option><option>物品清单</option><option>天气提醒</option></select></label>
+      <div class="field"><span>发送对象</span><div class="segmented"><label><input type="checkbox" checked> 全部出行人</label><label><input type="checkbox"> 仅未读</label><label><input type="checkbox"> 指定</label></div></div>
+      <div class="field"><span>发送方式</span><div class="segmented"><label><input type="checkbox" checked> 短信</label><label><input type="checkbox" checked> 公众号消息</label><label><input type="checkbox" checked> 小程序推送</label></div></div>
+      <div class="field"><span>发送时间</span><div class="segmented"><label><input type="radio" name="sendtime" checked> 立即</label><label><input type="radio" name="sendtime"> 定时</label></div></div>
+      <label class="field"><span>定时时间</span><input type="datetime-local" value="2026-09-24T10:00"></label>
+      <label class="field full"><span>提醒内容</span><textarea rows="5">尊敬的旅客，昆明号将于9月25日18:00于昆明站集合，请携带有效证件原件，提前60分钟到达。</textarea></label>
+    </div>
+    <div class="modal-foot"><button class="button secondary" type="button" data-toast="提醒预览已打开">预览</button><button class="button primary" type="button" data-toast="提醒已发送">发送</button></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>发送记录</h2><p>记录模板、发送人数、送达/已读和发送方式。</p></div><span class="badge green">6条</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="preNoticeTable">
+        <thead><tr><th>发送时间</th><th>班期团</th><th>模板</th><th>发送人数</th><th>送达/已读</th><th>方式</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td>2026-09-20 10:00</td><td>KM20260925 1团</td><td>行前须知</td><td>48</td><td>46/42</td><td>短信、公众号消息、小程序推送</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+          <tr><td>2026-09-21 09:30</td><td>KM20260925 1团</td><td>集合通知</td><td>48</td><td>48/45</td><td>短信、小程序推送</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+          <tr><td>2026-09-22 16:00</td><td>KM20260925 2团</td><td>物品清单</td><td>42</td><td>40/36</td><td>公众号消息、小程序推送</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+          <tr><td>2026-09-23 08:30</td><td>KM20260925 3团</td><td>天气提醒</td><td>60</td><td>58/52</td><td>短信、公众号消息</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+          <tr><td>2026-10-12 10:00</td><td>KM20261017 1团</td><td>行前须知</td><td>36</td><td>34/30</td><td>短信、小程序推送</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+          <tr><td>2026-10-15 18:00</td><td>KM20261017 2团</td><td>集合通知</td><td>44</td><td>44/40</td><td>短信、公众号消息、小程序推送</td><td><button class="button ghost small" data-toast="发送详情已打开">查看</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 6 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

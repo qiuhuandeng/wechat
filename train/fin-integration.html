@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>财务对接 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="fin-integration" data-title="财务对接">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">FINANCE INTEGRATION</div>
+      <h1>财务对接</h1>
+      <p>配置金蝶云星空/用友接口，并同步应收、应付、收款和发票凭证。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="失败凭证已加入重试队列">全部重试</button>
+      <button class="button primary" type="button" data-toast="手动同步任务已启动">手动同步</button>
+    </div>
+  </header>
+
+  <section class="panel" id="integrationScope">
+    <div class="panel-header">
+      <div>
+        <h2>对接配置与同步日志</h2>
+        <p>接口配置保存后，凭证可按实时或每日定时策略同步到财务系统。</p>
+      </div>
+      <div class="segmented" data-tabs data-scope="#integrationScope">
+        <button class="active" type="button" data-tab="config">接口配置</button>
+        <button type="button" data-tab="logs">凭证同步</button>
+      </div>
+    </div>
+
+    <div data-tab-panel="config">
+      <div class="form-section">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="field">
+            <span>财务系统*</span>
+            <div class="flex gap-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+              <label class="flex items-center gap-2"><input type="radio" name="financeSystem" checked required> 金蝶云星空</label>
+              <label class="flex items-center gap-2"><input type="radio" name="financeSystem"> 用友</label>
+            </div>
+          </div>
+          <label class="field">
+            <span>接口地址</span>
+            <input value="https://api.kingdee.com/...">
+          </label>
+          <label class="field">
+            <span>账套编码</span>
+            <input value="RAILTOUR-2026">
+          </label>
+          <label class="field">
+            <span>对接账号</span>
+            <input value="finance_sync">
+          </label>
+          <label class="field">
+            <span>密钥/AppSecret</span>
+            <input type="password" value="kingdee-app-secret">
+          </label>
+          <label class="field">
+            <span>同步频率</span>
+            <select><option>实时</option><option>每日定时</option></select>
+          </label>
+          <div class="field full">
+            <span>同步范围</span>
+            <div class="grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-4">
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" checked> 应收凭证</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" checked> 应付凭证</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" checked> 收款凭证</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" checked> 发票</label>
+            </div>
+          </div>
+          <div class="field">
+            <span>连接状态</span>
+            <div class="rounded-xl border border-green-200 bg-green-50 p-3"><span class="badge green">已连接</span><span class="ml-2 text-sm text-green-700">最近心跳：2026-07-16 09:30</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="button secondary" type="button" data-toast="测试连接成功">测试连接</button>
+        <button class="button primary" type="button" data-toast="财务接口配置已保存">保存配置</button>
+      </div>
+    </div>
+
+    <div data-tab-panel="logs" hidden>
+      <div class="panel-header">
+        <div>
+          <h2>凭证同步日志</h2>
+          <p>展示应收、应付、收款、发票凭证同步至金蝶的结果。</p>
+        </div>
+        <span class="badge blue">10条</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table selectable" id="syncLogTable">
+          <thead>
+            <tr>
+              <th>同步单号</th>
+              <th>凭证类型</th>
+              <th>业务单号</th>
+              <th>金额</th>
+              <th>同步方向</th>
+              <th>同步时间</th>
+              <th>同步状态</th>
+              <th>失败原因</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="selected"><td>TB20260601</td><td><span class="badge blue">应收</span></td><td>DD20260901</td><td>¥25998</td><td>ERP→金蝶</td><td>2026-06-16 14:00</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260602</td><td><span class="badge orange">应付</span></td><td>YF20260925</td><td>¥75840</td><td>ERP→金蝶</td><td>2026-06-16 14:05</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260603</td><td><span class="badge green">收款</span></td><td>SK20260601</td><td>¥5000</td><td>ERP→金蝶</td><td>2026-06-16 14:10</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260604</td><td><span class="badge purple">发票</span></td><td>FP20260601</td><td>¥25998</td><td>ERP→金蝶</td><td>2026-06-20 10:20</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260605</td><td><span class="badge blue">应收</span></td><td>DD20260902</td><td>¥51996</td><td>ERP→金蝶</td><td>2026-06-21 09:00</td><td><span class="badge red">失败</span></td><td>客户编码未匹配</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="凭证已重新提交">重试</button></td></tr>
+            <tr><td>TB20260606</td><td><span class="badge green">收款</span></td><td>SK20260602</td><td>¥20998</td><td>ERP→金蝶</td><td>2026-06-22 11:30</td><td><span class="badge orange">待重试</span></td><td>接口超时</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="凭证已重新提交">重试</button></td></tr>
+            <tr><td>TB20260607</td><td><span class="badge orange">应付</span></td><td>YF20260601</td><td>¥120000</td><td>ERP→金蝶</td><td>2026-06-23 16:00</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260608</td><td><span class="badge purple">发票</span></td><td>FP20260602</td><td>¥51996</td><td>ERP→金蝶</td><td>2026-06-24 15:20</td><td><span class="badge red">失败</span></td><td>税号格式校验失败</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="凭证已重新提交">重试</button></td></tr>
+            <tr><td>TB20260609</td><td><span class="badge blue">应收</span></td><td>DD20260903</td><td>¥38997</td><td>ERP→金蝶</td><td>2026-06-25 13:45</td><td><span class="badge green">成功</span></td><td>—</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="该凭证无需重试">重试</button></td></tr>
+            <tr><td>TB20260610</td><td><span class="badge green">收款</span></td><td>SK20260603</td><td>¥25998</td><td>ERP→金蝶</td><td>2026-06-26 17:10</td><td><span class="badge orange">待重试</span></td><td>凭证期间未开启</td><td><button class="button ghost small" type="button" data-toast="同步详情已打开">查看</button><button class="button ghost small" type="button" data-toast="凭证已重新提交">重试</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination"><span>共 10 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+    </div>
+  </section>
+</body>
+</html>

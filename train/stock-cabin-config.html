@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>包厢配置 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="stock-cabin-config" data-title="包厢配置">
+  <header class="page-header">
+    <div><div class="eyebrow">CABIN CONFIG</div><h1>包厢配置</h1><p>维护指定车厢下的包厢编号、房型、铺位数和卫浴属性。</p></div>
+    <div class="page-actions"><button class="button secondary" data-toast="包厢配置已同步">同步模板</button></div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div class="form-grid cols-2">
+        <label class="field"><span>车型</span><select><option>昆明号</option></select></label>
+        <label class="field"><span>车厢</span><select><option>第3车厢-尊享房</option><option>第9车厢-品质房</option></select></label>
+      </div>
+      <div class="toolbar-actions"><span class="badge orange">安途尊享房</span></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>第3车厢包厢清单</h2><p>每间尊享房配置 3 个铺位，可住 2-3 人。</p></div></div>
+    <div class="table-wrap">
+      <table class="data-table selectable">
+        <thead><tr><th>包厢编号</th><th>所属车厢</th><th>房型</th><th>铺位数</th><th>可住人数</th><th>卫浴</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td>3-01</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-01？" data-confirm-success="包厢已停用">停用</button></td></tr>
+          <tr><td>3-02</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-02？" data-confirm-success="包厢已停用">停用</button></td></tr>
+          <tr><td>3-03</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-03？" data-confirm-success="包厢已停用">停用</button></td></tr>
+          <tr><td>3-04</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-04？" data-confirm-success="包厢已停用">停用</button></td></tr>
+          <tr><td>3-05</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-05？" data-confirm-success="包厢已停用">停用</button></td></tr>
+          <tr><td>3-06</td><td>第3车厢</td><td><span class="badge orange">安途尊享房</span></td><td class="numeric">3</td><td>2-3人</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="berthDrawer">编辑铺位</button><button class="button ghost small" data-confirm="确认停用包厢 3-06？" data-confirm-success="包厢已停用">停用</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 6 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal drawer wide" id="berthDrawer" hidden>
+    <section class="modal-card">
+      <div class="modal-head"><div><h2>包厢 3-01 铺位配置</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <section class="panel full">
+          <div class="panel-header"><div><h2>铺位行配置</h2><p>可按包厢增删铺位，保存后同步到库存模板。</p></div><button class="button secondary small" data-toast="已新增一行铺位">+ 新增铺位</button></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>铺位编号</th><th>铺位类型</th><th>床尺寸</th><th>铺位属性</th></tr></thead><tbody>
+            <tr><td>3-01-A</td><td><select><option>双人床</option><option>上铺</option><option>沙发床</option></select></td><td>200×150</td><td>主床</td></tr>
+            <tr><td>3-01-B</td><td><select><option>上铺</option><option>双人床</option><option>沙发床</option></select></td><td>200×75</td><td>加铺</td></tr>
+            <tr><td>3-01-C</td><td><select><option>沙发床</option><option>双人床</option><option>上铺</option></select></td><td>200×75</td><td>加铺</td></tr>
+          </tbody></table></div>
+        </section>
+      </div>
+      <div class="modal-foot"><button class="button secondary" data-modal-close>关闭</button><button class="button primary" data-toast="铺位配置已保存" data-modal-close>保存</button></div>
+    </section>
+  </div>
+</body>
+</html>

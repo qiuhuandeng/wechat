@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>销售台席 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .quote-layout { display:grid; grid-template-columns: 1.6fr .9fr; gap:14px; align-items:stretch; }
+    .quote-result { min-height:100%; padding:16px; border:1px solid #e7edf3; border-radius:12px; background:linear-gradient(135deg,#fff7ed 0%,#ffffff 64%); box-shadow:0 8px 22px rgba(232,139,43,.08); }
+    .quote-result h3 { margin:0; color:#173955; font-size:17px; font-weight:900; }
+    .quote-result .price { margin:8px 0 0; color:#b9600f; font-size:28px; font-weight:950; letter-spacing:-.02em; }
+    .quote-result dl { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:8px 12px; margin:14px 0; }
+    .quote-result dt { color:#8392a2; font-size:12px; }
+    .quote-result dd { margin:3px 0 0; font-size:14px; font-weight:850; }
+    .order-customer { display:block; color:#748292; font-size:12px; margin-top:2px; }
+    @media (max-width: 1100px) { .quote-layout { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body data-page="sale-workbench" data-title="销售台席">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">SALES WORKBENCH</div>
+      <h1>销售台席</h1>
+      <p>销售主战场：快速查位查价、查看今日数据和最近订单，并一键替客建单。</p>
+    </div>
+    <div class="page-actions">
+      <a class="button primary" href="order-create.html">替客建单</a>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>快速查位查价</h2><p>选择产品、班期、房型和入住人数后，展示内部可售余量和当前报价。</p></div>
+      <span class="badge orange">内部报价</span>
+    </div>
+    <div class="quote-layout">
+      <form class="form-section" data-success="报价已刷新">
+        <div class="form-grid">
+          <label class="field"><span>产品*</span><select required><option>环云南9天</option><option>滇西秘境7天</option><option>版纳雨林6天</option></select></label>
+          <label class="field"><span>出发班期*</span><select required><option>2026-09-25 KM20260925</option><option>2026-10-17 KM20261017</option><option>2026-11-14 KM20261114</option></select></label>
+          <label class="field"><span>房型*</span><select required><option>安途尊享房</option><option>悦途品质房</option></select></label>
+          <label class="field"><span>入住人数</span><select><option>2人</option><option>3人</option><option>4人</option></select></label>
+        </div>
+        <div class="modal-foot"><button class="button primary" type="submit">查询报价</button></div>
+      </form>
+      <aside class="quote-result">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <span class="badge orange">5钻 · 安途尊享房</span>
+            <h3>2026-09-25 环云南9天</h3>
+          </div>
+          <span class="badge green">可售76间</span>
+        </div>
+        <div class="price">¥12999 <small style="font-size:13px;color:#748292;">/人均价</small></div>
+        <dl>
+          <div><dt>可售状态</dt><dd>对内显示“可售76间”</dd></div>
+          <div><dt>单房差</dt><dd>¥1200</dd></div>
+          <div><dt>入住人数</dt><dd>2人</dd></div>
+          <div><dt>库存来源</dt><dd>真实内部库存</dd></div>
+        </dl>
+        <a class="button primary" href="order-create.html">立即建单</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">新</span><div><span>今日新单</span><strong>8</strong><small>较昨日 +2</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">确</span><div><span>待确认</span><strong>5</strong><small>需今天跟进</small></div></article>
+    <article class="metric-card"><span class="metric-icon red">款</span><div><span>待收款</span><strong>¥86,000</strong><small>订金/尾款合计</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">绩</span><div><span>本月业绩</span><strong>¥1,280,000</strong><small>张经理团队口径</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>我的最近订单</h2><p>最近处理的订单，支持查看和继续处理。</p></div>
+      <span class="badge blue">6笔</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="recentOrderTable">
+        <thead><tr><th>订单号</th><th>产品班期</th><th>客户</th><th>房型/人数</th><th>金额</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td>DD20260901</td><td>环云南9天 09-25</td><td>康辉旅行社<span class="order-customer">刘经理</span></td><td>尊享房2人</td><td>¥25998</td><td><span class="badge orange">待确认</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+          <tr><td>DD20260902</td><td>环云南9天 09-25</td><td>王建国<span class="order-customer">直客</span></td><td>尊享房2人</td><td>¥25998</td><td><span class="badge green">已确认</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+          <tr><td>DD20260903</td><td>环云南9天 09-25</td><td>夕阳红俱乐部<span class="order-customer">赵老师</span></td><td>品质房4人</td><td>¥23996</td><td><span class="badge blue">已付款</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+          <tr><td>DD20260904</td><td>环云南9天 10-17</td><td>李秀兰<span class="order-customer">直客</span></td><td>品质房2人</td><td>¥12798</td><td><span class="badge orange">待确认</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+          <tr><td>DD20260905</td><td>环云南9天 11-14</td><td>众信旅游<span class="order-customer">王经理</span></td><td>尊享房3人</td><td>¥33997</td><td><span class="badge green">已确认</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+          <tr><td>DD20260906</td><td>环云南9天 12-19</td><td>张伟<span class="order-customer">直客</span></td><td>品质房4人</td><td>¥25596</td><td><span class="badge blue">已付款</span></td><td><button class="button ghost small" data-toast="订单详情已打开">查看</button><a class="button ghost small" href="order-create.html">继续处理</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</body>
+</html>

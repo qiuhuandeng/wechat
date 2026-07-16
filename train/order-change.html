@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>订单变更 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .change-type-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
+    .change-type { padding:14px; border:1px solid #e3e8ed; border-radius:12px; background:#fff; cursor:pointer; }
+    .change-type.selected { border-color:#e88b2b; background:#fff7ed; box-shadow:0 10px 24px rgba(232,139,43,.12); }
+    .diff-card { padding:16px; border:1px solid #f1d8bd; border-radius:12px; background:linear-gradient(135deg,#fff2e2,#fff); }
+    .compare-table td:first-child { color:#748292; }
+  </style>
+</head>
+<body data-page="order-change" data-title="订单变更">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">ORDER CHANGE</div>
+      <h1>订单变更</h1>
+      <p>处理订单改期、换铺、加减人和改房型，并自动计算费用影响。</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>原订单摘要</h2><p>原订单号 DD20260901 · 环云南9天 2026-09-25 · 安途尊享房 · 2人 · ¥25998</p></div><span class="badge blue">已付款</span></div>
+    <div class="record-meta"><span>客户：王建国</span><span>归属销售：李销售</span><span>已收金额：¥25998</span><span>当前状态：已付款</span></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>变更类型选择</h2><p>当前示例展示“改期”表单。</p></div></div>
+    <div class="change-type-grid">
+      <label class="change-type selected"><input type="radio" name="changeType" checked> <b>改期</b><p class="text-xs text-slate-500 mt-2">更换出发班期</p></label>
+      <label class="change-type"><input type="radio" name="changeType"> <b>换铺</b><p class="text-xs text-slate-500 mt-2">调整铺位分配</p></label>
+      <label class="change-type"><input type="radio" name="changeType"> <b>加减人</b><p class="text-xs text-slate-500 mt-2">调整出行人数</p></label>
+      <label class="change-type"><input type="radio" name="changeType"> <b>改房型</b><p class="text-xs text-slate-500 mt-2">切换房型档次</p></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>改期信息</h2><p>选择目标班期并填写变更原因。</p></div><span class="badge green">可改期</span></div>
+    <div class="grid grid-cols-[1fr_.8fr] gap-4">
+      <div class="form-section">
+        <div class="form-grid cols-2">
+          <label class="field"><span>原班期</span><input value="2026-09-25" readonly></label>
+          <label class="field"><span>目标班期*</span><select required><option>2026-10-17 (可售54间)</option><option>2026-11-14 (可售96间)</option></select></label>
+          <label class="field full"><span>变更原因*</span><textarea>客户行程时间调整，申请改至 2026-10-17 班期。</textarea></label>
+        </div>
+      </div>
+      <aside class="diff-card">
+        <span class="badge orange">差价计算</span>
+        <p class="mt-3 text-sm">原价¥25998 → 新价¥25998 → 差额¥0</p>
+        <div class="mt-4"><span>是否收变更费</span> <span class="badge green">否</span></div>
+      </aside>
+    </div>
+    <div class="modal-foot"><a class="button secondary" href="order-detail.html">取消</a><button class="button primary" type="button" data-modal-open="changeConfirmModal">提交变更</button></div>
+  </section>
+
+  <div class="modal" id="changeConfirmModal" hidden>
+    <form class="modal-card" data-success="订单变更已确认">
+      <div class="modal-head"><div><h2>变更确认</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <section class="panel full" style="margin:0;">
+          <div class="panel-header"><div><h2>变更前后对比</h2><p>确认后订单班期将更新。</p></div></div>
+          <div class="table-wrap">
+            <table class="data-table compare-table">
+              <thead><tr><th>项目</th><th>变更前</th><th>变更后</th></tr></thead>
+              <tbody>
+                <tr><td>班期</td><td>2026-09-25</td><td>2026-10-17</td></tr>
+                <tr><td>产品</td><td>环云南9天</td><td>环云南9天</td></tr>
+                <tr><td>房型/人数</td><td>安途尊享房2人</td><td>安途尊享房2人</td></tr>
+                <tr><td>费用影响</td><td>¥25998</td><td>¥25998，差额¥0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <div class="field full"><span>费用影响</span><div class="notice-card success"><b>无需补差</b><p>本次改期新旧价格一致，变更费为 0。</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">确认变更</button></div>
+    </form>
+  </div>
+</body>
+</html>

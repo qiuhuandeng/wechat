@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>产品上架 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="product-publish" data-title="产品上架">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">PRODUCT PUBLISH</div>
+      <h1>产品上架</h1>
+      <p>管理产品在小程序、公众号和分销门户的上下架时间与渠道范围。</p>
+    </div>
+    <div class="page-actions">
+      <a class="button secondary" href="product-list.html">产品列表</a>
+      <button class="button primary" type="button" data-modal-open="channelModal">编辑渠道</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div class="filter-tabs" data-status-tabs data-target="#publishTable">
+        <button class="active" data-status="all">全部 <i>6</i></button>
+        <button data-status="已上架">已上架 <i>4</i></button>
+        <button data-status="草稿">草稿 <i>1</i></button>
+        <button data-status="已下架">已下架 <i>1</i></button>
+      </div>
+      <div class="toolbar-actions"><span class="badge orange">上架渠道</span></div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="publishTable">
+        <thead><tr><th>产品名称</th><th>当前状态</th><th>上架渠道</th><th>上架时间</th><th>下架时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected" data-status="已上架"><td>环云南9天</td><td><span class="badge green">已上架</span></td><td><span class="badge blue">小程序</span><span class="badge purple">公众号</span><span class="badge orange">分销门户</span></td><td>2026-06-01</td><td>2026-12-31</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-confirm="确认下架环云南9天？" data-confirm-success="产品已下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+          <tr data-status="已上架"><td>滇西秘境7天</td><td><span class="badge green">已上架</span></td><td><span class="badge blue">小程序</span><span class="badge orange">分销门户</span></td><td>2026-06-05</td><td>2026-11-30</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-confirm="确认下架滇西秘境7天？" data-confirm-success="产品已下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+          <tr data-status="已上架"><td>版纳雨林6天</td><td><span class="badge green">已上架</span></td><td><span class="badge blue">小程序</span><span class="badge purple">公众号</span></td><td>2026-06-08</td><td>2026-10-31</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-confirm="确认下架版纳雨林6天？" data-confirm-success="产品已下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+          <tr data-status="草稿"><td>香格里拉8天</td><td><span class="badge">草稿</span></td><td><span class="badge">未配置</span></td><td>—</td><td>—</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-toast="草稿无需下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+          <tr data-status="已上架"><td>腾冲火山5天</td><td><span class="badge green">已上架</span></td><td><span class="badge blue">小程序</span><span class="badge orange">分销门户</span></td><td>2026-06-12</td><td>2026-09-30</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-confirm="确认下架腾冲火山5天？" data-confirm-success="产品已下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+          <tr data-status="已下架"><td>建水古城4天</td><td><span class="badge red">已下架</span></td><td><span class="badge blue">小程序</span></td><td>2026-05-01</td><td>2026-06-30</td><td><button class="button ghost small" data-toast="产品已上架">上架</button><button class="button ghost small" data-toast="产品已下架">下架</button><button class="button ghost small" data-modal-open="channelModal">编辑渠道</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 6 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="channelModal" hidden>
+    <form class="modal-card" data-success="上架渠道已保存">
+      <div class="modal-head"><div><h2>编辑渠道</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <div class="field full"><span>上架渠道</span><label class="check-row"><input type="checkbox" checked><div><b>小程序</b><span>C端报名入口</span></div></label><label class="check-row"><input type="checkbox" checked><div><b>公众号</b><span>微信内容入口</span></div></label><label class="check-row"><input type="checkbox" checked><div><b>分销门户</b><span>渠道自助下单</span></div></label></div>
+        <label class="field"><span>上架时间</span><input type="date" value="2026-06-01"></label>
+        <label class="field"><span>下架时间</span><input type="date" value="2026-12-31"></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>收款提醒 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .days-risk { color:#d84f58; font-weight:900; }
+    .remind-note { padding:12px 14px; border:1px solid #f3d2aa; border-radius:12px; color:#7f4c17; background:#fff8ef; font-size:12px; }
+  </style>
+</head>
+<body data-page="order-pay-remind" data-title="收款提醒">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">PAYMENT REMINDER</div>
+      <h1>收款提醒</h1>
+      <p>尾款到期/定金逾期提醒。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="提醒模板已打开">提醒模板</button>
+      <button class="button primary" type="button" data-toast="已批量催收待处理订单">批量催收</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="remind-note">系统按班期出发日、定金有效期和尾款截止日自动生成提醒；剩余天数≤7天时红色高亮。</div>
+  </section>
+
+  <section class="panel">
+    <div class="filters" data-filter-scope="#payRemindTable">
+      <label class="field"><span>班期</span><select data-table-filter="#payRemindTable" data-filter-key="schedule"><option value="">全部班期</option><option>环云南9天 09-25</option><option>环云南9天 10-17</option></select></label>
+      <label class="field"><span>提醒类型</span><select data-table-filter="#payRemindTable" data-filter-key="type"><option value="">全部类型</option><option>尾款到期</option><option>定金逾期</option></select></label>
+      <label class="field"><span>状态</span><select data-table-filter="#payRemindTable" data-filter-key="status"><option value="">全部状态</option><option>待催收</option><option>已催收</option></select></label>
+      <div class="filter-actions"><button class="button secondary small" data-apply-filters="#payRemindTable">查询</button><button class="button ghost small" data-reset-filters>重置</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>收款提醒列表</h2><p>销售可单条发送提醒，也可按筛选结果批量催收。</p></div>
+      <span class="badge orange">7条提醒</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="payRemindTable">
+        <thead><tr><th>订单号</th><th>客户</th><th>产品班期</th><th>应收金额</th><th>已收金额</th><th>待收金额</th><th>尾款截止日</th><th>剩余天数</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected" data-schedule="环云南9天 09-25" data-type="尾款到期" data-status="待催收"><td>DD20260901</td><td><b>王建国</b></td><td>环云南9天 09-25</td><td>¥25998</td><td>¥5000</td><td>¥20998</td><td>2026-08-25</td><td><span class="days-risk">5</span></td><td><span class="badge orange">待催收</span></td><td><button class="button ghost small" data-toast="收款提醒已发送">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 09-25" data-type="尾款到期" data-status="待催收"><td>DD20260902</td><td><b>康辉旅行社</b></td><td>环云南9天 09-25</td><td>¥51996</td><td>¥10000</td><td>¥41996</td><td>2026-08-25</td><td><span class="days-risk">6</span></td><td><span class="badge orange">待催收</span></td><td><button class="button ghost small" data-toast="收款提醒已发送">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 09-25" data-type="定金逾期" data-status="待催收"><td>DD20260903</td><td><b>赵玉芬</b></td><td>环云南9天 09-25</td><td>¥23996</td><td>¥0</td><td>¥23996</td><td>2026-07-18</td><td><span class="days-risk">2</span></td><td><span class="badge orange">待催收</span></td><td><button class="button ghost small" data-toast="收款提醒已发送">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 09-25" data-type="尾款到期" data-status="已催收"><td>DD20260904</td><td><b>张伟</b></td><td>环云南9天 09-25</td><td>¥12798</td><td>¥5000</td><td>¥7798</td><td>2026-08-25</td><td>12</td><td><span class="badge green">已催收</span></td><td><button class="button ghost small" data-toast="已再次发送提醒">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 10-17" data-type="尾款到期" data-status="待催收"><td>DD20261001</td><td><b>夕阳红俱乐部</b></td><td>环云南9天 10-17</td><td>¥95992</td><td>¥30000</td><td>¥65992</td><td>2026-09-17</td><td>28</td><td><span class="badge orange">待催收</span></td><td><button class="button ghost small" data-toast="收款提醒已发送">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 10-17" data-type="定金逾期" data-status="已催收"><td>DD20261002</td><td><b>银发之家</b></td><td>环云南9天 10-17</td><td>¥35994</td><td>¥0</td><td>¥35994</td><td>2026-07-20</td><td><span class="days-risk">4</span></td><td><span class="badge green">已催收</span></td><td><button class="button ghost small" data-toast="已再次发送提醒">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+          <tr data-schedule="环云南9天 10-17" data-type="尾款到期" data-status="待催收"><td>DD20261003</td><td><b>众信旅游</b></td><td>环云南9天 10-17</td><td>¥71994</td><td>¥15000</td><td>¥56994</td><td>2026-09-17</td><td>28</td><td><span class="badge orange">待催收</span></td><td><button class="button ghost small" data-toast="收款提醒已发送">发送提醒</button><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 7 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

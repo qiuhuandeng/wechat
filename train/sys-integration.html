@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>集成配置 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="sys-integration" data-title="集成配置">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">INTEGRATION SETTINGS</div>
+      <h1>集成配置</h1>
+      <p>集中配置支付、财务、OCR、短信、公众号、小程序、发票和分销 API 服务。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="集成配置已导出">导出</button>
+      <button class="button primary" type="button" data-modal-open="integrationModal">新增集成</button>
+    </div>
+  </header>
+
+  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon green">微</span><span class="badge green">已连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">微信支付</h2>
+      <p class="mt-2 text-sm text-slate-500">小程序、公众号、H5 在线支付。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon blue">财</span><span class="badge green">已连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">金蝶/用友财务</h2>
+      <p class="mt-2 text-sm text-slate-500">凭证、应收、应付、发票同步。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon orange">证</span><span class="badge green">已连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">证件OCR识别</h2>
+      <p class="mt-2 text-sm text-slate-500">身份证、护照图像识别。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon purple">短</span><span class="badge green">已连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">短信服务</h2>
+      <p class="mt-2 text-sm text-slate-500">催收、提醒、验证码通知。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon green">公</span><span class="badge green">已连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">公众号/小程序</h2>
+      <p class="mt-2 text-sm text-slate-500">产品展示、报名、消息推送。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon blue">票</span><span class="badge">未连接</span></div>
+      <h2 class="mt-4 text-lg font-semibold">发票服务</h2>
+      <p class="mt-2 text-sm text-slate-500">电子发票开具、红冲、下载。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon orange">分</span><span class="badge orange">待接入(二期)</span></div>
+      <h2 class="mt-4 text-lg font-semibold">OTA分销API</h2>
+      <p class="mt-2 text-sm text-slate-500">对接外部分销与 OTA 平台。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+    <article class="panel">
+      <div class="flex items-start justify-between gap-3"><span class="metric-icon purple">海</span><span class="badge orange">待接入(二期)</span></div>
+      <h2 class="mt-4 text-lg font-semibold">海外支付网关</h2>
+      <p class="mt-2 text-sm text-slate-500">境外银行卡、钱包支付网关。</p>
+      <button class="button secondary small mt-4" type="button" data-modal-open="integrationModal">配置</button>
+    </article>
+  </section>
+
+  <div class="modal" id="integrationModal" hidden>
+    <form class="modal-card" data-success="集成配置已保存">
+      <div class="modal-head">
+        <div><span class="eyebrow">INTEGRATION FORM</span><h2>集成配置</h2></div>
+        <button class="modal-close" type="button" data-modal-close>×</button>
+      </div>
+      <div class="modal-body">
+        <label class="field"><span>服务名称</span><input value="微信支付"></label>
+        <label class="field"><span>接口地址</span><input value="https://api.weixin.qq.com/pay/..."></label>
+        <label class="field"><span>AppID</span><input value="wx_railtour_erp"></label>
+        <label class="field"><span>密钥</span><input type="password" value="app-secret-key"></label>
+        <label class="field full"><span>回调地址</span><input value="https://erp.example.com/callback/payment"></label>
+        <div class="field"><span>启用状态</span><label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm"><input type="checkbox" checked> 启用</label></div>
+      </div>
+      <div class="modal-foot">
+        <button class="button secondary" type="button" data-toast="测试连接成功">测试连接</button>
+        <button class="button primary" type="submit">保存</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>退款处理 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="order-refund-process" data-title="退款处理">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">REFUND PROCESSING</div>
+      <h1>退款处理</h1>
+      <p>处理审核通过的退改单，完成原路退回或对公退款。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="退款明细已导出">导出</button>
+      <button class="button primary" type="button" data-toast="已同步最新退款状态">同步状态</button>
+    </div>
+  </header>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon orange">待</span><div><span>待退款</span><strong>¥54000</strong><small>审核通过未执行</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">退</span><div><span>本月已退</span><strong>¥120000</strong><small>财务已完成</small></div></article>
+    <article class="metric-card"><span class="metric-icon blue">笔</span><div><span>退款笔数</span><strong>28</strong><small>本月累计</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="filters" data-filter-scope="#refundProcessTable">
+      <label class="field"><span>退改单号</span><input data-table-search="#refundProcessTable" placeholder="TG20260701"></label>
+      <label class="field"><span>退款方式</span><select data-table-filter="#refundProcessTable" data-filter-key="method"><option value="">全部方式</option><option>原路退回</option><option>对公退款</option></select></label>
+      <label class="field"><span>状态</span><select data-table-filter="#refundProcessTable" data-filter-key="status"><option value="">全部状态</option><option>待退款</option><option>退款中</option><option>已退款</option></select></label>
+      <div class="filter-actions"><button class="button secondary small" data-apply-filters="#refundProcessTable">查询</button><button class="button ghost small" data-reset-filters>重置</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>退款处理列表</h2><p>执行退款前需确认退款方式、收款账户与财务复核人。</p></div>
+      <span class="badge orange">财务复核</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="refundProcessTable">
+        <thead><tr><th>退改单号</th><th>订单号</th><th>客户</th><th>应退金额</th><th>退款方式</th><th>收款账户</th><th>审核状态</th><th>退款状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected" data-method="原路退回" data-status="待退款"><td>TG20260701</td><td>DD20260901</td><td><b>王建国</b></td><td>¥18199</td><td><span class="badge green">原路退回</span></td><td>微信｜WX2026061612345</td><td><span class="badge blue">已通过</span></td><td><span class="badge orange">待退款</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="对公退款" data-status="退款中"><td>TG20260702</td><td>DD20260902</td><td><b>康辉旅行社</b></td><td>¥36397</td><td><span class="badge blue">对公退款</span></td><td>银行卡尾号 8899</td><td><span class="badge blue">已通过</span></td><td><span class="badge purple">退款中</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="原路退回" data-status="待退款"><td>TG20260703</td><td>DD20260903</td><td><b>李秀兰</b></td><td>¥25998</td><td><span class="badge green">原路退回</span></td><td>微信｜WX2026061807789</td><td><span class="badge blue">已通过</span></td><td><span class="badge orange">待退款</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="原路退回" data-status="已退款"><td>TG20260704</td><td>DD20260904</td><td><b>张伟</b></td><td>¥6399</td><td><span class="badge green">原路退回</span></td><td>微信｜WX2026061900928</td><td><span class="badge blue">已通过</span></td><td><span class="badge green">已退款</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="对公退款" data-status="退款中"><td>TG20260705</td><td>DD20260905</td><td><b>夕阳红俱乐部</b></td><td>¥67194</td><td><span class="badge blue">对公退款</span></td><td>银行卡尾号 6621</td><td><span class="badge blue">已通过</span></td><td><span class="badge purple">退款中</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="原路退回" data-status="待退款"><td>TG20260706</td><td>DD20260906</td><td><b>赵玉芬</b></td><td>¥7199</td><td><span class="badge green">原路退回</span></td><td>微信｜WX2026062104456</td><td><span class="badge blue">已通过</span></td><td><span class="badge orange">待退款</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+          <tr data-method="对公退款" data-status="已退款"><td>TG20260707</td><td>DD20260907</td><td><b>银发之家</b></td><td>¥35994</td><td><span class="badge blue">对公退款</span></td><td>银行卡尾号 1024</td><td><span class="badge blue">已通过</span></td><td><span class="badge green">已退款</span></td><td><button class="button ghost small" data-modal-open="refundPayModal">执行退款</button><button class="button ghost small" data-toast="退款详情已打开">查看</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 7 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="refundPayModal" hidden>
+    <form class="modal-card" data-success="退款已提交执行">
+      <div class="modal-head">
+        <div><span class="eyebrow">EXECUTE REFUND</span><h2>执行退款</h2></div>
+        <button class="modal-close" type="button" data-modal-close>×</button>
+      </div>
+      <div class="modal-body">
+        <div class="full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          <p><b>退改单摘要：</b>TG20260701｜DD20260901｜王建国</p>
+          <p><b>审核状态：</b>已通过｜违约金 ¥7799｜应退 ¥18199</p>
+        </div>
+        <label class="field"><span>应退金额</span><input value="¥18199" readonly></label>
+        <label class="field"><span>退款方式确认</span><select><option>原路退回</option><option>对公退款</option></select></label>
+        <label class="field full"><span>财务复核人</span><select><option>张经理</option><option>王财务</option><option>李会计</option></select></label>
+      </div>
+      <div class="modal-foot">
+        <button class="button secondary" type="button" data-modal-close>取消</button>
+        <button class="button primary" type="submit">确认退款</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

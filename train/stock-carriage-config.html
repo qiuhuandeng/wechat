@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>车厢配置 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="stock-carriage-config" data-title="车厢配置">
+  <header class="page-header">
+    <div><div class="eyebrow">CARRIAGE CONFIG</div><h1>车厢配置</h1><p>按车型维护车厢序号、类型、房型、包厢数和定员。</p></div>
+    <div class="page-actions"><button class="button primary" type="button" data-modal-open="carriageModal">新增车厢</button></div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <label class="field wide"><span>车型选择</span><select><option>昆明号</option><option>丽江号</option><option>香格里拉号</option></select></label>
+      <div class="toolbar-actions"><span class="badge orange">16 节编组</span><button class="button secondary small" data-toast="车厢配置已刷新">刷新</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>昆明号车厢清单</h2><p>当前展示前 10 节车厢，完整编组共 16 节。</p></div><span class="badge green">启用</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="carriageTable">
+        <thead><tr><th>车厢序号</th><th>车厢编号</th><th>车厢类型</th><th>所属房型</th><th>包厢数量</th><th>定员</th><th>卫浴类型</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td>1</td><td>KM-01</td><td><span class="badge blue">软卧载客</span></td><td>尊享房</td><td class="numeric">6</td><td class="numeric">18</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-01 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>2</td><td>KM-02</td><td><span class="badge blue">软卧载客</span></td><td>尊享房</td><td class="numeric">6</td><td class="numeric">18</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-02 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>3</td><td>KM-03</td><td><span class="badge blue">软卧载客</span></td><td>尊享房</td><td class="numeric">6</td><td class="numeric">18</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-03 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>4</td><td>KM-04</td><td><span class="badge blue">软卧载客</span></td><td>尊享房</td><td class="numeric">6</td><td class="numeric">18</td><td><span class="badge green">独立卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-04 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>5</td><td>KM-05</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-05 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>6</td><td>KM-06</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-06 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>7</td><td>KM-07</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-07 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>8</td><td>KM-08</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-08 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>9</td><td>KM-09</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-09 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+          <tr><td>10</td><td>KM-10</td><td><span class="badge blue">软卧载客</span></td><td>品质房</td><td class="numeric">6</td><td class="numeric">24</td><td><span class="badge">公共卫浴</span></td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="carriageModal">编辑</button><button class="button ghost small" data-confirm="确认删除 KM-10 车厢？" data-confirm-success="车厢已删除">删除</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 16 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="carriageModal" hidden>
+    <form class="modal-card" data-success="车厢配置已保存">
+      <div class="modal-head"><div><h2>车厢编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <label class="field"><span>车厢序号*</span><input type="number" value="1" required></label>
+        <label class="field"><span>车厢编号*</span><input value="KM-01" required></label>
+        <label class="field"><span>车厢类型*</span><select required><option>软卧载客</option><option>多功能餐车</option><option>特色餐车</option><option>工作车</option><option>发电车</option></select></label>
+        <label class="field"><span>所属房型</span><select><option>尊享房</option><option>品质房</option><option>无</option></select></label>
+        <label class="field"><span>包厢数量*</span><input type="number" value="6" required></label>
+        <label class="field"><span>每包厢铺位数*</span><input type="number" value="3" required></label>
+        <label class="field"><span>定员*</span><input type="number" value="24" required></label>
+        <div class="field"><span>卫浴类型*</span><label class="check-row"><input type="radio" name="bath" checked><div><b>独立卫浴</b><span>尊享房默认</span></div></label><label class="check-row"><input type="radio" name="bath"><div><b>公共卫浴</b><span>品质房默认</span></div></label></div>
+        <label class="field full"><span>备注</span><textarea placeholder="请输入车厢配置备注"></textarea></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </div>
+</body>
+</html>

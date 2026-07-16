@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>班期分团 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .split-layout { display:grid; grid-template-columns:minmax(0, 1fr) 110px minmax(360px, .9fr); gap:14px; align-items:start; }
+    .transfer-actions { display:grid; gap:10px; padding-top:160px; }
+    .group-tabs { display:flex; gap:8px; margin-bottom:14px; }
+    .group-tabs button { border:1px solid #dfe6ee; border-radius:999px; padding:8px 13px; color:#536476; background:#fff; font-size:12px; font-weight:850; }
+    .group-tabs button.active { color:#fff; border-color:#173955; background:#173955; }
+    .split-note { padding:12px 14px; border:1px solid #f3d2aa; border-radius:12px; color:#7f4c17; background:#fff8ef; font-size:12px; }
+    @media (max-width: 1180px) { .split-layout { grid-template-columns:1fr; } .transfer-actions { display:flex; padding-top:0; } }
+  </style>
+</head>
+<body data-page="ops-group-split" data-title="班期分团">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">GROUP SPLIT</div>
+      <h1>班期分团</h1>
+      <p>将本班期订单按需分成若干团，便于地接接待与导游分配。</p>
+    </div>
+    <div class="page-actions">
+      <label class="field" style="margin:0;min-width:300px;"><span>班期选择</span><select><option>KM20260925 (2026-09-25 环云南9天)</option><option>KM20261017 (2026-10-17 环云南9天)</option></select></label>
+      <button class="button primary" type="button" data-toast="分团方案已保存">保存分团</button>
+    </div>
+  </header>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">单</span><div><span>本班期订单</span><strong>52</strong><small>KM20260925</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">人</span><div><span>出行人</span><strong>264</strong><small>已完成名单归集</small></div></article>
+    <article class="metric-card"><span class="metric-icon purple">团</span><div><span>已分团</span><strong>220</strong><small>已进入地接计划</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">待</span><div><span>待分团</span><strong>44</strong><small>需继续分配</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="split-note">将本班期订单按需分成若干团(便于地接接待与导游分配)</div>
+  </section>
+
+  <section class="split-layout">
+    <div class="panel">
+      <div class="panel-header"><div><h2>待分团订单列表</h2><p>勾选订单后加入右侧当前团。</p></div><span class="badge orange">待分团44人</span></div>
+      <div class="table-wrap">
+        <table class="data-table selectable" id="pendingGroupTable">
+          <thead><tr><th><input type="checkbox"></th><th>订单号</th><th>客户</th><th>房型/人数</th><th>出行人数</th></tr></thead>
+          <tbody>
+            <tr class="selected"><td><input type="checkbox" checked></td><td>DD20260901</td><td><b>王建国</b></td><td>尊享房2人</td><td>2</td></tr>
+            <tr><td><input type="checkbox" checked></td><td>DD20260902</td><td><b>康辉旅行社</b></td><td>尊享房4人</td><td>4</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260903</td><td><b>李秀兰</b></td><td>品质房4人</td><td>4</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260904</td><td><b>张伟</b></td><td>品质房2人</td><td>2</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260905</td><td><b>夕阳红俱乐部</b></td><td>尊享房8人</td><td>8</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260906</td><td><b>赵玉芬</b></td><td>品质房4人</td><td>4</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260907</td><td><b>众信旅游</b></td><td>品质房12人</td><td>12</td></tr>
+            <tr><td><input type="checkbox"></td><td>DD20260908</td><td><b>银发之家</b></td><td>尊享房8人</td><td>8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="transfer-actions">
+      <button class="button primary" type="button" data-toast="已加入当前团">加入团&gt;</button>
+      <button class="button secondary" type="button" data-toast="已从当前团移出">&lt;移出</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div><h2>团分组区</h2><p>切换团队 Tab 后编辑地接社与导游。</p></div><a class="button ghost small" href="ops-group-detail.html">查看团队详情</a></div>
+      <div class="group-tabs">
+        <button class="active" type="button" data-toast="已切换1团">1团</button>
+        <button type="button" data-toast="已切换2团">2团</button>
+        <button type="button" data-toast="已新建团队草稿">新建团</button>
+      </div>
+      <div class="form-grid cols-3">
+        <label class="field full"><span>当前团名称</span><input value="环云南9天-09-25-1团"></label>
+        <label class="field"><span>地接社</span><select><option>昆明国旅地接</option><option>云南康辉地接</option><option>大理春城地接</option></select></label>
+        <label class="field"><span>导游</span><select><option>张导</option><option>李导</option><option>王导</option></select></label>
+        <label class="field"><span>领队</span><select><option>王计调</option><option>陈领队</option><option>赵领队</option></select></label>
+      </div>
+      <div class="table-wrap mt-4">
+        <table class="data-table selectable" id="includedOrderTable">
+          <thead><tr><th>订单号</th><th>客户</th><th>出行人数</th></tr></thead>
+          <tbody>
+            <tr class="selected"><td>DD20260909</td><td><b>中青旅</b></td><td>12</td></tr>
+            <tr><td>DD20260910</td><td><b>王建国</b></td><td>2</td></tr>
+            <tr><td>DD20260911</td><td><b>乐龄会</b></td><td>18</td></tr>
+            <tr><td>DD20260912</td><td><b>康辉旅行社</b></td><td>16</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-foot" style="padding-left:0;padding-right:0;padding-bottom:0;">
+        <button class="button primary" type="button" data-toast="分团方案已保存">保存分团</button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

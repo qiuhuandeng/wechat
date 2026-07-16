@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>缔结结算 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="fin-payable" data-title="缔结结算">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">ACCOUNTS PAYABLE</div>
+      <h1>缔结结算</h1>
+      <p>落地地接缔结款等应付款项管理。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="应付列表已导出">导出</button>
+      <button class="button primary" type="button" data-modal-open="payModal">付款登记</button>
+    </div>
+  </header>
+
+  <section class="panel"><div class="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">落地地接缔结款等应付款项管理</div></section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">应</span><div><span>应付总额</span><strong>¥560000</strong><small>全部应付单</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">已</span><div><span>已付</span><strong>¥320000</strong><small>财务已付款</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">待</span><div><span>待付</span><strong>¥240000</strong><small>待付款审批</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="filters" data-filter-scope="#payableTable">
+      <label class="field"><span>地接社</span><select data-table-filter="#payableTable" data-filter-key="supplier"><option value="">全部收款方</option><option>昆明国旅地接</option><option>云南康辉地接</option><option>大理春城地接</option></select></label>
+      <label class="field"><span>班期</span><select data-table-filter="#payableTable" data-filter-key="schedule"><option value="">全部班期</option><option>KM20260925</option><option>KM20261017</option><option>KM20261114</option></select></label>
+      <label class="field"><span>结算状态</span><select data-table-filter="#payableTable" data-filter-key="status"><option value="">全部状态</option><option>待付</option><option>部分付</option><option>已结清</option></select></label>
+      <div class="filter-actions"><button class="button secondary small" data-apply-filters="#payableTable">查询</button><button class="button ghost small" data-reset-filters>重置</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>应付明细</h2><p>支持付款登记和应付单详情查看。</p></div><span class="badge blue">8条</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="payableTable">
+        <thead><tr><th>应付单号</th><th>收款方</th><th>款项类型</th><th>所属班期/团</th><th>应付金额</th><th>已付金额</th><th>待付金额</th><th>结算状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected" data-supplier="昆明国旅地接" data-schedule="KM20260925" data-status="部分付"><td>YF20260925</td><td><b>昆明国旅地接</b></td><td><span class="badge blue">地接缔结款</span></td><td>KM20260925 1团</td><td>¥75840</td><td>¥40000</td><td>¥35840</td><td><span class="badge blue">部分付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="昆明国旅地接" data-schedule="KM20260925" data-status="待付"><td>YF20260925-2</td><td><b>昆明国旅地接</b></td><td><span class="badge green">用车</span></td><td>KM20260925 2团</td><td>¥32000</td><td>¥0</td><td>¥32000</td><td><span class="badge orange">待付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="云南康辉地接" data-schedule="KM20260925" data-status="已结清"><td>YF20260925-3</td><td><b>云南康辉地接</b></td><td><span class="badge purple">住宿</span></td><td>KM20260925 3团</td><td>¥91200</td><td>¥91200</td><td>¥0</td><td><span class="badge green">已结清</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="大理春城地接" data-schedule="KM20261017" data-status="待付"><td>YF20261017</td><td><b>大理春城地接</b></td><td><span class="badge blue">地接缔结款</span></td><td>KM20261017 1团</td><td>¥52560</td><td>¥0</td><td>¥52560</td><td><span class="badge orange">待付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="云南康辉地接" data-schedule="KM20261017" data-status="部分付"><td>YF20261017-2</td><td><b>云南康辉地接</b></td><td><span class="badge green">用车</span></td><td>KM20261017 2团</td><td>¥66880</td><td>¥30000</td><td>¥36880</td><td><span class="badge blue">部分付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="大理春城地接" data-schedule="KM20261114" data-status="已结清"><td>YF20261114</td><td><b>大理春城地接</b></td><td><span class="badge purple">住宿</span></td><td>KM20261114 1团</td><td>¥73000</td><td>¥73000</td><td>¥0</td><td><span class="badge green">已结清</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="昆明国旅地接" data-schedule="KM20261114" data-status="待付"><td>YF20261114-2</td><td><b>昆明国旅地接</b></td><td><span class="badge">其他</span></td><td>KM20261114 2团</td><td>¥18000</td><td>¥0</td><td>¥18000</td><td><span class="badge orange">待付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+          <tr data-supplier="云南康辉地接" data-schedule="KM20260925" data-status="部分付"><td>YF20260925-4</td><td><b>云南康辉地接</b></td><td><span class="badge">其他</span></td><td>KM20260925 4团</td><td>¥42000</td><td>¥20000</td><td>¥22000</td><td><span class="badge blue">部分付</span></td><td><button class="button ghost small" data-modal-open="payModal">付款</button><button class="button ghost small" data-toast="应付详情已打开">查看</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 8 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="payModal" hidden>
+    <form class="modal-card" data-success="付款登记已提交">
+      <div class="modal-head"><div><span class="eyebrow">PAYMENT REGISTER</span><h2>付款登记</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <div class="full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          <p><b>应付单摘要：</b>YF20260925｜昆明国旅地接｜KM20260925 1团</p>
+          <p><b>应付金额：</b>¥75840｜已付 ¥40000｜待付 ¥35840</p>
+        </div>
+        <label class="field"><span>本次付款金额*</span><input type="number" value="35840" required></label>
+        <label class="field"><span>付款方式</span><select><option>银行转账</option><option>企业网银</option><option>现金</option></select></label>
+        <label class="field"><span>付款账户</span><input value="中国银行 6222 **** 8899"></label>
+        <label class="field"><span>付款时间</span><input type="datetime-local" value="2026-07-16T10:00"></label>
+        <label class="field full"><span>凭证上传</span><input type="file"></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">确认付款</button></div>
+    </form>
+  </div>
+</body>
+</html>

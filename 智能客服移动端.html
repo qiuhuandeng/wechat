@@ -42,7 +42,22 @@ button { cursor:pointer; }
 .login-logo h1 { font-size:22px; font-weight:700; color:#fff; }
 .login-logo p { font-size:13px; color:rgba(255,255,255,.6); margin-top:5px; }
 .login-card { width:100%; background:var(--white); border-radius:24px; padding:28px 24px 24px; box-shadow:0 24px 64px rgba(0,0,0,.18); }
-.login-card h2 { font-size:20px; font-weight:700; margin-bottom:24px; }
+.login-card h2 { font-size:20px; font-weight:700; margin-bottom:18px; }
+.login-tabs { display:flex; gap:6px; padding:4px; background:var(--bg); border:1px solid var(--border2); border-radius:14px; margin-bottom:18px; }
+.login-tab { flex:1; height:38px; border-radius:10px; font-size:14px; font-weight:600; color:var(--c3); display:flex; align-items:center; justify-content:center; gap:5px; }
+.login-tab.on { background:var(--white); color:var(--blue); box-shadow:var(--shadow-sm); }
+.login-tab svg { width:16px; height:16px; }
+.login-panel { display:none; }
+.login-panel.active { display:block; }
+.ding-login-hero { padding:18px 4px 8px; text-align:center; }
+.ding-login-icon { width:62px; height:62px; margin:0 auto 13px; border-radius:20px; background:linear-gradient(135deg,#1E8CFF,#1677FF); display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 8px 20px rgba(22,119,255,.26); }
+.ding-login-icon svg { width:34px; height:34px; }
+.ding-login-hero h3 { font-size:18px; font-weight:700; margin-bottom:7px; }
+.ding-login-hero p { font-size:13px; line-height:1.6; color:var(--c3); }
+.ding-submit { width:100%; height:52px; border-radius:var(--r-md); background:linear-gradient(135deg,#1890FF,#1677FF); color:#fff; font-size:16px; font-weight:700; margin-top:16px; box-shadow:0 6px 20px rgba(22,119,255,.35); display:flex; align-items:center; justify-content:center; gap:8px; }
+.ding-submit svg { width:19px; height:19px; }
+.login-bind-note { display:flex; gap:8px; align-items:flex-start; margin-top:14px; padding:11px 12px; background:var(--blue-bg); color:#3267A8; border-radius:var(--r-md); font-size:12px; line-height:1.55; }
+.login-bind-note svg { width:16px; height:16px; flex-shrink:0; margin-top:1px; color:var(--blue); }
 .lf-group { margin-bottom:14px; }
 .lf-label { font-size:12px; color:var(--c3); margin-bottom:7px; font-weight:500; }
 .lf-input-wrap { display:flex; align-items:center; background:var(--bg); border-radius:var(--r-md); padding:0 14px; gap:10px; height:50px; border:1.5px solid transparent; transition:border-color .2s; }
@@ -52,6 +67,47 @@ button { cursor:pointer; }
 .lf-input-wrap input::placeholder { color:var(--c4); }
 .lf-submit { width:100%; height:52px; border-radius:var(--r-md); background:linear-gradient(135deg,#1890FF,#1677FF); color:#fff; font-size:16px; font-weight:600; margin-top:22px; box-shadow:0 6px 20px rgba(22,119,255,.35); }
 .lf-tip { text-align:center; font-size:12px; color:var(--c3); margin-top:16px; }
+
+/* ── DINGTALK UNBOUND ── */
+#pg-unbound { background:var(--bg); }
+#pg-unbound .nb { border-bottom:none; }
+.ding-mini { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:14px; background:var(--blue-bg); color:var(--blue); font-size:12px; font-weight:700; }
+.ding-mini svg { width:13px; height:13px; }
+.unbound-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:calc(24px + var(--sab)); }
+.ub-hero { background:var(--white); padding:30px 24px 24px; text-align:center; border-bottom:1px solid var(--border); }
+.ub-link-visual { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; }
+.ub-app-icon { width:54px; height:54px; border-radius:18px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; box-shadow:var(--shadow-md); flex-shrink:0; }
+.ub-app-icon.ding { background:linear-gradient(135deg,#1E8CFF,#1677FF); }
+.ub-app-icon.wecom { background:linear-gradient(135deg,#07C160,#14D77A); font-size:15px; }
+.ub-app-icon svg { width:30px; height:30px; }
+.ub-link-line { width:54px; height:2px; background:linear-gradient(90deg,#1677FF,#DDE6F2,#07C160); position:relative; }
+.ub-link-line::after { content:''; position:absolute; left:50%; top:50%; width:9px; height:9px; transform:translate(-50%,-50%); border-radius:50%; background:var(--orange); box-shadow:0 0 0 5px var(--orange-bg); }
+.ub-hero h2 { font-size:22px; font-weight:800; margin-bottom:9px; }
+.ub-hero p { font-size:14px; line-height:1.7; color:var(--c2); }
+.ub-status-strip { display:flex; align-items:center; gap:10px; background:var(--white); padding:13px 16px; border-bottom:1px solid var(--border); }
+.ub-avatar { width:42px; height:42px; border-radius:14px; background:linear-gradient(135deg,#1677FF,#58A6FF); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; flex-shrink:0; }
+.ub-status-main { flex:1; min-width:0; }
+.ub-status-main p { font-size:15px; font-weight:700; margin-bottom:3px; }
+.ub-status-main span { font-size:12px; color:var(--c3); }
+.ub-tag { padding:4px 10px; border-radius:12px; background:var(--orange-bg); color:var(--orange); font-size:12px; font-weight:700; flex-shrink:0; }
+.ub-explain { background:var(--white); margin-top:10px; padding:16px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.ub-explain-title { display:flex; align-items:center; gap:8px; font-size:16px; font-weight:800; margin-bottom:9px; }
+.ub-explain-title svg { width:19px; height:19px; color:var(--orange); }
+.ub-explain p { font-size:13px; line-height:1.7; color:var(--c2); }
+.ub-steps { background:var(--white); margin-top:10px; padding:16px 16px 6px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.ub-section-title { font-size:16px; font-weight:800; margin-bottom:13px; }
+.ub-step { display:flex; gap:12px; padding-bottom:16px; }
+.ub-step-no { width:24px; height:24px; border-radius:50%; background:var(--blue-bg); color:var(--blue); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; margin-top:1px; }
+.ub-step-body { flex:1; min-width:0; padding-bottom:15px; border-bottom:1px solid var(--border); }
+.ub-step:last-child .ub-step-body { border-bottom:none; }
+.ub-step-body p { font-size:14px; font-weight:700; margin-bottom:4px; }
+.ub-step-body span { font-size:12px; line-height:1.6; color:var(--c3); display:block; }
+.ub-actions { padding:16px; display:flex; flex-direction:column; gap:10px; }
+.ub-btn { width:100%; height:48px; border-radius:var(--r-md); font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:7px; }
+.ub-btn.primary { background:var(--blue); color:#fff; box-shadow:0 6px 18px rgba(22,119,255,.24); }
+.ub-btn.secondary { background:var(--white); color:var(--c2); border:1px solid var(--border2); }
+.ub-btn svg { width:18px; height:18px; }
+.ub-demo-note { text-align:center; color:var(--c3); font-size:12px; line-height:1.5; padding:0 16px; }
 
 /* ── NAVBAR ── */
 .nb { flex-shrink:0; height:calc(var(--nb-h) + var(--sat)); padding-top:var(--sat); display:flex; align-items:center; padding-left:16px; padding-right:16px; background:var(--white); border-bottom:1px solid var(--border); position:relative; z-index:5; }
@@ -502,23 +558,134 @@ input[type=file] { display:none; }
     <p>多账号聚合客服工作台</p>
   </div>
   <div class="login-card">
-    <h2>账号登录</h2>
-    <div class="lf-group">
-      <div class="lf-label">账 号</div>
-      <div class="lf-input-wrap">
+    <h2>登录方式</h2>
+    <div class="login-tabs">
+      <button class="login-tab on" id="login-tab-ding" onclick="setLoginMethod('ding')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
+        钉钉登录
+      </button>
+      <button class="login-tab" id="login-tab-account" onclick="setLoginMethod('account')">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-        <input type="text" id="inp-user" placeholder="请输入账号" value="admin"/>
+        账号密码
+      </button>
+    </div>
+
+    <div class="login-panel active" id="login-panel-ding">
+      <div class="ding-login-hero">
+        <div class="ding-login-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
+        </div>
+        <h3>使用钉钉身份进入</h3>
+        <p>登录后会先校验你的钉钉号是否已绑定企微客服账号，绑定后才展示对应客户和聊天。</p>
+      </div>
+      <button class="ding-submit" onclick="doDingLogin()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
+        钉钉授权登录
+      </button>
+      <div class="login-bind-note">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        首次使用时，如果管理员还没有完成绑定，进入后会先看到绑定提示页。
       </div>
     </div>
-    <div class="lf-group">
-      <div class="lf-label">密 码</div>
-      <div class="lf-input-wrap">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-        <input type="password" id="inp-pwd" placeholder="请输入密码" value="123456"/>
+
+    <div class="login-panel" id="login-panel-account">
+      <div class="lf-group">
+        <div class="lf-label">账 号</div>
+        <div class="lf-input-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+          <input type="text" id="inp-user" placeholder="请输入账号" value="admin"/>
+        </div>
       </div>
+      <div class="lf-group">
+        <div class="lf-label">密 码</div>
+        <div class="lf-input-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          <input type="password" id="inp-pwd" placeholder="请输入密码" value="123456"/>
+        </div>
+      </div>
+      <button class="lf-submit" onclick="doLogin()">登 录</button>
     </div>
-    <button class="lf-submit" onclick="doLogin()">登 录</button>
     <div class="lf-tip">登录即表示同意服务条款与隐私政策</div>
+  </div>
+</div>
+
+<!-- ██ DINGTALK UNBOUND ██ -->
+<div class="page" id="pg-unbound">
+  <div class="nb">
+    <span class="nb-title">会话中心</span>
+    <div class="nb-right">
+      <div class="ding-mini">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
+        钉钉已登录
+      </div>
+    </div>
+  </div>
+  <div class="unbound-scroll">
+    <section class="ub-hero">
+      <div class="ub-link-visual">
+        <div class="ub-app-icon ding">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
+        </div>
+        <div class="ub-link-line"></div>
+        <div class="ub-app-icon wecom">企微</div>
+      </div>
+      <h2>暂时看不到客户和聊天</h2>
+      <p>你已通过钉钉登录，但这个钉钉号还没有绑定系统里的企微客服账号。</p>
+    </section>
+
+    <section class="ub-status-strip">
+      <div class="ub-avatar">钉</div>
+      <div class="ub-status-main">
+        <p>当前钉钉用户：张晓晨</p>
+        <span>手机号 138****2468 · 组织：示例门店运营部</span>
+      </div>
+      <div class="ub-tag">未绑定</div>
+    </section>
+
+    <section class="ub-explain">
+      <div class="ub-explain-title">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        为什么这里是空的？
+      </div>
+      <p>客户和会话是按企微客服号归属展示的。系统现在只识别到你的钉钉身份，还不知道它对应哪个企微账号，所以不会展示任何客户列表、聊天框或历史会话。</p>
+    </section>
+
+    <section class="ub-actions">
+      <button class="ub-btn secondary" onclick="refreshBindStatus()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 11-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        刷新绑定状态
+      </button>
+      <button class="ub-btn primary" onclick="demoBoundLogin()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        演示：已绑定，进入聊天页面
+      </button>
+    </section>
+    <div class="ub-demo-note">此入口仅用于演示绑定后的效果，真实环境由管理员后台完成绑定。</div>
+
+    <section class="ub-steps">
+      <div class="ub-section-title">接下来怎么做</div>
+      <div class="ub-step">
+        <div class="ub-step-no">1</div>
+        <div class="ub-step-body">
+          <p>联系管理员绑定账号</p>
+          <span>请管理员在后台找到你的钉钉用户，并选择对应的系统企微客服账号。</span>
+        </div>
+      </div>
+      <div class="ub-step">
+        <div class="ub-step-no">2</div>
+        <div class="ub-step-body">
+          <p>确认企微账号在线</p>
+          <span>绑定完成后，如果企微设备在线且账号已登录，就能看到该账号接待的客户。</span>
+        </div>
+      </div>
+      <div class="ub-step">
+        <div class="ub-step-no">3</div>
+        <div class="ub-step-body">
+          <p>刷新绑定状态</p>
+          <span>管理员处理完成后，点上方刷新，或重新进入移动端。</span>
+        </div>
+      </div>
+    </section>
   </div>
 </div>
 
@@ -1141,6 +1308,7 @@ input[type=file] { display:none; }
 /* ── STATE ── */
 const S = {
   currentPage:'pg-login', pageStack:['pg-login'],
+  loginMethod:'ding', dingBound:false,
   currentChat:null, currentMode:'human',
   currentAccount:'all',
   lpTargetMsgId:null, retractMsgId:null,
@@ -1249,12 +1417,39 @@ function goBack(){
 }
 
 /* ── LOGIN ── */
+function setLoginMethod(type){
+  S.loginMethod=type;
+  const isDing=type==='ding';
+  document.getElementById('login-tab-ding').classList.toggle('on',isDing);
+  document.getElementById('login-tab-account').classList.toggle('on',!isDing);
+  document.getElementById('login-panel-ding').classList.toggle('active',isDing);
+  document.getElementById('login-panel-account').classList.toggle('active',!isDing);
+}
+function doDingLogin(){
+  showToast('正在钉钉授权...');
+  setTimeout(()=>{
+    S.dingBound=false;
+    showToast('钉钉登录成功');
+    showPage('pg-unbound');
+  },700);
+}
 function doLogin(){
   const u=document.getElementById('inp-user').value.trim();
   const p=document.getElementById('inp-pwd').value.trim();
   if(!u||!p){showToast('请输入账号和密码');return;}
   showToast('登录中...');
   setTimeout(()=>{renderSessions();showPage('pg-list');},700);
+}
+function refreshBindStatus(){
+  showToast('暂未查询到绑定关系，请联系管理员处理');
+}
+function demoBoundLogin(){
+  S.dingBound=true;
+  S.currentAccount='acc1';
+  renderSessions();
+  showToast('演示：已绑定到企微主号');
+  showPage('pg-list');
+  setTimeout(()=>openChat('s1'),180);
 }
 
 /* ── SESSION LIST ── */

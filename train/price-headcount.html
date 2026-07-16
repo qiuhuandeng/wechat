@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人数定价 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="price-headcount" data-title="人数定价">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">HEADCOUNT PRICING</div>
+      <h1>人数定价</h1>
+      <p>按入住人数场景维护人均价、单房差补差和第三人地面单房差。</p>
+    </div>
+    <div class="page-actions">
+      <a class="button secondary" href="price-plan.html">返回价格方案</a>
+      <button class="button primary" type="button" data-modal-open="headcountModal">新增人数价</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="form-grid cols-2">
+      <label class="field wide"><span>价格方案</span><select><option>9月旺季价-环云南9天</option><option>10月国庆价-环云南9天</option></select></label>
+      <label class="field"><span>快速定位房型</span><select><option>全部房型</option><option>安途尊享房</option><option>悦途品质房</option></select></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>人数定价明细</h2><p>用于销售台席、C端报价和确认件价格计算。</p></div>
+      <span class="badge orange">9月旺季价</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="headcountTable">
+        <thead><tr><th>房型</th><th>入住人数</th><th>人均价</th><th>是否补单房差</th><th>第三人补地面单房差</th><th>备注</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td><b>安途尊享房</b></td><td>2人入住</td><td>¥12999</td><td><span class="badge red">是</span></td><td><span class="badge orange">需补(¥1200)</span></td><td>尊享房不接受单人拼房</td><td><button class="button ghost small" data-modal-open="headcountModal">编辑</button></td></tr>
+          <tr><td><b>安途尊享房</b></td><td>第3人(成人)</td><td>¥7999</td><td><span class="badge green">否</span></td><td><span class="badge">—</span></td><td>第三人使用沙发床或加铺</td><td><button class="button ghost small" data-modal-open="headcountModal">编辑</button></td></tr>
+          <tr><td><b>悦途品质房</b></td><td>4人入住</td><td>¥5999</td><td><span class="badge green">否</span></td><td><span class="badge">—</span></td><td>四人满员按上铺基础价起售</td><td><button class="button ghost small" data-modal-open="headcountModal">编辑</button></td></tr>
+          <tr><td><b>悦途品质房</b></td><td>2人专属包厢</td><td>¥8299</td><td><span class="badge red">是</span></td><td><span class="badge orange">需补(¥700)</span></td><td>两人独享整间品质房</td><td><button class="button ghost small" data-modal-open="headcountModal">编辑</button></td></tr>
+          <tr><td><b>悦途品质房</b></td><td>2人入住</td><td>¥6399</td><td><span class="badge green">否</span></td><td><span class="badge">—</span></td><td>下铺优先，按铺位定价联动</td><td><button class="button ghost small" data-modal-open="headcountModal">编辑</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 5 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>页脚示例提示</h2><p>尊享房2人¥12999、第三人¥7999；品质房2人专属¥8299、上铺¥5999、下铺¥6399。</p></div><span class="badge blue">报价口径</span></div>
+  </section>
+
+  <div class="modal" id="headcountModal" hidden>
+    <form class="modal-card" data-success="人数定价已保存">
+      <div class="modal-head"><div><h2>人数定价编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <label class="field"><span>房型*</span><select required><option>安途尊享房</option><option>悦途品质房</option></select></label>
+        <label class="field"><span>入住人数场景*</span><select required><option>2人入住</option><option>第3人</option><option>4人入住</option><option>2人专属</option></select></label>
+        <label class="field"><span>人均价*</span><input type="number" value="12999" required></label>
+        <label class="field"><span>单房差补差</span><input type="number" value="1200"></label>
+        <label class="field full"><span>说明</span><textarea>尊享房不接受单人拼房，第三人按加铺价执行。</textarea></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </div>
+</body>
+</html>

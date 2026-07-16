@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>库存预警 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="stock-warning" data-title="库存预警">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">INVENTORY WARNING</div>
+      <h1>库存预警</h1>
+      <p>配置售罄、低可售和守仓到期提醒，统一推送给库存与销售负责人。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="预警列表已刷新">刷新预警</button>
+      <button class="button primary" type="button" data-toast="预警规则已保存">保存规则</button>
+    </div>
+  </header>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon red">警</span><div><span>待处理预警</span><strong>3</strong><small>售罄1 · 低可售1 · 到期1</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">低</span><div><span>低可售阈值</span><strong>≤10</strong><small>低于阈值自动提醒</small></div></article>
+    <article class="metric-card"><span class="metric-icon blue">仓</span><div><span>守仓提前提醒</span><strong>7天</strong><small>到期前推送</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">人</span><div><span>接收人</span><strong>3</strong><small>张经理、李销售、王计调</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>预警规则</h2><p>规则保存后立即用于库存变化、守仓到期和班期余量扫描。</p></div>
+      <span class="badge green">启用中</span>
+    </div>
+    <form class="form-section" data-success="预警规则已保存">
+      <div class="form-grid cols-3">
+        <label class="check-row"><input type="checkbox" checked><div><b>售罄预警</b><span>班期或房型余量为 0 时提醒</span></div><span class="badge green">开</span></label>
+        <label class="field"><span>低可售预警(余量≤N)</span><input type="number" value="10"></label>
+        <label class="field"><span>守仓到期预警(提前N天)</span><input type="number" value="7"></label>
+        <div class="field full"><span>接收人</span>
+          <div class="record-meta" style="padding:0;border:0;">
+            <label class="check-row" style="min-height:34px;"><input type="checkbox" checked><div><b>张经理</b><span>库存负责人</span></div></label>
+            <label class="check-row" style="min-height:34px;"><input type="checkbox" checked><div><b>李销售</b><span>销售跟进</span></div></label>
+            <label class="check-row" style="min-height:34px;"><input type="checkbox" checked><div><b>王计调</b><span>计调协同</span></div></label>
+          </div>
+        </div>
+        <div class="field full"><span>通知方式</span>
+          <div class="record-meta" style="padding:0;border:0;">
+            <label class="check-row" style="min-height:34px;"><input type="checkbox" checked><div><b>站内消息</b><span>进入系统后实时提醒</span></div></label>
+            <label class="check-row" style="min-height:34px;"><input type="checkbox" checked><div><b>短信</b><span>紧急预警同步发送</span></div></label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-toast="已恢复默认规则">恢复默认</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div class="filter-tabs" data-status-tabs data-target="#warningTable">
+        <button class="active" data-status="all">全部 <i>6</i></button>
+        <button data-status="待处理">待处理 <i>3</i></button>
+        <button data-status="已处理">已处理 <i>2</i></button>
+        <button data-status="已忽略">已忽略 <i>1</i></button>
+      </div>
+      <div class="toolbar-actions"><span class="badge red">当前预警</span></div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="warningTable">
+        <thead>
+          <tr><th>预警时间</th><th>预警类型</th><th>班期</th><th>预警内容</th><th>处理状态</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr class="selected" data-status="待处理"><td>2026-07-14 09:00</td><td><span class="badge red">售罄</span></td><td>KM20261114</td><td>安途尊享房仅剩4间</td><td><span class="badge red">待处理</span></td><td><button class="button ghost small" data-toast="已跳转至库存总览">去处理</button><button class="button ghost small" data-confirm="确认忽略该预警？" data-confirm-success="预警已忽略">忽略</button></td></tr>
+          <tr data-status="待处理"><td>2026-07-14 10:30</td><td><span class="badge orange">低可售</span></td><td>KM20260925</td><td>悦途品质房可售余量低于10</td><td><span class="badge red">待处理</span></td><td><button class="button ghost small" data-toast="已跳转至铺位看板">去处理</button><button class="button ghost small" data-confirm="确认忽略该预警？" data-confirm-success="预警已忽略">忽略</button></td></tr>
+          <tr data-status="待处理"><td>2026-07-15 08:00</td><td><span class="badge blue">守仓到期</span></td><td>KM20260925</td><td>SC20260601将于2天后到期</td><td><span class="badge red">待处理</span></td><td><button class="button ghost small" data-toast="已跳转至守仓到期">去处理</button><button class="button ghost small" data-confirm="确认忽略该预警？" data-confirm-success="预警已忽略">忽略</button></td></tr>
+          <tr data-status="已处理"><td>2026-07-15 11:20</td><td><span class="badge orange">低可售</span></td><td>KM20261017</td><td>安途尊享房可售余量低于10</td><td><span class="badge green">已处理</span></td><td><button class="button ghost small" data-toast="处理记录已打开">去处理</button><button class="button ghost small" data-toast="已处理预警无需忽略">忽略</button></td></tr>
+          <tr data-status="已忽略"><td>2026-07-16 09:15</td><td><span class="badge blue">守仓到期</span></td><td>KM20261219</td><td>SC20260606将于6天后到期</td><td><span class="badge">已忽略</span></td><td><button class="button ghost small" data-toast="预警详情已打开">去处理</button><button class="button ghost small" data-toast="预警已忽略">忽略</button></td></tr>
+          <tr data-status="已处理"><td>2026-07-16 14:40</td><td><span class="badge red">售罄</span></td><td>KM20261017</td><td>悦途品质房已售罄</td><td><span class="badge green">已处理</span></td><td><button class="button ghost small" data-toast="处理记录已打开">去处理</button><button class="button ghost small" data-toast="已处理预警无需忽略">忽略</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 6 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+</body>
+</html>

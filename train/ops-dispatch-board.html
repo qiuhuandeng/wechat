@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>发团看板 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .board-grid { display:grid; grid-template-columns:repeat(4, minmax(230px, 1fr)); gap:14px; align-items:start; }
+    .board-col { min-height:560px; padding:12px; border:1px solid #e3e8ed; border-radius:14px; background:#f8fafc; }
+    .board-col h2 { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px; color:#173955; font-size:14px; }
+    .team-card { margin-bottom:12px; padding:14px; border:1px solid #e3e8ed; border-radius:12px; background:#fff; box-shadow:0 8px 20px rgba(13,35,57,.06); }
+    .team-card b { color:#173955; }
+    .team-card p { margin:6px 0; color:#627385; font-size:12px; }
+    .check-list { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:6px; margin:10px 0; }
+    .check-list span { padding:6px 8px; border-radius:8px; background:#f3f6f8; color:#627385; font-size:11px; }
+    .check-list .ok { color:#239665; background:#eaf8f0; }
+    .check-list .bad { color:#d84f58; background:#fff1f2; }
+    @media (max-width: 1200px) { .board-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body data-page="ops-dispatch-board" data-title="发团看板">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">DISPATCH BOARD</div>
+      <h1>发团看板</h1>
+      <p>按发团状态跟踪团队卡片、证件齐备度与检查项。</p>
+    </div>
+    <div class="page-actions">
+      <label class="field" style="margin:0;min-width:190px;"><span>日期筛选</span><input type="date" value="2026-09-25"></label>
+      <label class="field" style="margin:0;min-width:210px;"><span>班期筛选</span><select><option>KM20260925</option><option>KM20261017</option></select></label>
+    </div>
+  </header>
+
+  <section class="board-grid">
+    <div class="board-col">
+      <h2>待发团 <span class="badge orange">2</span></h2>
+      <article class="team-card">
+        <b>TT20260925-1</b><p>出发日期09-25 · 出行人数48</p><p>昆明国旅地接 · 张导</p>
+        <div class="progress"><i style="width:96%"></i></div><p>证件齐备度 46/48</p>
+        <div class="check-list"><span class="ok">名单√</span><span class="bad">证件×</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div>
+        <button class="button primary small" type="button" data-toast="团队已发团">发团</button>
+      </article>
+      <article class="team-card">
+        <b>TT20260925-2</b><p>出发日期09-25 · 出行人数42</p><p>昆明国旅地接 · 李导</p>
+        <div class="progress"><i style="width:90%"></i></div><p>证件齐备度 38/42</p>
+        <div class="check-list"><span class="ok">名单√</span><span class="bad">证件×</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div>
+        <button class="button primary small" type="button" data-toast="团队已发团">发团</button>
+      </article>
+    </div>
+    <div class="board-col">
+      <h2>已发团 <span class="badge blue">2</span></h2>
+      <article class="team-card"><b>TT20260925-3</b><p>出发日期09-25 · 出行人数60</p><p>云南康辉地接 · 王导</p><div class="progress"><i style="width:100%"></i></div><p>证件齐备度 60/60</p><div class="check-list"><span class="ok">名单√</span><span class="ok">证件√</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button secondary small" type="button" data-toast="已发团">发团</button></article>
+      <article class="team-card"><b>TT20261017-1</b><p>出发日期10-17 · 出行人数36</p><p>大理春城地接 · 赵导</p><div class="progress"><i style="width:100%"></i></div><p>证件齐备度 36/36</p><div class="check-list"><span class="ok">名单√</span><span class="ok">证件√</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button secondary small" type="button" data-toast="已发团">发团</button></article>
+    </div>
+    <div class="board-col">
+      <h2>进行中 <span class="badge purple">2</span></h2>
+      <article class="team-card"><b>TT20261017-2</b><p>出发日期10-17 · 出行人数44</p><p>云南康辉地接 · 刘导</p><div class="progress"><i style="width:100%"></i></div><p>证件齐备度 44/44</p><div class="check-list"><span class="ok">名单√</span><span class="ok">证件√</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button ghost small" type="button" data-toast="团队进行中">发团</button></article>
+      <article class="team-card"><b>TT20261114-1</b><p>出发日期11-14 · 出行人数50</p><p>丽江古城接待 · 周导</p><div class="progress"><i style="width:98%"></i></div><p>证件齐备度 49/50</p><div class="check-list"><span class="ok">名单√</span><span class="bad">证件×</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button ghost small" type="button" data-toast="团队进行中">发团</button></article>
+    </div>
+    <div class="board-col">
+      <h2>已完成 <span class="badge green">2</span></h2>
+      <article class="team-card"><b>TT20260818-1</b><p>出发日期08-18 · 出行人数46</p><p>昆明国旅地接 · 张导</p><div class="progress"><i style="width:100%"></i></div><p>证件齐备度 46/46</p><div class="check-list"><span class="ok">名单√</span><span class="ok">证件√</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button ghost small" type="button" data-toast="团队已完成">发团</button></article>
+      <article class="team-card"><b>TT20260818-2</b><p>出发日期08-18 · 出行人数40</p><p>大理春城地接 · 李导</p><div class="progress"><i style="width:100%"></i></div><p>证件齐备度 40/40</p><div class="check-list"><span class="ok">名单√</span><span class="ok">证件√</span><span class="ok">地接计划√</span><span class="ok">保险√</span></div><button class="button ghost small" type="button" data-toast="团队已完成">发团</button></article>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>毛利核算 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="fin-profit" data-title="毛利核算">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">GROSS PROFIT</div>
+      <h1>毛利核算</h1>
+      <p>按班期、团队和产品核算收入、成本与毛利率。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button secondary" type="button" data-toast="毛利数据已导出">导出</button>
+      <button class="button primary" type="button" data-toast="已重新核算本期毛利">重新核算</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div class="segmented" aria-label="核算维度切换">
+        <button class="active" type="button" data-toast="已切换到按班期">按班期</button>
+        <button type="button" data-toast="已切换到按团">按团</button>
+        <button type="button" data-toast="已切换到按产品">按产品</button>
+      </div>
+      <label class="field">
+        <span>时间筛选</span>
+        <input type="text" value="2026-09-01 至 2026-12-31">
+      </label>
+      <button class="button secondary" type="button" data-toast="毛利核算条件已应用">查询</button>
+    </div>
+  </section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">收</span><div><span>营收</span><strong>¥2860000</strong><small>已确认收入</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">本</span><div><span>成本</span><strong>¥1980000</strong><small>车底/地接/物料</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">利</span><div><span>毛利</span><strong>¥880000</strong><small>收入减成本</small></div></article>
+    <article class="metric-card"><span class="metric-icon purple">率</span><div><span>毛利率</span><strong>30.8%</strong><small>目标 30%+</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>班期维度毛利表</h2>
+        <p>以班期维度拆分营业收入、车底成本、地接成本和其他成本。</p>
+      </div>
+      <span class="badge blue">6条</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="profitTable">
+        <thead>
+          <tr>
+            <th>班期</th>
+            <th>产品</th>
+            <th>出行人数</th>
+            <th>营业收入</th>
+            <th>车底成本</th>
+            <th>地接成本</th>
+            <th>餐食/物料</th>
+            <th>其他成本</th>
+            <th>毛利</th>
+            <th>毛利率</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="selected">
+            <td><b>KM20260925</b></td>
+            <td>环云南9天</td>
+            <td>264</td>
+            <td>¥2860000</td>
+            <td>¥800000</td>
+            <td>¥760000</td>
+            <td>¥260000</td>
+            <td>¥160000</td>
+            <td><b>¥880000</b></td>
+            <td><div class="progress-line"><div class="progress green"><i style="width:30.8%"></i></div><span>30.8%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+          <tr>
+            <td><b>KM20261017</b></td>
+            <td>环云南9天</td>
+            <td>248</td>
+            <td>¥2680000</td>
+            <td>¥790000</td>
+            <td>¥708000</td>
+            <td>¥238000</td>
+            <td>¥132000</td>
+            <td><b>¥812000</b></td>
+            <td><div class="progress-line"><div class="progress green"><i style="width:30.3%"></i></div><span>30.3%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+          <tr>
+            <td><b>KM20261114</b></td>
+            <td>环云南9天</td>
+            <td>196</td>
+            <td>¥1980000</td>
+            <td>¥760000</td>
+            <td>¥565000</td>
+            <td>¥182000</td>
+            <td>¥93000</td>
+            <td><b>¥380000</b></td>
+            <td><div class="progress-line"><div class="progress blue"><i style="width:19.2%"></i></div><span>19.2%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+          <tr>
+            <td><b>KM20261219</b></td>
+            <td>环云南9天</td>
+            <td>168</td>
+            <td>¥1680000</td>
+            <td>¥720000</td>
+            <td>¥480000</td>
+            <td>¥166000</td>
+            <td>¥84000</td>
+            <td><b>¥230000</b></td>
+            <td><div class="progress-line"><div class="progress blue"><i style="width:13.7%"></i></div><span>13.7%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+          <tr>
+            <td><b>KM20261228</b></td>
+            <td>环云南9天</td>
+            <td>132</td>
+            <td>¥1350000</td>
+            <td>¥720000</td>
+            <td>¥392000</td>
+            <td>¥126000</td>
+            <td>¥68000</td>
+            <td><b>¥44000</b></td>
+            <td><div class="progress-line"><div class="progress"><i style="width:3.3%"></i></div><span>3.3%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+          <tr>
+            <td><b>LJ20261002</b></td>
+            <td>滇西秘境7天</td>
+            <td>180</td>
+            <td>¥1460000</td>
+            <td>¥560000</td>
+            <td>¥420000</td>
+            <td>¥128000</td>
+            <td>¥72000</td>
+            <td><b>¥280000</b></td>
+            <td><div class="progress-line"><div class="progress blue"><i style="width:19.2%"></i></div><span>19.2%</span></div></td>
+            <td><button class="button ghost small" type="button" data-modal-open="profitDrawer">查看明细</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 6 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal drawer wide" id="profitDrawer" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><span class="eyebrow">PROFIT DETAIL</span><h2>毛利明细</h2></div>
+        <button class="modal-close" type="button" data-modal-close>×</button>
+      </div>
+      <div class="modal-body">
+        <section class="panel">
+          <div class="panel-header"><div><h2>收入构成</h2><p>KM20260925 · 环云南9天 · 出行人数264</p></div><span class="badge green">营收 ¥2860000</span></div>
+          <div class="grid gap-3 sm:grid-cols-3">
+            <div class="rounded-xl bg-slate-50 p-4"><span class="text-xs text-slate-500">直客收入</span><strong class="mt-1 block text-lg">¥980000</strong></div>
+            <div class="rounded-xl bg-slate-50 p-4"><span class="text-xs text-slate-500">渠道收入</span><strong class="mt-1 block text-lg">¥1680000</strong></div>
+            <div class="rounded-xl bg-slate-50 p-4"><span class="text-xs text-slate-500">增值服务</span><strong class="mt-1 block text-lg">¥200000</strong></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-header"><div><h2>成本构成分项表</h2><p>用于核对车底、地接、餐食、物料和其他成本。</p></div></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>成本项目</th><th>供应商/来源</th><th>金额</th><th>占收入比</th><th>备注</th></tr></thead>
+              <tbody>
+                <tr><td>车底成本</td><td>铁路昆明局</td><td>¥800000</td><td>28.0%</td><td>整列包销租费</td></tr>
+                <tr><td>地接成本</td><td>昆明国旅地接</td><td>¥760000</td><td>26.6%</td><td>落地接待与导游</td></tr>
+                <tr><td>餐食/物料</td><td>餐饮供应商/非遗物料商</td><td>¥260000</td><td>9.1%</td><td>餐食、活动物料</td></tr>
+                <tr><td>其他成本</td><td>保险/演出/运营</td><td>¥160000</td><td>5.6%</td><td>保险、演出、杂费</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <div class="modal-foot">
+        <button class="button secondary" type="button" data-modal-close>关闭</button>
+        <button class="button primary" type="button" data-toast="毛利明细已导出">导出明细</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

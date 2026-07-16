@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>铺位分配 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .assign-summary { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; }
+    .assign-summary div { padding:14px; border:1px solid #e3e8ed; border-radius:12px; background:#fff; }
+    .assign-summary span { display:block; color:#7b8794; font-size:11px; }
+    .assign-summary b { display:block; margin-top:4px; color:#173955; font-size:15px; }
+    .assign-layout { display:grid; grid-template-columns:minmax(0, 1fr) 360px; gap:16px; align-items:start; }
+    .carriage-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+    .carriage-tabs button { padding:8px 12px; border:1px solid #dfe6ee; border-radius:999px; color:#536476; background:#fff; font-size:12px; font-weight:850; }
+    .carriage-tabs button.active { color:#fff; border-color:#173955; background:#173955; }
+    .berth-cabin-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; }
+    .cabin-card { min-height:144px; padding:12px; border:1px solid #e3e8ed; border-radius:12px; background:#fff; }
+    .cabin-card.selected { border-color:#e88b2b; box-shadow:0 10px 24px rgba(232,139,43,.12); }
+    .cabin-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .cabin-head b { color:#173955; font-size:12px; }
+    .berth-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px; }
+    .berth-dot { min-height:34px; border:1px solid #dfe6ee; border-radius:8px; color:#334155; background:#f8fafc; font-size:11px; font-weight:850; cursor:pointer; }
+    .berth-dot.available { color:#1f7a53; border-color:#9bd3b9; background:#ecfdf5; }
+    .berth-dot.sold { color:#7b8794; border-color:#d4dbe3; background:#eef2f6; cursor:not-allowed; }
+    .berth-dot.selected { color:#fff; border-color:#3478e5; background:#3478e5; box-shadow:0 8px 18px rgba(52,120,229,.22); }
+    .berth-legend { display:flex; flex-wrap:wrap; gap:12px; color:#64748b; font-size:11px; }
+    .berth-legend i { display:inline-block; width:10px; height:10px; margin-right:5px; border-radius:3px; vertical-align:-1px; }
+    .selected-list { display:grid; gap:10px; }
+    .selected-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid #e3e8ed; border-radius:10px; background:#fff; }
+    .selected-item b { color:#173955; font-size:12px; }
+    .selected-item span { color:#64748b; font-size:11px; }
+    @media (max-width: 1120px) { .assign-layout { grid-template-columns:1fr; } .berth-cabin-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body data-page="order-berth-assign" data-title="铺位分配">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">BERTH ASSIGNMENT</div>
+      <h1>铺位分配</h1>
+      <p>按订单房型展示可选包厢与铺位，销售可代客锁铺。</p>
+    </div>
+    <div class="page-actions">
+      <a class="button secondary" href="order-berth-pending.html">返回待选铺单</a>
+      <button class="button primary" type="button" data-modal-open="lockModal">确认锁铺</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="assign-summary">
+      <div><span>订单号</span><b>DD20260901</b></div>
+      <div><span>客户</span><b>王建国</b></div>
+      <div><span>需分配2个铺位</span><b>已选 2/2</b></div>
+      <div><span>班期</span><b>09-25</b></div>
+    </div>
+  </section>
+
+  <section class="assign-layout">
+    <div class="panel">
+      <div class="panel-header">
+        <div><h2>可视化选铺图</h2><p>当前仅展示该订单房型对应车厢：第3-6车厢 · 安途尊享房。</p></div>
+        <div class="berth-legend"><span><i style="background:#ecfdf5;border:1px solid #9bd3b9"></i>可售</span><span><i style="background:#eef2f6;border:1px solid #d4dbe3"></i>已售</span><span><i style="background:#3478e5"></i>选中</span></div>
+      </div>
+      <div class="carriage-tabs">
+        <button class="active" type="button" data-toast="已切换第3车厢">第3车厢</button>
+        <button type="button" data-toast="已切换第4车厢">第4车厢</button>
+        <button type="button" data-toast="已切换第5车厢">第5车厢</button>
+        <button type="button" data-toast="已切换第6车厢">第6车厢</button>
+      </div>
+      <div class="berth-cabin-grid">
+        <article class="cabin-card selected">
+          <div class="cabin-head"><b>3-01</b><span class="badge green">可售</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot selected" type="button">A</button>
+            <button class="berth-dot selected" type="button">B</button>
+            <button class="berth-dot available" type="button">C</button>
+          </div>
+        </article>
+        <article class="cabin-card">
+          <div class="cabin-head"><b>3-02</b><span class="badge green">可售</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot available" type="button">A</button>
+            <button class="berth-dot available" type="button">B</button>
+            <button class="berth-dot sold" type="button">C</button>
+          </div>
+        </article>
+        <article class="cabin-card">
+          <div class="cabin-head"><b>3-03</b><span class="badge orange">余1</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot sold" type="button">A</button>
+            <button class="berth-dot available" type="button">B</button>
+            <button class="berth-dot sold" type="button">C</button>
+          </div>
+        </article>
+        <article class="cabin-card">
+          <div class="cabin-head"><b>3-04</b><span class="badge green">可售</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot available" type="button">A</button>
+            <button class="berth-dot available" type="button">B</button>
+            <button class="berth-dot available" type="button">C</button>
+          </div>
+        </article>
+        <article class="cabin-card">
+          <div class="cabin-head"><b>3-05</b><span class="badge red">满员</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot sold" type="button">A</button>
+            <button class="berth-dot sold" type="button">B</button>
+            <button class="berth-dot sold" type="button">C</button>
+          </div>
+        </article>
+        <article class="cabin-card">
+          <div class="cabin-head"><b>3-06</b><span class="badge green">可售</span></div>
+          <div class="berth-grid">
+            <button class="berth-dot available" type="button">A</button>
+            <button class="berth-dot available" type="button">B</button>
+            <button class="berth-dot available" type="button">C</button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div class="panel-header">
+        <div><h2>已选铺位清单</h2><p>锁铺前可清空重选。</p></div>
+        <span class="badge blue">2/2</span>
+      </div>
+      <div class="selected-list">
+        <div class="selected-item"><div><b>王建国</b><span>出行人</span></div><strong>3-01-A(下铺)</strong></div>
+        <div class="selected-item"><div><b>李秀兰</b><span>出行人</span></div><strong>3-01-B(上铺)</strong></div>
+      </div>
+      <div class="modal-foot" style="padding-left:0;padding-right:0;">
+        <button class="button secondary" type="button" data-toast="已清空，可重新选择铺位">清空重选</button>
+        <button class="button primary" type="button" data-modal-open="lockModal">确认锁铺</button>
+      </div>
+    </aside>
+  </section>
+
+  <div class="modal" id="lockModal" hidden>
+    <form class="modal-card" data-success="铺位已锁定">
+      <div class="modal-head">
+        <div><span class="eyebrow">LOCK BERTH</span><h2>确认锁铺</h2></div>
+        <button class="modal-close" type="button" data-modal-close>×</button>
+      </div>
+      <div class="modal-body">
+        <div class="full">
+          <p class="text-sm text-slate-600">锁铺后不可自行更改，需联系客服。</p>
+          <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+            <p><b>王建国</b> → 3-01-A(下铺)</p>
+            <p><b>李秀兰</b> → 3-01-B(上铺)</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="button secondary" type="button" data-modal-close>取消</button>
+        <button class="button primary" type="submit">确认</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.berth-dot.available, .berth-dot.selected').forEach(function (button) {
+        button.addEventListener('click', function () {
+          if (button.classList.contains('sold')) return;
+          button.classList.toggle('selected');
+          button.classList.toggle('available');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

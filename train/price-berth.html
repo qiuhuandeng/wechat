@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>铺位定价 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="price-berth" data-title="铺位定价">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">BERTH PRICING</div>
+      <h1>铺位定价</h1>
+      <p>维护悦途品质房上下铺散卖价，以及两人享专属包厢价格。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button primary" type="button" data-modal-open="berthPriceModal">新增铺位价</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="form-grid cols-2">
+      <label class="field wide"><span>价格方案</span><select><option>9月旺季价</option><option>10月国庆价</option><option>11月常规价</option></select></label>
+      <label class="field"><span>房型</span><select><option>悦途品质房</option></select></label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header"><div><h2>铺位价格表</h2><p>品质房可散卖上下铺，也可按两人专属包厢价售卖。</p></div><span class="badge blue">悦途品质房</span></div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="berthPriceTable">
+        <thead><tr><th>房型</th><th>铺位类型</th><th>散卖单价</th><th>两人享专属包厢价</th><th>备注</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td><b>悦途品质房</b></td><td><span class="badge blue">下铺</span></td><td>¥6399</td><td>¥8299</td><td>含遮光帘、充电舱</td><td><button class="button ghost small" data-modal-open="berthPriceModal">编辑</button></td></tr>
+          <tr><td><b>悦途品质房</b></td><td><span class="badge purple">上铺</span></td><td>¥5999</td><td>¥8299</td><td>含遮光帘、充电舱</td><td><button class="button ghost small" data-modal-open="berthPriceModal">编辑</button></td></tr>
+          <tr><td><b>悦途品质房</b></td><td><span class="badge blue">下铺</span></td><td>¥6399</td><td>¥8299</td><td>靠窗优先推荐，售卖口径同下铺</td><td><button class="button ghost small" data-modal-open="berthPriceModal">编辑</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 3 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="berthPriceModal" hidden>
+    <form class="modal-card" data-success="铺位定价已保存">
+      <div class="modal-head"><div><h2>铺位定价编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <label class="field"><span>铺位类型*</span><select required><option>下铺</option><option>上铺</option><option>双人床</option></select></label>
+        <label class="field"><span>散卖单价*</span><input type="number" value="6399" required></label>
+        <label class="field"><span>专属包厢价</span><input type="number" value="8299"></label>
+        <label class="field full"><span>说明</span><textarea>含遮光帘、充电舱；下铺优先用于长者客群。</textarea></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </div>
+</body>
+</html>

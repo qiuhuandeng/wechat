@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>库存总览 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+  <style>
+    .inventory-six { grid-template-columns: repeat(6, 1fr); }
+    .internal-note { margin-top: 14px; padding: 12px 15px; border: 1px solid #f1cf9f; border-radius: 10px; color: var(--orange-dark); background: #fff8ee; font-size: 12px; font-weight: 800; }
+  </style>
+</head>
+<body data-page="stock-overview" data-title="库存总览">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">INVENTORY OVERVIEW</div>
+      <h1>库存总览</h1>
+      <p>按班期查看内部真实库存，可售、预留、已售、锁定与维修状态集中呈现。</p>
+    </div>
+    <div class="page-actions">
+      <a class="button secondary" href="stock-berth-board.html">铺位看板</a>
+      <button class="button primary" type="button" data-toast="库存快照已刷新">刷新库存</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <label class="field wide"><span>班期选择</span><select><option>KM20260925(2026-09-25环云南9天)</option><option>KM20261017(2026-10-17环云南9天)</option></select></label>
+      <div class="toolbar-actions"><span class="badge green">销售中</span><span class="badge orange">内部真实库存</span></div>
+    </div>
+  </section>
+
+  <section class="metric-grid inventory-six">
+    <article class="metric-card"><span class="metric-icon blue">总</span><div><span>可售总位</span><strong>264</strong><small>昆明号标准定员</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">余</span><div><span>可售余量</span><strong>76</strong><small>尊享20 · 品质56</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">预</span><div><span>已预留</span><strong>30</strong><small>守仓与切位</small></div></article>
+    <article class="metric-card"><span class="metric-icon blue">售</span><div><span>已售</span><strong>188</strong><small>已付款确认占用</small></div></article>
+    <article class="metric-card"><span class="metric-icon purple">锁</span><div><span>锁定</span><strong>4</strong><small>支付短锁</small></div></article>
+    <article class="metric-card"><span class="metric-icon red">修</span><div><span>维修</span><strong>2</strong><small>暂不可销售</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>房型库存分组统计</h2><p>按房型汇总库存结构和上座率。</p></div>
+      <span class="badge orange">KM20260925</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable">
+        <thead><tr><th>房型</th><th>总位</th><th>可售</th><th>预留</th><th>已售</th><th>锁定</th><th>上座率</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td><b>安途尊享房</b></td><td>72</td><td>20</td><td>8</td><td>42</td><td>1</td><td><div class="progress-line"><div class="progress green"><i style="width:83%"></i></div><span>83%</span></div></td></tr>
+          <tr><td><b>悦途品质房</b></td><td>192</td><td>56</td><td>22</td><td>146</td><td>3</td><td><div class="progress-line"><div class="progress blue"><i style="width:76%"></i></div><span>76%</span></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="internal-note">本页为内部真实库存视图，不对客展示</div>
+  </section>
+
+</body>
+</html>

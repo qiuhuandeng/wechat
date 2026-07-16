@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>价格方案 · 专列ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="price-plan" data-title="价格方案">
+  <header class="page-header">
+    <div>
+      <div class="eyebrow">PRICE PLAN</div>
+      <h1>价格方案</h1>
+      <p>按产品、班期和房型档次维护一套可启停、可追溯的价格方案。</p>
+    </div>
+    <div class="page-actions">
+      <button class="button primary" type="button" data-modal-open="planModal">新增价格方案</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="form-grid cols-2">
+      <label class="field"><span>产品</span><select><option>环云南9天</option><option>滇西秘境7天</option><option>版纳雨林6天</option></select></label>
+      <label class="field"><span>班期</span><select><option>KM20260925</option><option>KM20261017</option><option>KM20261114</option></select></label>
+    </div>
+  </section>
+
+  <section class="metric-grid">
+    <article class="metric-card"><span class="metric-icon blue">方</span><div><span>价格方案</span><strong>4</strong><small>覆盖 9-12 月班期</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">钻</span><div><span>房型档次</span><strong>2</strong><small>5钻 / 4钻</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">启</span><div><span>启用方案</span><strong>4</strong><small>当前均已生效</small></div></article>
+    <article class="metric-card"><span class="metric-icon purple">班</span><div><span>适用班期</span><strong>KM20260925</strong><small>环云南9天</small></div></article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div><h2>价格方案列表</h2><p>点击“查看明细”进入人数定价页面，其他定价项保留为左侧菜单独立入口。</p></div>
+      <span class="badge green">启用</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table selectable" id="pricePlanTable">
+        <thead><tr><th>方案名称</th><th>房型档次</th><th>适用班期</th><th>生效日期</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr class="selected"><td><b>9月旺季价</b></td><td><span class="badge orange">5钻</span><span class="badge blue">4钻</span></td><td>KM20260925</td><td>2026-09-01</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="planModal">编辑</button><a class="button ghost small" href="price-headcount.html">查看明细</a><button class="button ghost small" data-confirm="确认停用 9月旺季价？" data-confirm-success="价格方案已停用">停用</button></td></tr>
+          <tr><td><b>10月国庆价</b></td><td><span class="badge orange">5钻</span><span class="badge blue">4钻</span></td><td>KM20260925</td><td>2026-09-01</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="planModal">编辑</button><a class="button ghost small" href="price-headcount.html">查看明细</a><button class="button ghost small" data-confirm="确认停用 10月国庆价？" data-confirm-success="价格方案已停用">停用</button></td></tr>
+          <tr><td><b>11月常规价</b></td><td><span class="badge orange">5钻</span><span class="badge blue">4钻</span></td><td>KM20260925</td><td>2026-09-01</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="planModal">编辑</button><a class="button ghost small" href="price-headcount.html">查看明细</a><button class="button ghost small" data-confirm="确认停用 11月常规价？" data-confirm-success="价格方案已停用">停用</button></td></tr>
+          <tr><td><b>12月淡季价</b></td><td><span class="badge orange">5钻</span><span class="badge blue">4钻</span></td><td>KM20260925</td><td>2026-09-01</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="planModal">编辑</button><a class="button ghost small" href="price-headcount.html">查看明细</a><button class="button ghost small" data-confirm="确认停用 12月淡季价？" data-confirm-success="价格方案已停用">停用</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination"><span>共 4 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </section>
+
+  <div class="modal" id="planModal" hidden>
+    <form class="modal-card" data-success="价格方案已保存">
+      <div class="modal-head"><div><h2>价格方案编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <label class="field full"><span>方案名称*</span><input value="9月旺季价" required></label>
+        <label class="field"><span>产品*</span><select required><option>环云南9天</option></select></label>
+        <label class="field"><span>适用班期*</span><select required><option>KM20260925</option></select></label>
+        <div class="field full"><span>房型档次*</span><label class="check-row"><input type="checkbox" checked><div><b>5钻</b><span>安途尊享房</span></div></label><label class="check-row"><input type="checkbox" checked><div><b>4钻</b><span>悦途品质房</span></div></label></div>
+        <label class="field"><span>生效日期*</span><input type="date" value="2026-09-01" required></label>
+        <label class="check-row"><input type="checkbox" checked><div><b>状态</b><span>启用后可用于下单报价</span></div><span class="badge green">启用</span></label>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
+    </form>
+  </div>
+</body>
+</html>
