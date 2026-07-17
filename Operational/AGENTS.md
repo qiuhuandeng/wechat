@@ -307,7 +307,7 @@
   - `fin-payable-other.html` 属于 `fin-payable.html`。
   - `fin-auto-match.html` 和 `fin-writeoff-detail.html` 属于 `fin-writeoff.html`。
   - `fin-reconcile-doc.html` 属于 `fin-channel-reconcile.html`。
-- 已内联并删除的旧页不登记路由关系，包括 `stock-berth-config.html`、`product-publish.html`、`price-berth.html`、`price-single-diff.html`、`channel-credit.html`、`distribution-permission.html`、`order-change.html`、`order-refund.html`、`order-refund-calc.html`、`order-refund-process.html`、`order-berth-pending.html`、`order-pay-remind.html`、`ops-group-split.html`、`ops-namelist-export.html`、`ops-pre-notice.html`、`ops-doc-recheck.html`。
+- 已内联并删除的旧页不登记路由关系，也不得在菜单、二级路由、面包屑或页面链接中继续引用。
 
 入口形态判定：
 
