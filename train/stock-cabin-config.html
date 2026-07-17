@@ -28,7 +28,6 @@
     </div>
     <div class="page-actions">
       <button class="button secondary" type="button" data-toast="房型包厢已同步到编组配置">同步到编组</button>
-      <button class="button primary" type="button" data-modal-open="templateModal">新增房型包厢</button>
     </div>
   </header>
 
@@ -50,13 +49,20 @@
 
   <section class="panel">
     <div class="toolbar">
-      <div class="filter-tabs" data-status-tabs data-target="#cabinTemplateTable">
-        <button class="active" data-status="all">全部 <i>4</i></button>
-        <button data-status="启用">启用 <i>3</i></button>
-        <button data-status="停用">停用 <i>1</i></button>
+      <div class="filter-tabs" data-tabs data-scope="#cabinConfigTabs">
+        <button class="active" type="button" data-tab="cabins">房型包厢 <i>4</i></button>
+        <button type="button" data-tab="berths">铺位规则 <i>11</i></button>
       </div>
-      <div class="toolbar-actions"><span class="badge orange">房型先行 · 编组引用</span></div>
+      <div class="toolbar-actions">
+        <button class="button primary small" type="button" data-modal-open="templateModal" data-tab-action="cabins">新增房型包厢</button>
+        <button class="button secondary small" type="button" data-modal-open="berthRuleModal" data-tab-action="berths" hidden>新增铺位规则</button>
+      </div>
     </div>
+  </section>
+
+  <div id="cabinConfigTabs">
+    <div data-tab-panel="cabins">
+      <section class="panel">
     <div class="table-wrap">
       <table class="data-table selectable" id="cabinTemplateTable">
         <thead><tr><th>房型编号</th><th>房型包厢</th><th>房型档次</th><th>默认容量</th><th>铺位规则</th><th>默认设施</th><th>引用列车车型</th><th>状态</th><th>操作</th></tr></thead>
@@ -69,13 +75,11 @@
       </table>
     </div>
     <div class="pagination"><span>共 4 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-header">
-      <div><h2>安途尊享房 · 铺位规则</h2><p>铺位规则隶属于房型包厢，编组配置引用房型后自动生成 03-01-A 这类实际铺位编号。</p></div>
-      <div class="toolbar-actions"><button class="button secondary small" type="button" data-modal-open="berthRuleModal">新增铺位规则</button></div>
+      </section>
     </div>
+
+    <div data-tab-panel="berths" hidden>
+      <section class="panel">
     <div class="template-detail-grid">
       <div><span>房型容量</span><b>3铺 · 2-3人</b><small>用于生成包厢实例</small></div>
       <div><span>默认卫浴</span><b>独立卫浴</b><small>引用设施服务</small></div>
@@ -92,7 +96,9 @@
         </tbody>
       </table>
     </div>
-  </section>
+      </section>
+    </div>
+  </div>
 
   <div class="modal" id="templateModal" hidden>
     <form class="modal-card" data-success="房型包厢已保存">

@@ -42,24 +42,27 @@
     </aside>
 
     <section class="panel" id="rolePermissionScope">
-      <div class="panel-header">
-        <div><h2>超级管理员 · 权限配置</h2><p>按菜单、数据和操作三个维度控制权限。</p></div>
+      <div class="toolbar">
         <div class="segmented" data-tabs data-scope="#rolePermissionScope">
           <button class="active" type="button" data-tab="menu">菜单权限</button>
           <button type="button" data-tab="data">数据权限</button>
           <button type="button" data-tab="action">操作权限</button>
         </div>
+        <div class="toolbar-actions">
+          <span class="badge blue">超级管理员</span>
+          <button class="button primary small" type="button" data-toast="权限配置已保存">保存权限</button>
+        </div>
       </div>
 
       <div data-tab-panel="menu">
         <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 运力库存</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 车型编组</label><br><label><input type="checkbox" checked> 运力规划</label><br><label><input type="checkbox" checked> 库存管理</label><br><label><input type="checkbox" checked> 守仓切位</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 产品定价</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 产品管理</label><br><label><input type="checkbox" checked> 定价管理</label><br><label><input type="checkbox" checked> 退改策略</label><br><label><input type="checkbox" checked> 促销政策</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 销售分销</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 客户管理</label><br><label><input type="checkbox" checked> 渠道管理</label><br><label><input type="checkbox" checked> 分销配置</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 订单交易</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 订单管理</label><br><label><input type="checkbox" checked> 售后管理</label><br><label><input type="checkbox" checked> 出行人员</label><br><label><input type="checkbox" checked> 选铺管理</label><br><label><input type="checkbox" checked> 收款管理</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 计调操作</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 分团管理</label><br><label><input type="checkbox" checked> 名单管理</label><br><label><input type="checkbox" checked> 地接计划</label><br><label><input type="checkbox" checked> 发团作业</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 财务结算</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 应收管理</label><br><label><input type="checkbox" checked> 应付管理</label><br><label><input type="checkbox" checked> 对账管理</label><br><label><input type="checkbox" checked> 成本毛利</label></div></div>
-          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 经营看板</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 经营总览</label><br><label><input type="checkbox" checked> 销售分析</label><br><label><input type="checkbox" checked> 库存分析</label><br><label><input type="checkbox" checked> 报表中心</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 运力库存</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 列车资源</label><br><label><input type="checkbox" checked> 班期计划</label><br><label><input type="checkbox" checked> 库存管理</label><br><label><input type="checkbox" checked> 守仓切位</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 产品定价</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 定价管理</label><br><label><input type="checkbox" checked> 退改策略</label><br><label><input type="checkbox" checked> 促销政策</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 销售分销</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 客户管理</label><br><label><input type="checkbox" checked> 渠道管理</label><br><label><input type="checkbox" checked> 分销管理</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 订单交易</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 订单管理</label><br><label><input type="checkbox" checked> 旅客资料</label><br><label><input type="checkbox" checked> 选铺管理</label><br><label><input type="checkbox" checked> 收款管理</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 计调作业</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 分团管理</label><br><label><input type="checkbox" checked> 地接计划</label><br><label><input type="checkbox" checked> 发团作业</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 财务管理</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 应收管理</label><br><label><input type="checkbox" checked> 应付管理</label><br><label><input type="checkbox" checked> 对账管理</label><br><label><input type="checkbox" checked> 班期财务</label></div></div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 数据分析</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 经营总览</label><br><label><input type="checkbox" checked> 销售分析</label><br><label><input type="checkbox" checked> 库存分析</label><br><label><input type="checkbox" checked> 报表中心</label></div></div>
           <div class="rounded-xl border border-slate-200 bg-slate-50 p-4"><label class="font-semibold"><input type="checkbox" checked> 系统管理</label><div class="mt-2 space-y-2 pl-5 text-sm"><label><input type="checkbox" checked> 组织人员</label><br><label><input type="checkbox" checked> 角色权限</label><br><label><input type="checkbox" checked> 数据字典</label><br><label><input type="checkbox" checked> 参数设置</label></div></div>
         </div>
       </div>
@@ -83,9 +86,6 @@
         </div>
       </div>
 
-      <div class="modal-foot">
-        <button class="button primary" type="button" data-toast="权限配置已保存">保存权限</button>
-      </div>
     </section>
   </section>
 

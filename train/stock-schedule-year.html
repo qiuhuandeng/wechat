@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>年度排期 · 专列ERP</title>
+  <title>年度班期 · 专列ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/app.js" defer></script>
@@ -21,15 +21,16 @@
     .gantt-block:hover small { display: block; }
   </style>
 </head>
-<body data-page="stock-schedule-year" data-title="年度排期">
+<body data-page="stock-schedule-year" data-title="年度班期">
   <header class="page-header">
     <div>
       <div class="eyebrow">ANNUAL SCHEDULE</div>
-      <h1>年度排期</h1>
+      <h1>年度班期</h1>
       <p>按年份和车型查看已规划班期，支持甘特视图与列表视图切换。</p>
     </div>
     <div class="page-actions">
-      <button class="button secondary" type="button" data-toast="年度排期已导出">导出排期</button>
+      <button class="button secondary" type="button" data-toast="年度班期已导出">导出班期</button>
+      <a class="button primary" href="stock-schedule-batch.html">系统开班</a>
     </div>
   </header>
 
@@ -47,7 +48,7 @@
   <div id="scheduleViews">
     <section class="panel" data-view-panel="gantt">
       <div class="panel-header">
-        <div><h2>昆明号年度甘特排期</h2><p>横轴为 1-12 月，蓝色块表示已开班期；悬停可查看班期编号与可售位。</p></div>
+        <div><h2>昆明号年度班期甘特</h2><p>横轴为 1-12 月，蓝色块表示已开班期；悬停可查看班期编号与可售位。</p></div>
         <span class="badge green">销售中</span>
       </div>
       <div class="year-gantt">

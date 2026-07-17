@@ -10,6 +10,8 @@
   <script src="assets/app.js" defer></script>
   <style>
     .dispatch-overview { padding:0; overflow:hidden; }
+    .dispatch-page-actions { align-items:center; gap:8px; }
+    .dispatch-schedule-select { width:240px; height:35px; padding:0 34px 0 12px; border:1px solid #d6e0ea; border-radius:7px; color:#20364c; background:#fff; font-size:12px; font-weight:800; }
     .dispatch-main { padding:18px 20px; }
     .dispatch-topline { display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .dispatch-title { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -61,6 +63,8 @@
     @media (max-width: 720px) {
       .readiness-grid, .drawer-summary { grid-template-columns:1fr; }
       .dispatch-topline { align-items:flex-start; flex-direction:column; }
+      .dispatch-page-actions { width:100%; flex-wrap:wrap; }
+      .dispatch-schedule-select { flex:1 1 100%; width:100%; }
       .dispatch-right, .dispatch-summary-right { flex-wrap:wrap; }
     }
   </style>
@@ -72,8 +76,8 @@
       <h1>发团看板</h1>
       <p>发团前最后总控台，集中检查班期、团队、名单、证件、地接、保险、通知和资料包准备度。</p>
     </div>
-    <div class="page-actions">
-      <label class="field" style="margin:0;min-width:210px;"><span>班期</span><select><option>KM20260925 · 环云南9天</option><option>KM20261017 · 环云南9天</option></select></label>
+    <div class="page-actions dispatch-page-actions">
+      <select class="dispatch-schedule-select" aria-label="班期"><option>KM20260925 · 环云南9天</option><option>KM20261017 · 环云南9天</option></select>
       <button class="button secondary" type="button" data-toast="执行检查已刷新">执行检查</button>
       <button class="button primary" type="button" data-modal-open="dispatchConfirmModal">最终发团确认</button>
     </div>
@@ -174,7 +178,7 @@
           </tbody></table></div>
         </section>
       </div>
-      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>关闭</button><a class="button primary" href="ops-namelist.html">进入名单总览</a></div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>关闭</button><a class="button primary" href="ops-namelist.html">进入团队名单</a></div>
     </div>
   </div>
 

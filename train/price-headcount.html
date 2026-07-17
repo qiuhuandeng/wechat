@@ -59,15 +59,17 @@
           <button type="button" data-tab="single">单房差</button>
           <button type="button" data-tab="quote">价格试算</button>
         </div>
-        <div class="toolbar-actions"><span class="badge orange">方案内规则</span></div>
+        <div class="toolbar-actions">
+          <span class="badge orange">方案内规则</span>
+          <button class="button primary small" type="button" data-modal-open="headcountModal" data-tab-action="headcount">新增人数价</button>
+          <button class="button primary small" type="button" data-modal-open="berthPriceModal" data-tab-action="berth" hidden>新增铺位价</button>
+          <button class="button primary small" type="button" data-modal-open="singleDiffModal" data-tab-action="single" hidden>新增单房差</button>
+          <button class="button secondary small" type="button" data-toast="报价已重新试算" data-tab-action="quote" hidden>重新试算</button>
+        </div>
       </div>
     </section>
 
     <section class="panel" data-tab-panel="headcount">
-      <div class="toolbar">
-        <div class="panel-header" style="padding:0;"><div><h2>人数定价</h2><p>维护房型在不同入住人数场景下的人均价，单房差仅做引用展示。</p></div></div>
-        <div class="toolbar-actions"><button class="button primary small" type="button" data-modal-open="headcountModal">新增人数价</button></div>
-      </div>
       <div class="table-wrap">
         <table class="data-table selectable" id="headcountTable">
           <thead><tr><th>房型</th><th>入住人数场景</th><th>人均价</th><th>单房差引用</th><th>第三人补差</th><th>价格口径</th><th>操作</th></tr></thead>
@@ -83,10 +85,6 @@
     </section>
 
     <section class="panel" data-tab-panel="berth" hidden>
-      <div class="toolbar">
-        <div class="panel-header" style="padding:0;"><div><h2>铺位定价</h2><p>只配置支持散卖铺位的房型，人数价可引用这里的铺位基础价。</p></div></div>
-        <div class="toolbar-actions"><button class="button primary small" type="button" data-modal-open="berthPriceModal">新增铺位价</button></div>
-      </div>
       <div class="table-wrap">
         <table class="data-table selectable" id="berthPriceTable">
           <thead><tr><th>房型</th><th>铺位类型</th><th>散卖单价</th><th>两人专属包厢价</th><th>引用关系</th><th>操作</th></tr></thead>
@@ -100,10 +98,6 @@
     </section>
 
     <section class="panel" data-tab-panel="single" hidden>
-      <div class="toolbar">
-        <div class="panel-header" style="padding:0;"><div><h2>单房差</h2><p>按房型统一维护补差金额，人数定价和订单报价只引用规则结果。</p></div></div>
-        <div class="toolbar-actions"><button class="button primary small" type="button" data-modal-open="singleDiffModal">新增单房差</button></div>
-      </div>
       <div class="table-wrap">
         <table class="data-table selectable" id="singleDiffTable">
           <thead><tr><th>房型</th><th>单房差金额</th><th>适用场景</th><th>被引用规则</th><th>操作</th></tr></thead>
@@ -116,7 +110,6 @@
     </section>
 
     <section class="panel" data-tab-panel="quote" hidden>
-      <div class="panel-header"><div><h2>价格试算</h2><p>配置后即时验证人数价、铺位价和单房差的组合结果。</p></div><span class="badge blue">报价校验</span></div>
       <div class="quote-board">
         <section class="panel" style="margin:0;">
           <div class="form-grid cols-2">

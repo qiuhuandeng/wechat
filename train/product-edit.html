@@ -36,13 +36,16 @@
         <button data-tab="content">卖点与内容</button>
         <button data-tab="itinerary">行程明细</button>
       </div>
-      <div class="toolbar-actions"><span class="badge">草稿</span><span class="badge orange">CP-YN09</span></div>
+      <div class="toolbar-actions">
+        <span class="badge">草稿</span>
+        <span class="badge orange">CP-YN09</span>
+        <button class="button secondary small" type="button" data-toast="已新增一天行程" data-tab-action="itinerary" hidden>+ 新增行程</button>
+      </div>
     </div>
   </section>
 
   <div id="productEditor">
     <section class="panel" data-tab-panel="basic">
-      <div class="panel-header"><div><h2>基本信息</h2><p>产品名称、编号、目的地、天数、房型档次和图片素材。</p></div></div>
       <div class="form-section">
         <div class="form-grid cols-3">
           <label class="field"><span>产品名称*</span><input value="环云南9天" required></label>
@@ -57,7 +60,6 @@
     </section>
 
     <section class="panel" data-tab-panel="content" hidden>
-      <div class="panel-header"><div><h2>卖点与内容</h2><p>对客展示的产品亮点、非遗活动、餐食和增值服务。</p></div></div>
       <div class="form-section">
         <div class="form-grid cols-2">
           <div class="field full"><span>卖点标签</span><div class="record-meta" style="padding:0;border:0;"><span>国企背书</span><span>移动非遗馆</span><span>纯玩无购物</span><span>24h管家</span><span>适老化设计</span><button class="button ghost small" type="button" data-toast="已新增卖点标签">+ 新增</button></div></div>
@@ -70,7 +72,6 @@
     </section>
 
     <section class="panel" data-tab-panel="itinerary" hidden>
-      <div class="panel-header"><div><h2>行程明细</h2><p>可增删每日行程，保存后用于产品详情和确认件。</p></div><button class="button secondary small" data-toast="已新增一天行程">+ 新增行程</button></div>
       <div class="table-wrap">
         <table class="data-table selectable">
           <thead><tr><th>第X天</th><th>城市</th><th>行程内容</th><th>住宿</th><th>餐食</th></tr></thead>

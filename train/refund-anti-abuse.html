@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>反薅规则 · 专列ERP</title>
+  <title>退改风控 · 专列ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
@@ -22,11 +22,11 @@
     @media (max-width: 980px) { .anti-rule-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
-<body data-page="refund-anti-abuse" data-title="反薅规则">
+<body data-page="refund-anti-abuse" data-title="退改风控">
   <header class="page-header">
     <div>
       <div class="eyebrow">ANTI ABUSE</div>
-      <h1>反薅规则</h1>
+      <h1>退改风控</h1>
       <p>识别同一客户频繁取消占房行为，并自动加收违约金比例。</p>
     </div>
     <div class="page-actions">
@@ -37,14 +37,16 @@
   <section class="panel" id="antiAbuseScope">
     <div class="toolbar">
       <div class="filter-tabs" data-tabs data-scope="#antiAbuseScope">
-        <button class="active" type="button" data-tab="rules">反薅规则列表 <i>3</i></button>
+        <button class="active" type="button" data-tab="rules">风控规则 <i>3</i></button>
         <button type="button" data-tab="hits">命中记录 <i>4</i></button>
       </div>
-      <div class="toolbar-actions"><span class="badge green">启用中</span><button class="button primary small" type="button" data-modal-open="antiRuleModal">新增规则</button></div>
+      <div class="toolbar-actions">
+        <button class="button primary small" type="button" data-modal-open="antiRuleModal" data-tab-action="rules">新增规则</button>
+        <button class="button secondary small" type="button" data-toast="命中记录已导出" data-tab-action="hits" hidden>导出记录</button>
+      </div>
     </div>
 
     <div data-tab-panel="rules">
-      <div class="panel-header"><div><h2>反薅规则列表</h2><p>用于退改申请和违约计算页，命中后自动展示加收说明。</p></div></div>
       <div class="table-wrap">
         <table class="data-table selectable">
           <thead><tr><th>规则名称</th><th>触发条件</th><th>加收比例</th><th>统计周期</th><th>状态</th><th>最近更新</th><th>操作</th></tr></thead>
@@ -58,7 +60,6 @@
     </div>
 
     <div data-tab-panel="hits" hidden>
-      <div class="panel-header"><div><h2>命中记录</h2><p>只读记录，用于财务与客服解释退改加收原因。</p></div><span class="badge red">风控命中</span></div>
       <section class="metric-grid">
         <article class="metric-card"><span class="metric-icon red">命</span><div><span>本月命中</span><strong>4</strong><small>需重点复核</small></div></article>
         <article class="metric-card"><span class="metric-icon orange">间</span><div><span>累计取消</span><strong>15</strong><small>命中客户总间数</small></div></article>
@@ -81,7 +82,7 @@
   </section>
 
   <div class="modal anti-rule-modal" id="antiRuleModal" hidden>
-    <form class="modal-card" data-success="反薅规则已保存">
+    <form class="modal-card" data-success="风控规则已保存">
       <div class="modal-head">
         <div><h2>规则卡片</h2><p>用于退改申请和违约计算页，命中后自动展示加收说明。</p></div>
         <span class="badge green">开</span>

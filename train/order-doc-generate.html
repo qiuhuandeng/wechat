@@ -56,18 +56,20 @@
   </header>
 
   <section class="panel">
-    <div class="panel-header">
-      <div>
-        <h2>单据类型</h2>
-        <p>下单确认后系统自动生成确认件→收款单→发团通知书→分团单，销售一键发送客户。</p>
+    <div class="toolbar">
+      <div class="doc-tabs" data-tabs data-scope="#docGenerateScope">
+        <button class="active" type="button" data-tab="confirm">确认件</button>
+        <button type="button" data-tab="receipt">收款单</button>
+        <button type="button" data-tab="notice">发团通知书</button>
+        <button type="button" data-tab="group">分团单</button>
       </div>
-      <span class="badge blue">DD20260901</span>
-    </div>
-    <div class="doc-tabs" data-tabs data-scope="#docGenerateScope">
-      <button class="active" type="button" data-tab="confirm">确认件</button>
-      <button type="button" data-tab="receipt">收款单</button>
-      <button type="button" data-tab="notice">发团通知书</button>
-      <button type="button" data-tab="group">分团单</button>
+      <div class="toolbar-actions">
+        <span class="badge blue">DD20260901</span>
+        <button class="button primary small" type="button" data-toast="确认件已生成" data-tab-action="confirm">生成确认件</button>
+        <button class="button primary small" type="button" data-toast="收款单已生成" data-tab-action="receipt" hidden>生成收款单</button>
+        <button class="button primary small" type="button" data-toast="发团通知书已生成" data-tab-action="notice" hidden>生成通知书</button>
+        <button class="button primary small" type="button" data-toast="分团单已生成" data-tab-action="group" hidden>生成分团单</button>
+      </div>
     </div>
   </section>
 
@@ -76,7 +78,6 @@
       <div class="toolbar">
         <label class="field"><span>选订单</span><select><option>DD20260901｜王建国｜已付款</option><option>DD20260902｜赵玉芬｜待确认</option><option>DD20260903｜张伟｜已选铺</option></select></label>
         <label class="field"><span>选班期</span><select><option>KM20260925｜2026-09-25 环云南9天</option><option>KM20261017｜2026-10-17 环云南9天</option></select></label>
-        <button class="button primary" type="button" data-toast="确认件已生成">生成单据</button>
       </div>
       <div class="doc-workspace">
         <article class="doc-preview">
@@ -121,7 +122,6 @@
       <div class="toolbar">
         <label class="field"><span>选订单</span><select><option>DD20260901｜王建国｜已付款</option><option>DD20260904｜陈桂英｜部分收款</option></select></label>
         <label class="field"><span>选班期</span><select><option>KM20260925｜2026-09-25 环云南9天</option><option>KM20261017｜2026-10-17 环云南9天</option></select></label>
-        <button class="button primary" type="button" data-toast="收款单已生成">生成单据</button>
       </div>
       <div class="doc-workspace">
         <article class="doc-preview">
@@ -163,7 +163,6 @@
       <div class="toolbar">
         <label class="field"><span>选订单</span><select><option>DD20260901｜王建国｜已选铺</option><option>DD20260906｜周玉芬｜已付款</option></select></label>
         <label class="field"><span>选班期</span><select><option>KM20260925｜2026-09-25 环云南9天</option><option>KM20261017｜2026-10-17 环云南9天</option></select></label>
-        <button class="button primary" type="button" data-toast="发团通知书已生成">生成单据</button>
       </div>
       <div class="doc-workspace">
         <article class="doc-preview">
@@ -202,7 +201,6 @@
       <div class="toolbar">
         <label class="field"><span>选订单</span><select><option>DD20260901｜王建国｜已选铺</option><option>DD20260907｜马国强｜已付款</option></select></label>
         <label class="field"><span>选班期</span><select><option>KM20260925｜2026-09-25 环云南9天</option><option>KM20261017｜2026-10-17 环云南9天</option></select></label>
-        <button class="button primary" type="button" data-toast="分团单已生成">生成单据</button>
       </div>
       <div class="doc-workspace">
         <article class="doc-preview">

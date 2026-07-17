@@ -2,20 +2,20 @@
   "use strict";
 
   var menuTree = [
-    { id: "index", label: "工作台", pageLabel: "工作台", icon: "dashboard", file: "index.html" },
+    { id: "index", label: "经营", pageLabel: "经营", icon: "dashboard", file: "index.html" },
     { label: "运力库存", icon: "train", sections: [
-      { label: "车型编组", items: [
+      { label: "列车资源", items: [
         { id: "stock-traintype-list", label: "列车车型", file: "stock-traintype-list.html" },
         { id: "stock-cabin-config", label: "房型包厢", file: "stock-cabin-config.html" },
         { id: "stock-facility", label: "设施服务", file: "stock-facility.html" }
       ]},
-      { label: "运力规划", items: [
-        { id: "stock-schedule-year", label: "年度排期", file: "stock-schedule-year.html" },
+      { label: "班期计划", items: [
+        { id: "stock-schedule-year", label: "年度班期", file: "stock-schedule-year.html" },
         { id: "stock-schedule-list", label: "班期列表", file: "stock-schedule-list.html" }
       ]},
       { label: "库存管理", items: [
         { id: "stock-overview", label: "库存总览", file: "stock-overview.html" },
-        { id: "stock-log", label: "库存日志", file: "stock-log.html" },
+        { id: "stock-log", label: "库存流水", file: "stock-log.html" },
         { id: "stock-warning", label: "库存预警", file: "stock-warning.html" }
       ]},
       { label: "守仓切位", items: [
@@ -33,27 +33,26 @@
       ]},
       { label: "退改策略", items: [
         { id: "refund-ladder", label: "阶梯退改", file: "refund-ladder.html" },
-        { id: "refund-anti-abuse", label: "反薅规则", file: "refund-anti-abuse.html" },
+        { id: "refund-anti-abuse", label: "退改风控", file: "refund-anti-abuse.html" },
         { id: "refund-special", label: "特殊规则", file: "refund-special.html" }
       ]},
       { label: "促销政策", items: [
-        { id: "promo-earlybird", label: "早鸟团购", file: "promo-earlybird.html" },
-        { id: "promo-commission", label: "渠道返佣", file: "promo-commission.html" },
-        { id: "promo-activity-list", label: "活动列表", file: "promo-activity-list.html" }
+        { id: "promo-activity-list", label: "促销活动", file: "promo-activity-list.html" },
+        { id: "promo-commission", label: "渠道返佣", file: "promo-commission.html" }
       ]}
     ]},
     { label: "销售分销", icon: "customers", sections: [
       { label: "客户管理", items: [
         { id: "sale-customer-list", label: "客户列表", file: "sale-customer-list.html" },
-        { id: "sale-customer-merge", label: "客户查重", file: "sale-customer-merge.html" },
+        { id: "sale-customer-merge", label: "客户合并", file: "sale-customer-merge.html" },
         { id: "sale-customer-tag", label: "客户标签", file: "sale-customer-tag.html" }
       ]},
       { label: "渠道管理", items: [
         { id: "channel-list", label: "渠道档案", file: "channel-list.html" },
         { id: "channel-reconcile", label: "返佣对账", file: "channel-reconcile.html" },
-        { id: "channel-order-log", label: "下单记录", file: "channel-order-log.html" }
+        { id: "channel-order-log", label: "渠道订单", file: "channel-order-log.html" }
       ]},
-      { label: "分销配置", items: [
+      { label: "分销管理", items: [
         { id: "distribution-account", label: "分销账号", file: "distribution-account.html" },
         { id: "distribution-audit", label: "分销审核", file: "distribution-audit.html" }
       ]}
@@ -61,10 +60,10 @@
     { label: "订单交易", icon: "orders", sections: [
       { label: "订单管理", items: [
         { id: "order-list", label: "订单列表", file: "order-list.html" },
-        { id: "order-after-sales", label: "售后列表", file: "order-after-sales.html" }
+        { id: "order-after-sales", label: "售后工单", file: "order-after-sales.html" }
       ]},
-      { label: "出行人员", items: [
-        { id: "order-traveler-list", label: "出行名单", file: "order-traveler-list.html" },
+      { label: "旅客资料", items: [
+        { id: "order-traveler-list", label: "旅客名单", file: "order-traveler-list.html" },
         { id: "order-doc-check", label: "证件核验", file: "order-doc-check.html" }
       ]},
       { label: "选铺管理", items: [
@@ -76,57 +75,54 @@
         { id: "order-online-pay", label: "在线流水", file: "order-online-pay.html" }
       ]}
     ]},
-    { label: "计调操作", icon: "fulfillment", sections: [
+    { label: "计调作业", icon: "fulfillment", sections: [
       { label: "分团管理", items: [
-        { id: "ops-group-list", label: "团队列表", file: "ops-group-list.html" },
-        { id: "ops-namelist", label: "名单总览", file: "ops-namelist.html" }
+        { id: "ops-group-list", label: "团队管理", file: "ops-group-list.html" },
+        { id: "ops-namelist", label: "团队名单", file: "ops-namelist.html" }
       ]},
       { label: "地接计划", items: [
-        { id: "ops-dmc-plan", label: "下达计划", file: "ops-dmc-plan.html" },
+        { id: "ops-dmc-plan", label: "接待计划", file: "ops-dmc-plan.html" },
         { id: "ops-dmc-settle", label: "地接结算", file: "ops-dmc-settle.html" },
         { id: "ops-dmc-list", label: "地接档案", file: "ops-dmc-list.html" }
       ]},
       { label: "发团作业", items: [
-        { id: "ops-dispatch-board", label: "发团看板", file: "ops-dispatch-board.html" }
-      ]},
-      { label: "变更协同", hideTitle: true, items: [
-        { id: "ops-change-collab", label: "变更协同", file: "ops-change-collab.html" }
+        { id: "ops-dispatch-board", label: "发团看板", file: "ops-dispatch-board.html" },
+        { id: "ops-change-collab", label: "订单变更", file: "ops-change-collab.html" }
       ]}
     ]},
-    { label: "财务结算", icon: "finance", sections: [
+    { label: "财务管理", icon: "finance", sections: [
       { label: "应收管理", items: [
         { id: "fin-receivable", label: "应收账款", file: "fin-receivable.html" },
         { id: "fin-writeoff", label: "收款核销", file: "fin-writeoff.html" },
         { id: "fin-aging", label: "账龄分析", file: "fin-aging.html" }
       ]},
       { label: "应付管理", items: [
-        { id: "fin-payable", label: "缔结结算", file: "fin-payable.html" },
-        { id: "fin-payable-other", label: "其他应付", file: "fin-payable-other.html" }
+        { id: "fin-payable", label: "应付账款", file: "fin-payable.html" }
       ]},
       { label: "对账管理", items: [
-        { id: "fin-channel-reconcile", label: "渠道对账", file: "fin-channel-reconcile.html" },
-        { id: "fin-auto-match", label: "自动匹配", file: "fin-auto-match.html" },
-        { id: "fin-reconcile-doc", label: "对账单据", file: "fin-reconcile-doc.html" }
+        { id: "fin-channel-reconcile", label: "往来对账", file: "fin-channel-reconcile.html" }
       ]},
-      { label: "成本毛利", items: [
-        { id: "fin-profit", label: "毛利核算", file: "fin-profit.html" },
-        { id: "fin-channel-analysis", label: "渠道分析", file: "fin-channel-analysis.html" }
+      { label: "班期财务", items: [
+        { id: "fin-profit", label: "班期核算", file: "fin-profit.html" },
+        { id: "fin-closeout", label: "结算关账", file: "fin-closeout.html" },
+        { id: "fin-channel-analysis", label: "渠道毛利", file: "fin-channel-analysis.html" }
       ]},
       { label: "发票管理", hideTitle: true, items: [
         { id: "fin-invoice", label: "发票管理", file: "fin-invoice.html" }
       ]},
       { label: "财务对接", items: [
-        { id: "fin-integration", label: "财务对接", file: "fin-integration.html" }
+        { id: "fin-integration", label: "凭证同步", file: "fin-integration.html" },
+        { id: "fin-integration-log", label: "接口日志", file: "fin-integration-log.html" },
+        { id: "fin-integration-config", label: "接口配置", file: "fin-integration-config.html" }
       ]}
     ]},
-    { label: "经营看板", icon: "chart", sections: [
-      { label: "经营看板", hideTitle: true, items: [
+    { label: "数据分析", icon: "chart", sections: [
+      { label: "数据分析", hideTitle: true, items: [
         { id: "bi-overview", label: "经营总览", file: "bi-overview.html" },
         { id: "bi-sales", label: "销售分析", file: "bi-sales.html" },
         { id: "bi-direct", label: "直客分析", file: "bi-direct.html" },
         { id: "bi-stock", label: "库存分析", file: "bi-stock.html" },
         { id: "bi-refund", label: "退改分析", file: "bi-refund.html" },
-        { id: "bi-customer", label: "客户分析", file: "bi-customer.html" },
         { id: "bi-report", label: "报表中心", file: "bi-report.html" }
       ]}
     ]},
@@ -135,12 +131,12 @@
         { id: "sys-dept", label: "部门管理", file: "sys-dept.html" },
         { id: "sys-user", label: "员工账号", file: "sys-user.html" }
       ]},
-      { label: "系统管理", hideTitle: true, items: [
+      { label: "基础配置", hideTitle: true, items: [
         { id: "sys-role", label: "角色权限", file: "sys-role.html" },
         { id: "sys-dict", label: "数据字典", file: "sys-dict.html" },
         { id: "sys-msg-template", label: "消息模板", file: "sys-msg-template.html" },
         { id: "sys-log", label: "操作日志", file: "sys-log.html" },
-        { id: "sys-integration", label: "集成配置", file: "sys-integration.html" },
+        { id: "sys-integration", label: "接口集成", file: "sys-integration.html" },
         { id: "sys-params", label: "参数设置", file: "sys-params.html" }
       ]}
     ]}
@@ -152,14 +148,14 @@
       label: "编组配置",
       file: "stock-carriage-config.html",
       parentId: "stock-traintype-list",
-      path: ["运力库存", "车型编组", "列车车型"]
+      path: ["运力库存", "列车资源", "列车车型"]
     },
     "stock-schedule-batch": {
       id: "stock-schedule-batch",
-      label: "系列开班",
+      label: "系统开班",
       file: "stock-schedule-batch.html",
       parentId: "stock-schedule-list",
-      path: ["运力库存", "运力规划", "班期列表"]
+      path: ["运力库存", "班期计划", "班期列表"]
     },
     "stock-berth-board": {
       id: "stock-berth-board",
@@ -203,6 +199,13 @@
       parentId: "price-plan",
       path: ["产品定价", "定价管理", "价格方案"]
     },
+    "promo-earlybird": {
+      id: "promo-earlybird",
+      label: "早鸟团购",
+      file: "promo-earlybird.html",
+      parentId: "promo-activity-list",
+      path: ["产品定价", "促销政策", "促销活动"]
+    },
     "channel-price": {
       id: "channel-price",
       label: "结算价格",
@@ -236,14 +239,42 @@
       label: "证件识别",
       file: "order-ocr.html",
       parentId: "order-traveler-list",
-      path: ["订单交易", "出行人员", "出行名单"]
+      path: ["订单交易", "旅客资料", "旅客名单"]
     },
     "ops-group-detail": {
       id: "ops-group-detail",
       label: "团队详情",
       file: "ops-group-detail.html",
       parentId: "ops-group-list",
-      path: ["计调操作", "分团管理", "团队列表"]
+      path: ["计调作业", "分团管理", "团队管理"]
+    },
+    "fin-payable-other": {
+      id: "fin-payable-other",
+      label: "其他应付",
+      file: "fin-payable-other.html",
+      parentId: "fin-payable",
+      path: ["财务管理", "应付管理", "应付账款"]
+    },
+    "fin-auto-match": {
+      id: "fin-auto-match",
+      label: "自动匹配",
+      file: "fin-auto-match.html",
+      parentId: "fin-writeoff",
+      path: ["财务管理", "应收管理", "收款核销"]
+    },
+    "fin-writeoff-detail": {
+      id: "fin-writeoff-detail",
+      label: "订单核销",
+      file: "fin-writeoff-detail.html",
+      parentId: "fin-writeoff",
+      path: ["财务管理", "应收管理", "收款核销"]
+    },
+    "fin-reconcile-doc": {
+      id: "fin-reconcile-doc",
+      label: "对账单据",
+      file: "fin-reconcile-doc.html",
+      parentId: "fin-channel-reconcile",
+      path: ["财务管理", "对账管理", "往来对账"]
     }
   };
 
@@ -269,6 +300,7 @@
   };
 
   var noticeIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16l-2-2Z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg>';
+  var brandTrainIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4h10a2 2 0 0 1 2 2v9a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2Z"/><path d="M8 8h8M8 12h8M8 21l2-3M16 18l2 3"/></svg>';
 
   function ensureFavicon() {
     if (document.querySelector('link[rel~="icon"]')) return;
@@ -313,7 +345,7 @@
         });
       });
     });
-    return found || { id: "index", label: "原型导航", file: "index.html", path: ["工作台"] };
+    return found || { id: "index", label: "原型导航", file: "index.html", path: ["经营"] };
   }
 
   function branchHasActive(domain, pageId) {
@@ -341,14 +373,14 @@
 
   function domainShortLabel(label) {
     var map = {
-      "工作台": "工作台",
+      "经营": "经营",
       "运力库存": "运力",
       "产品定价": "定价",
       "销售分销": "销售",
       "订单交易": "订单",
-      "计调操作": "计调",
-      "财务结算": "财务",
-      "经营看板": "看板",
+      "计调作业": "计调",
+      "财务管理": "财务",
+      "数据分析": "数据",
       "系统管理": "系统"
     };
     return map[label] || label;
@@ -376,7 +408,7 @@
 
     return '<aside class="app-sidebar app-sidebar-split' + (hasSecondary ? "" : " sidebar-primary-only") + '">' +
       '<div class="sidebar-rail">' +
-      '<a class="rail-brand" href="index.html" aria-label="专列ERP"><span class="brand-mark">专</span></a>' +
+      '<a class="rail-brand" href="index.html" aria-label="专列ERP"><span class="brand-mark">' + brandTrainIcon + '</span></a>' +
       '<nav class="primary-nav">' + primaryNav + '</nav></div>' +
       (hasSecondary ?
       '<div class="sidebar-panel">' +
@@ -415,7 +447,7 @@
     }).join("");
     return '<div class="channel-shell">' +
       '<header class="channel-topbar">' +
-      '<a class="channel-brand" href="d-home.html"><span class="brand-mark">专</span><b>专列ERP分销门户</b></a>' +
+      '<a class="channel-brand" href="d-home.html"><span class="brand-mark">' + brandTrainIcon + '</span><b>专列ERP分销门户</b></a>' +
       '<nav class="channel-nav">' + nav + '</nav>' +
       '<div class="top-tools"><button class="top-icon" type="button" data-toast="没有新的渠道通知" aria-label="通知">' + noticeIcon + '</button><span class="avatar" title="康辉旅行社">康</span><span class="user-name">康辉旅行社</span></div>' +
       '</header>' +
@@ -597,9 +629,20 @@
   }
 
   function bindTabs() {
+    function syncTabActions(tabs, name) {
+      var host = tabs.closest(".toolbar, .panel-header") || tabs.parentElement;
+      if (!host) return;
+      var actions = host.querySelector(".toolbar-actions");
+      if (!actions) return;
+      actions.querySelectorAll("[data-tab-action]").forEach(function (action) {
+        action.hidden = action.getAttribute("data-tab-action") !== name;
+      });
+    }
     document.querySelectorAll("[data-tabs]").forEach(function (tabs) {
       var scopeSelector = tabs.getAttribute("data-scope");
       var scope = scopeSelector ? document.querySelector(scopeSelector) : document;
+      var initial = tabs.querySelector("[data-tab].active") || tabs.querySelector("[data-tab]");
+      if (initial) syncTabActions(tabs, initial.getAttribute("data-tab"));
       tabs.querySelectorAll("[data-tab]").forEach(function (button) {
         button.addEventListener("click", function () {
           var name = button.getAttribute("data-tab");
@@ -608,6 +651,7 @@
           scope.querySelectorAll("[data-tab-panel]").forEach(function (panel) {
             panel.hidden = panel.getAttribute("data-tab-panel") !== name;
           });
+          syncTabActions(tabs, name);
         });
       });
     });
