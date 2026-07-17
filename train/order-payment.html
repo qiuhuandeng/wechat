@@ -14,7 +14,7 @@
     <div>
       <div class="eyebrow">PAYMENT RECORDS</div>
       <h1>收款记录</h1>
-      <p>登记、查询并核销订单收款，在线支付与收款提醒已恢复为独立菜单页面。</p>
+      <p>登记、查询并核销订单款项；待收催收回到订单列表，在线流水独立查看。</p>
     </div>
     <div class="page-actions">
       <button class="button secondary" type="button" data-toast="收款记录已导出">导出</button>
@@ -23,8 +23,9 @@
   </header>
 
   <section class="metric-grid">
-    <article class="metric-card"><span class="metric-icon green">收</span><div><span>本月收款</span><strong>¥1280000</strong><small>已到账与待确认收款</small></div></article>
-    <article class="metric-card"><span class="metric-icon orange">待</span><div><span>待收款</span><strong>¥86000</strong><small>尾款与逾期定金</small></div></article>
+    <article class="metric-card"><span class="metric-icon green">收</span><div><span>本月到账</span><strong>¥1280000</strong><small>线上支付与线下登记</small></div></article>
+    <article class="metric-card"><span class="metric-icon orange">确</span><div><span>待确认</span><strong>3笔</strong><small>对公转账待财务核验</small></div></article>
+    <article class="metric-card"><span class="metric-icon blue">核</span><div><span>已核销</span><strong>¥970000</strong><small>已进入应收核销</small></div></article>
     <article class="metric-card"><span class="metric-icon red">退</span><div><span>已退款</span><strong>¥12000</strong><small>本月已处理退款</small></div></article>
   </section>
 
@@ -39,7 +40,7 @@
   </section>
 
   <section class="panel">
-    <div class="panel-header"><div><h2>收款明细</h2><p>收款成功后可进入财务核销，未到账流水需人工确认。</p></div><span class="badge blue">共10条</span></div>
+    <div class="panel-header"><div><h2>收款明细</h2><p>线上支付成功和线下登记收款均进入这里，待确认流水由财务核销。</p></div><span class="badge blue">共10条</span></div>
     <div class="table-wrap">
       <table class="data-table selectable" id="paymentTable">
         <thead><tr><th>收款单号</th><th>订单号</th><th>客户</th><th>收款类型</th><th>收款方式</th><th>收款金额</th><th>收款时间</th><th>流水号</th><th>状态</th><th>操作</th></tr></thead>
@@ -62,15 +63,15 @@
 
   <div class="modal" id="paymentModal" hidden>
     <form class="modal-card" data-success="收款已登记">
-      <div class="modal-head"><div><span class="eyebrow">REGISTER PAYMENT</span><h2>登记收款</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-head"><h2>登记收款</h2><button class="modal-close" type="button" data-modal-close>×</button></div>
       <div class="modal-body">
-        <label class="field"><span>订单号*</span><select required><option>DD20260901｜王建国</option><option>DD20260902｜康辉旅行社</option></select></label>
+        <label class="field"><span>订单号*</span><select required><option>DD20260901｜王建国</option><option>DD20260902｜康辉旅行社</option><option>DD20260903｜李秀兰</option></select></label>
         <label class="field"><span>收款类型*</span><select required><option>定金</option><option>尾款</option><option>全款</option></select></label>
-        <label class="field"><span>收款方式*</span><select required><option>微信支付</option><option>对公转账</option></select></label>
-        <label class="field"><span>收款金额*</span><input type="number" value="25998" required></label>
+        <label class="field"><span>收款方式*</span><select required><option>微信支付</option><option>对公转账</option><option>现金</option></select></label>
+        <label class="field"><span>收款金额*</span><input type="number" value="20998" required></label>
         <label class="field"><span>收款时间</span><input type="date" value="2026-06-16"></label>
         <label class="field"><span>流水号</span><input value="WX2026061612345"></label>
-        <label class="field full"><span>备注</span><textarea rows="3"></textarea></label>
+        <label class="field full"><span>备注</span><textarea rows="3" placeholder="填写到账说明或财务核销备注"></textarea></label>
       </div>
       <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
     </form>

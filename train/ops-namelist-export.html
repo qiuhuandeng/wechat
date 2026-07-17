@@ -3,81 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>名单导出 · 专列ERP</title>
+  <title>名单导出已收敛 · 专列ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/app.js" defer></script>
   <style>
-    .export-layout { display:grid; grid-template-columns:360px minmax(0, 1fr); gap:16px; align-items:start; }
     .check-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
     .check-grid label { display:flex; align-items:center; gap:7px; padding:8px 10px; border:1px solid #e3e8ed; border-radius:9px; background:#f8fafc; color:#536476; font-size:12px; }
-    .export-tip { padding:12px 14px; border:1px solid #f3d2aa; border-radius:12px; color:#7f4c17; background:#fff8ef; font-size:12px; }
-    @media (max-width: 1080px) { .export-layout { grid-template-columns:1fr; } }
+    @media (max-width: 720px) { .check-grid { grid-template-columns:1fr; } }
   </style>
 </head>
-<body data-page="ops-namelist-export" data-title="名单导出">
+<body data-page="ops-namelist" data-title="名单总览">
   <header class="page-header">
     <div>
-      <div class="eyebrow">NAME LIST EXPORT</div>
-      <h1>名单导出</h1>
-      <p>导出计调标准弹药格式名单。</p>
+      <div class="eyebrow">OLD PAGE</div>
+      <h1>名单导出已收敛</h1>
+      <p>名单导出已改为名单总览页弹窗；导出流程只保留配置，不再预览名单表格。</p>
     </div>
     <div class="page-actions">
-      <button class="button secondary" type="button" data-toast="已生成预览">预览</button>
+      <a class="button secondary" href="ops-namelist.html">返回名单总览</a>
       <button class="button primary" type="button" data-toast="名单文件已导出下载">导出下载</button>
     </div>
   </header>
 
-  <section class="panel"><div class="export-tip">导出计调标准弹药格式名单</div></section>
-
-  <section class="export-layout">
-    <div class="panel">
-      <div class="panel-header"><div><h2>导出配置</h2><p>选择范围、模板、字段和文件格式。</p></div></div>
-      <div class="form-grid">
-        <label class="field full"><span>导出范围*</span><select required><option>按班期</option><option>按团</option></select></label>
-        <label class="field full"><span>选择对象*</span><select required><option>KM20260925</option><option>1团</option><option>2团</option></select></label>
-        <label class="field full"><span>导出模板*</span><select required><option>弹药标准格式</option><option>地接接待格式</option><option>铁路报备格式</option></select></label>
-        <div class="field full"><span>包含字段</span><div class="check-grid">
-          <label><input type="checkbox" checked>姓名</label><label><input type="checkbox" checked>性别</label><label><input type="checkbox" checked>证件号</label><label><input type="checkbox" checked>手机号</label><label><input type="checkbox" checked>房型床位</label><label><input type="checkbox" checked>紧急联系人</label><label><input type="checkbox" checked>特殊需求</label><label><input type="checkbox">保险单号</label>
-        </div></div>
-        <div class="field full"><span>文件格式</span><div class="segmented"><label><input type="radio" name="format" checked> Excel</label><label><input type="radio" name="format"> PDF</label></div></div>
-      </div>
-      <div class="modal-foot" style="padding-left:0;padding-right:0;padding-bottom:0;"><button class="button secondary" type="button" data-toast="已生成预览">预览</button><button class="button primary" type="button" data-toast="名单文件已导出下载">导出下载</button></div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header"><div><h2>导出预览</h2><p>按弹药标准格式列排布。</p></div><span class="badge blue">预览6行</span></div>
-      <div class="table-wrap">
-        <table class="data-table selectable" id="exportPreviewTable">
-          <thead><tr><th>序号</th><th>团队</th><th>姓名</th><th>性别</th><th>证件号</th><th>手机号</th><th>房型床位</th><th>紧急联系人</th><th>特殊需求</th></tr></thead>
-          <tbody>
-            <tr class="selected"><td>1</td><td>1团</td><td>王建国</td><td>男</td><td>5301****1234</td><td>138****6688</td><td>尊享房 3-01-A</td><td>李秀兰 139****</td><td>低糖餐/需扶手</td></tr>
-            <tr><td>2</td><td>1团</td><td>李秀兰</td><td>女</td><td>5301****2234</td><td>139****1188</td><td>尊享房 3-01-B</td><td>王建国 138****</td><td>需照护</td></tr>
-            <tr><td>3</td><td>1团</td><td>赵玉芬</td><td>女</td><td>5301****3234</td><td>137****2299</td><td>品质房 9-01-A</td><td>赵强 136****</td><td>忌口</td></tr>
-            <tr><td>4</td><td>1团</td><td>张伟</td><td>男</td><td>E123****88</td><td>188****9900</td><td>品质房 9-01-B</td><td>张敏 188****</td><td>—</td></tr>
-            <tr><td>5</td><td>1团</td><td>陈桂英</td><td>女</td><td>5301****5234</td><td>136****6677</td><td>品质房 9-01-C</td><td>陈明 135****</td><td>低盐餐</td></tr>
-            <tr><td>6</td><td>1团</td><td>刘建华</td><td>男</td><td>5301****6234</td><td>139****8899</td><td>品质房 9-01-D</td><td>刘梅 139****</td><td>—</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
   <section class="panel">
-    <div class="panel-header"><div><h2>历史导出记录</h2><p>保留最近导出的名单文件。</p></div></div>
-    <div class="table-wrap">
-      <table class="data-table selectable" id="exportHistoryTable">
-        <thead><tr><th>导出时间</th><th>范围</th><th>模板</th><th>操作人</th><th>操作</th></tr></thead>
-        <tbody>
-          <tr class="selected"><td>2026-07-12 10:20</td><td>KM20260925</td><td>弹药标准格式</td><td>王计调</td><td><button class="button ghost small" data-toast="已重新下载">重新下载</button></td></tr>
-          <tr><td>2026-07-11 16:42</td><td>1团</td><td>地接接待格式</td><td>王计调</td><td><button class="button ghost small" data-toast="已重新下载">重新下载</button></td></tr>
-          <tr><td>2026-07-10 09:18</td><td>KM20260925</td><td>铁路报备格式</td><td>李计调</td><td><button class="button ghost small" data-toast="已重新下载">重新下载</button></td></tr>
-          <tr><td>2026-07-08 14:05</td><td>2团</td><td>弹药标准格式</td><td>王计调</td><td><button class="button ghost small" data-toast="已重新下载">重新下载</button></td></tr>
-          <tr><td>2026-07-06 11:30</td><td>KM20261017</td><td>地接接待格式</td><td>张经理</td><td><button class="button ghost small" data-toast="已重新下载">重新下载</button></td></tr>
-        </tbody>
-      </table>
+    <div class="panel-header"><div><h2>导出配置</h2><p>选择范围、模板、字段和文件格式后直接导出。</p></div></div>
+    <div class="form-grid cols-2">
+      <label class="field"><span>导出范围*</span><select required><option>按班期</option><option>按团</option><option>按当前筛选结果</option></select></label>
+      <label class="field"><span>选择对象*</span><select required><option>KM20260925</option><option>1团</option><option>2团</option></select></label>
+      <label class="field"><span>导出模板*</span><select required><option>弹药标准格式</option><option>地接接待格式</option><option>铁路报备格式</option></select></label>
+      <div class="field"><span>文件格式</span><div class="segmented"><label><input type="radio" name="format" checked> Excel</label><label><input type="radio" name="format"> PDF</label></div></div>
+      <div class="field full"><span>包含字段</span><div class="check-grid">
+        <label><input type="checkbox" checked>姓名</label><label><input type="checkbox" checked>性别</label><label><input type="checkbox" checked>证件号</label><label><input type="checkbox" checked>手机号</label><label><input type="checkbox" checked>房型床位</label><label><input type="checkbox" checked>紧急联系人</label><label><input type="checkbox" checked>特殊需求</label><label><input type="checkbox">保险单号</label>
+      </div></div>
     </div>
+    <div class="modal-foot" style="padding-left:0;padding-right:0;padding-bottom:0;"><a class="button secondary" href="ops-namelist.html">取消</a><button class="button primary" type="button" data-toast="名单文件已导出下载">导出下载</button></div>
   </section>
 </body>
 </html>

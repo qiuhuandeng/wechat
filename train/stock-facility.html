@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>设施属性 · 专列ERP</title>
+  <title>设施服务 · 专列ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/app.js" defer></script>
 </head>
-<body data-page="stock-facility" data-title="设施属性">
+<body data-page="stock-facility" data-title="设施服务">
   <header class="page-header">
-    <div><div class="eyebrow">FACILITY</div><h1>设施属性</h1><p>维护车厢级、包厢级设施标签，供车型模板和对客展示引用。</p></div>
-    <div class="page-actions"><button class="button primary" type="button" data-modal-open="facilityModal">新增设施</button></div>
+    <div><div class="eyebrow">FACILITY</div><h1>设施服务</h1><p>维护车厢级、包厢级设施服务标签，供列车车型、房型包厢和对客展示引用。</p></div>
+    <div class="page-actions"><button class="button primary" type="button" data-modal-open="facilityModal">新增设施服务</button></div>
   </header>
 
   <section class="metric-grid">
@@ -22,10 +22,10 @@
   </section>
 
   <section class="panel">
-    <div class="panel-header"><div><h2>设施属性清单</h2><p>图标为静态原型占位，后续可替换为正式 icon。</p></div></div>
+    <div class="panel-header"><div><h2>设施服务清单</h2><p>图标为静态原型占位，后续可替换为正式 icon。</p></div></div>
     <div class="table-wrap">
       <table class="data-table selectable">
-        <thead><tr><th>设施名称</th><th>设施图标</th><th>适用范围</th><th>设施说明</th><th>状态</th><th>操作</th></tr></thead>
+        <thead><tr><th>设施服务</th><th>设施图标</th><th>适用范围</th><th>服务说明</th><th>状态</th><th>操作</th></tr></thead>
         <tbody>
           <tr class="selected"><td><b>独立卫浴</b></td><td><span class="badge blue">卫</span></td><td><span class="badge orange">包厢级</span></td><td>干湿分离设计</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="facilityModal">编辑</button><button class="button ghost small" data-confirm="确认删除独立卫浴？" data-confirm-success="设施已删除">删除</button></td></tr>
           <tr><td><b>紧急呼叫按钮</b></td><td><span class="badge red">SOS</span></td><td><span class="badge orange">包厢级</span></td><td>一键呼叫随车管家</td><td><span class="badge green">启用</span></td><td><button class="button ghost small" data-modal-open="facilityModal">编辑</button><button class="button ghost small" data-confirm="确认删除紧急呼叫按钮？" data-confirm-success="设施已删除">删除</button></td></tr>
@@ -42,14 +42,14 @@
   </section>
 
   <div class="modal" id="facilityModal" hidden>
-    <form class="modal-card" data-success="设施属性已保存">
-      <div class="modal-head"><div><h2>设施编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
+    <form class="modal-card" data-success="设施服务已保存">
+      <div class="modal-head"><div><h2>设施服务编辑</h2></div><button class="modal-close" type="button" data-modal-close>×</button></div>
       <div class="modal-body">
-        <label class="field"><span>设施名称*</span><input value="独立卫浴" required></label>
+        <label class="field"><span>设施服务*</span><input value="独立卫浴" required></label>
         <label class="field"><span>图标</span><select><option>卫浴图标</option><option>安全图标</option><option>充电图标</option><option>储物图标</option></select></label>
         <div class="field full"><span>适用范围*</span><label class="check-row"><input type="radio" name="scope"><div><b>车厢级</b><span>整节车厢共同设施</span></div></label><label class="check-row"><input type="radio" name="scope" checked><div><b>包厢级</b><span>房型与包厢展示设施</span></div></label></div>
         <label class="field full"><span>说明</span><textarea>干湿分离设计</textarea></label>
-        <label class="check-row full"><input type="checkbox" checked><div><b>状态</b><span>启用后可被车型模板引用</span></div><span class="badge green">启用</span></label>
+        <label class="check-row full"><input type="checkbox" checked><div><b>状态</b><span>启用后可被列车车型和房型包厢引用</span></div><span class="badge green">启用</span></label>
       </div>
       <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">保存</button></div>
     </form>

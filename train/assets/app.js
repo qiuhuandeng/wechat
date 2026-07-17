@@ -5,45 +5,29 @@
     { id: "index", label: "工作台", pageLabel: "工作台", icon: "dashboard", file: "index.html" },
     { label: "运力库存", icon: "train", sections: [
       { label: "车型编组", items: [
-        { id: "stock-traintype-list", label: "车型模板", file: "stock-traintype-list.html" },
-        { id: "stock-carriage-config", label: "车厢配置", file: "stock-carriage-config.html" },
-        { id: "stock-cabin-config", label: "包厢配置", file: "stock-cabin-config.html" },
-        { id: "stock-berth-config", label: "铺位配置", file: "stock-berth-config.html" },
-        { id: "stock-facility", label: "设施属性", file: "stock-facility.html" }
+        { id: "stock-traintype-list", label: "列车车型", file: "stock-traintype-list.html" },
+        { id: "stock-cabin-config", label: "房型包厢", file: "stock-cabin-config.html" },
+        { id: "stock-facility", label: "设施服务", file: "stock-facility.html" }
       ]},
       { label: "运力规划", items: [
         { id: "stock-schedule-year", label: "年度排期", file: "stock-schedule-year.html" },
-        { id: "stock-schedule-batch", label: "系列开班", file: "stock-schedule-batch.html" },
         { id: "stock-schedule-list", label: "班期列表", file: "stock-schedule-list.html" }
       ]},
       { label: "库存管理", items: [
         { id: "stock-overview", label: "库存总览", file: "stock-overview.html" },
-        { id: "stock-berth-board", label: "铺位看板", file: "stock-berth-board.html" },
         { id: "stock-log", label: "库存日志", file: "stock-log.html" },
-        { id: "stock-display-rule", label: "展示规则", file: "stock-display-rule.html" }
+        { id: "stock-warning", label: "库存预警", file: "stock-warning.html" }
       ]},
       { label: "守仓切位", items: [
-        { id: "stock-hold-apply", label: "守仓申请", file: "stock-hold-apply.html" },
-        { id: "stock-hold-expire", label: "守仓到期", file: "stock-hold-expire.html" },
+        { id: "stock-hold-apply", label: "守仓管理", file: "stock-hold-apply.html" },
         { id: "stock-cut-manage", label: "切位管理", file: "stock-cut-manage.html" },
         { id: "stock-release-log", label: "释放记录", file: "stock-release-log.html" }
       ]},
-      { label: "库存预警", hideTitle: true, items: [
-        { id: "stock-warning", label: "库存预警", file: "stock-warning.html" }
-      ]}
     ]},
     { label: "产品定价", icon: "package", sections: [
-      { label: "产品管理", items: [
-        { id: "product-list", label: "产品列表", file: "product-list.html" },
-        { id: "product-edit", label: "产品编辑", file: "product-edit.html" },
-        { id: "product-schedule-link", label: "班期关联", file: "product-schedule-link.html" },
-        { id: "product-publish", label: "产品上架", file: "product-publish.html" }
-      ]},
       { label: "定价管理", items: [
+        { id: "product-list", label: "产品列表", file: "product-list.html" },
         { id: "price-plan", label: "价格方案", file: "price-plan.html" },
-        { id: "price-headcount", label: "人数定价", file: "price-headcount.html" },
-        { id: "price-berth", label: "铺位定价", file: "price-berth.html" },
-        { id: "price-single-diff", label: "单房差价", file: "price-single-diff.html" },
         { id: "price-calendar", label: "价格日历", file: "price-calendar.html" },
         { id: "price-multi-system", label: "多价体系", file: "price-multi-system.html" }
       ]},
@@ -59,9 +43,6 @@
       ]}
     ]},
     { label: "销售分销", icon: "customers", sections: [
-      { label: "销售台席", items: [
-        { id: "sale-workbench", label: "销售台席", file: "sale-workbench.html" }
-      ]},
       { label: "客户管理", items: [
         { id: "sale-customer-list", label: "客户列表", file: "sale-customer-list.html" },
         { id: "sale-customer-merge", label: "客户查重", file: "sale-customer-merge.html" },
@@ -69,57 +50,36 @@
       ]},
       { label: "渠道管理", items: [
         { id: "channel-list", label: "渠道档案", file: "channel-list.html" },
-        { id: "channel-credit", label: "签约授信", file: "channel-credit.html" },
-        { id: "channel-price", label: "结算价格", file: "channel-price.html" },
         { id: "channel-reconcile", label: "返佣对账", file: "channel-reconcile.html" },
         { id: "channel-order-log", label: "下单记录", file: "channel-order-log.html" }
       ]},
       { label: "分销配置", items: [
         { id: "distribution-account", label: "分销账号", file: "distribution-account.html" },
-        { id: "distribution-permission", label: "分销权限", file: "distribution-permission.html" },
         { id: "distribution-audit", label: "分销审核", file: "distribution-audit.html" }
       ]}
     ]},
     { label: "订单交易", icon: "orders", sections: [
       { label: "订单管理", items: [
         { id: "order-list", label: "订单列表", file: "order-list.html" },
-        { id: "order-detail", label: "订单详情", file: "order-detail.html" },
-        { id: "order-create", label: "新建订单", file: "order-create.html" },
-        { id: "order-change", label: "订单变更", file: "order-change.html" }
+        { id: "order-after-sales", label: "售后列表", file: "order-after-sales.html" }
       ]},
       { label: "出行人员", items: [
         { id: "order-traveler-list", label: "出行名单", file: "order-traveler-list.html" },
-        { id: "order-ocr", label: "证件识别", file: "order-ocr.html" },
         { id: "order-doc-check", label: "证件核验", file: "order-doc-check.html" }
       ]},
-      { label: "单据生成", items: [
-        { id: "order-doc-generate", label: "单据生成", file: "order-doc-generate.html" }
-      ]},
       { label: "选铺管理", items: [
-        { id: "order-berth-pending", label: "待选铺单", file: "order-berth-pending.html" },
-        { id: "order-berth-assign", label: "铺位分配", file: "order-berth-assign.html" },
+        { id: "order-berth-assign", label: "代客选铺", file: "order-berth-assign.html" },
         { id: "order-berth-log", label: "换铺记录", file: "order-berth-log.html" }
       ]},
       { label: "收款管理", items: [
         { id: "order-payment", label: "收款记录", file: "order-payment.html" },
-        { id: "order-online-pay", label: "在线支付", file: "order-online-pay.html" },
-        { id: "order-pay-remind", label: "收款提醒", file: "order-pay-remind.html" }
-      ]},
-      { label: "退改管理", items: [
-        { id: "order-refund", label: "退改申请", file: "order-refund.html" },
-        { id: "order-refund-calc", label: "违约计算", file: "order-refund-calc.html" },
-        { id: "order-refund-process", label: "退款处理", file: "order-refund-process.html" }
+        { id: "order-online-pay", label: "在线流水", file: "order-online-pay.html" }
       ]}
     ]},
     { label: "计调操作", icon: "fulfillment", sections: [
       { label: "分团管理", items: [
-        { id: "ops-group-split", label: "班期分团", file: "ops-group-split.html" },
         { id: "ops-group-list", label: "团队列表", file: "ops-group-list.html" },
-        { id: "ops-group-detail", label: "团队详情", file: "ops-group-detail.html" }
-      ]},
-      { label: "名单管理", items: [
-        { id: "ops-namelist", label: "名单总览", file: "ops-namelist.html" },
-        { id: "ops-namelist-export", label: "名单导出", file: "ops-namelist-export.html" }
+        { id: "ops-namelist", label: "名单总览", file: "ops-namelist.html" }
       ]},
       { label: "地接计划", items: [
         { id: "ops-dmc-plan", label: "下达计划", file: "ops-dmc-plan.html" },
@@ -188,6 +148,107 @@
     ]}
   ];
 
+  var secondaryRoutes = {
+    "stock-carriage-config": {
+      id: "stock-carriage-config",
+      label: "编组配置",
+      file: "stock-carriage-config.html",
+      parentId: "stock-traintype-list",
+      path: ["运力库存", "车型编组", "列车车型"]
+    },
+    "stock-schedule-batch": {
+      id: "stock-schedule-batch",
+      label: "系列开班",
+      file: "stock-schedule-batch.html",
+      parentId: "stock-schedule-list",
+      path: ["运力库存", "运力规划", "班期列表"]
+    },
+    "stock-berth-board": {
+      id: "stock-berth-board",
+      label: "铺位看板",
+      file: "stock-berth-board.html",
+      parentId: "stock-overview",
+      path: ["运力库存", "库存管理", "库存总览"]
+    },
+    "stock-display-rule": {
+      id: "stock-display-rule",
+      label: "展示规则",
+      file: "stock-display-rule.html",
+      parentId: "stock-overview",
+      path: ["运力库存", "库存管理", "库存总览"]
+    },
+    "stock-hold-expire": {
+      id: "stock-hold-expire",
+      label: "守仓到期",
+      file: "stock-hold-expire.html",
+      parentId: "stock-hold-apply",
+      path: ["运力库存", "守仓切位", "守仓管理"]
+    },
+    "product-edit": {
+      id: "product-edit",
+      label: "产品编辑",
+      file: "product-edit.html",
+      parentId: "product-list",
+      path: ["产品定价", "定价管理", "产品列表"]
+    },
+    "product-schedule-link": {
+      id: "product-schedule-link",
+      label: "班期关联",
+      file: "product-schedule-link.html",
+      parentId: "product-list",
+      path: ["产品定价", "定价管理", "产品列表"]
+    },
+    "price-headcount": {
+      id: "price-headcount",
+      label: "价格方案配置",
+      file: "price-headcount.html",
+      parentId: "price-plan",
+      path: ["产品定价", "定价管理", "价格方案"]
+    },
+    "channel-price": {
+      id: "channel-price",
+      label: "结算价格",
+      file: "channel-price.html",
+      parentId: "channel-list",
+      path: ["销售分销", "渠道管理", "渠道档案"]
+    },
+    "order-detail": {
+      id: "order-detail",
+      label: "订单详情",
+      file: "order-detail.html",
+      parentId: "order-list",
+      path: ["订单交易", "订单管理", "订单列表"]
+    },
+    "order-create": {
+      id: "order-create",
+      label: "新建订单",
+      file: "order-create.html",
+      parentId: "order-list",
+      path: ["订单交易", "订单管理", "订单列表"]
+    },
+    "order-doc-generate": {
+      id: "order-doc-generate",
+      label: "单据生成",
+      file: "order-doc-generate.html",
+      parentId: "order-list",
+      path: ["订单交易", "订单管理", "订单列表"]
+    },
+    "order-ocr": {
+      id: "order-ocr",
+      label: "证件识别",
+      file: "order-ocr.html",
+      parentId: "order-traveler-list",
+      path: ["订单交易", "出行人员", "出行名单"]
+    },
+    "ops-group-detail": {
+      id: "ops-group-detail",
+      label: "团队详情",
+      file: "ops-group-detail.html",
+      parentId: "ops-group-list",
+      path: ["计调操作", "分团管理", "团队列表"]
+    }
+  };
+
   var channelPages = [
     { id: "d-home", label: "渠道首页", file: "d-home.html" },
     { id: "d-search", label: "查价查位", file: "d-search.html" },
@@ -224,7 +285,12 @@
     return '<span class="nav-primary-icon">' + (navIcons[name] || navIcons.dashboard) + '</span>';
   }
 
+  function activePageId(pageId) {
+    return secondaryRoutes[pageId] ? secondaryRoutes[pageId].parentId : pageId;
+  }
+
   function findMenuItem(pageId) {
+    if (secondaryRoutes[pageId]) return secondaryRoutes[pageId];
     var found = null;
     menuTree.forEach(function (domain) {
       if (domain.id === pageId) {
@@ -253,9 +319,10 @@
   }
 
   function branchHasActive(domain, pageId) {
-    if (domain.id === pageId) return true;
+    var activeId = activePageId(pageId);
+    if (domain.id === activeId) return true;
     return (domain.sections || []).some(function (section) {
-      return section.items.some(function (item) { return item.id === pageId; });
+      return section.items.some(function (item) { return item.id === activeId; });
     });
   }
 
@@ -270,7 +337,8 @@
   }
 
   function sectionHasActive(section, pageId) {
-    return section.items.some(function (item) { return item.id === pageId; });
+    var activeId = activePageId(pageId);
+    return section.items.some(function (item) { return item.id === activeId; });
   }
 
   function domainShortLabel(label) {
@@ -636,13 +704,131 @@
     });
   }
 
+  function setFieldValue(control, value) {
+    if (!control) return;
+    if (control.tagName === "SELECT") {
+      var hasOption = Array.prototype.some.call(control.options, function (option) {
+        return option.value === value || option.textContent === value;
+      });
+      if (!hasOption) {
+        var option = document.createElement("option");
+        option.textContent = value;
+        control.appendChild(option);
+      }
+    }
+    control.value = value;
+  }
+
+  function badgeTone(kind, name) {
+    if ((kind || "").indexOf("住宿") !== -1 && (name || "").indexOf("尊享") !== -1) return "orange";
+    if ((kind || "").indexOf("住宿") !== -1) return "blue";
+    if ((kind || "").indexOf("餐饮") !== -1) return "green";
+    if ((kind || "").indexOf("保障") !== -1) return "";
+    return "purple";
+  }
+
+  function berthItems(count) {
+    if (count === 3) {
+      return [
+        { label: "A 双人床", className: "main" },
+        { label: "B 上铺", className: "upper" },
+        { label: "C 沙发", className: "sofa" }
+      ];
+    }
+    return Array.from({ length: count }, function (_, index) {
+      var letter = String.fromCharCode(65 + index);
+      var upper = index % 2 === 1;
+      return { label: letter + (upper ? " 上铺" : " 下铺"), className: upper ? "upper" : "main" };
+    });
+  }
+
+  function renderSleeperPlan(button) {
+    var car = button.getAttribute("data-car") || "";
+    var name = button.getAttribute("data-name") || "";
+    var cabinCount = Number(button.getAttribute("data-cabins")) || 0;
+    var berthCount = Number(button.getAttribute("data-berths-per-cabin")) || 0;
+    var berths = berthItems(berthCount);
+    var cards = [];
+    for (var index = 1; index <= cabinCount; index += 1) {
+      var cabinNo = car + "-" + String(index).padStart(2, "0");
+      cards.push('<article class="cabin-plan-card">' +
+        '<div class="cabin-plan-head"><b>' + cabinNo + '</b><span class="badge ' + (name.indexOf("尊享") !== -1 ? "orange" : "blue") + '">' + name + '</span></div>' +
+        '<div class="berth-plan">' + berths.map(function (item) {
+          return '<span class="berth-chip ' + item.className + '">' + item.label + '</span>';
+        }).join("") + '</div>' +
+      '</article>');
+    }
+    return '<div class="cabin-plan-grid">' + cards.join("") + '</div>' +
+      '<div class="plan-corridor">过道 / 服务呼叫 / 行李架 / 卫浴动线</div>';
+  }
+
+  function renderFunctionPlan(button) {
+    var name = button.getAttribute("data-name") || "功能车";
+    var zones = (button.getAttribute("data-zones") || "服务台,设备区,储藏区,通道").split(",");
+    return '<div class="function-zone-grid">' + zones.map(function (zone, index) {
+      var badge = index === 0 ? "green" : index === 1 ? "blue" : index === 2 ? "orange" : "";
+      return '<article class="function-zone"><div><b>' + zone + '</b><small>' + name + '的' + zone + '模块，可维护面积、容量、设备和运营说明。</small></div><span class="badge ' + badge + '">功能区</span></article>';
+    }).join("") + '</div>' +
+      '<div class="plan-corridor">通道 / 设备检修 / 运营动线</div>';
+  }
+
+  function updateCarriageWorkbench(button) {
+    var scope = button.closest("[data-composition-workbench]") || document;
+    var car = button.getAttribute("data-car") || "";
+    var name = button.getAttribute("data-name") || (button.querySelector("b") ? button.querySelector("b").textContent : "");
+    var kind = button.getAttribute("data-kind") || "";
+    var cabins = button.getAttribute("data-cabins") || "0";
+    var berthsPerCabin = button.getAttribute("data-berths-per-cabin") || "0";
+    var total = button.getAttribute("data-total") || "0";
+    var layout = button.getAttribute("data-layout") || "sleeper";
+    var title = scope.querySelector("[data-car-title]");
+    if (title) title.textContent = car + "车 · " + name;
+    var kindBadge = scope.querySelector("[data-car-kind]");
+    if (kindBadge) {
+      kindBadge.textContent = kind;
+      kindBadge.className = "badge " + badgeTone(kind, name);
+    }
+    var fields = {
+      car: car,
+      name: name,
+      cabins: cabins,
+      berthsPerCabin: berthsPerCabin,
+      sale: button.getAttribute("data-sale") || "",
+      bath: button.getAttribute("data-bath") || "",
+      desc: button.getAttribute("data-desc") || ""
+    };
+    Object.keys(fields).forEach(function (key) {
+      setFieldValue(scope.querySelector('[data-car-field="' + key + '"]'), fields[key]);
+    });
+    var previewTitle = scope.querySelector("[data-preview-title]");
+    if (previewTitle) previewTitle.textContent = car + "车内部结构";
+    var previewCount = scope.querySelector("[data-preview-count]");
+    if (previewCount) {
+      if (layout === "function") {
+        var zoneCount = (button.getAttribute("data-zones") || "").split(",").filter(Boolean).length;
+        previewCount.textContent = total !== "0" ? total + "资源位" : zoneCount + "个功能区";
+      } else {
+        previewCount.textContent = cabins + "间 · " + total + "席";
+      }
+    }
+    var preview = scope.querySelector("[data-cabin-preview]");
+    if (preview) preview.innerHTML = layout === "function" ? renderFunctionPlan(button) : renderSleeperPlan(button);
+    var drawerTitle = document.getElementById("berthDrawerTitle");
+    if (drawerTitle) drawerTitle.textContent = car + "车包厢与铺位明细";
+  }
+
   function bindCarriages() {
+    document.querySelectorAll("[data-composition-workbench]").forEach(function (workbench) {
+      var active = workbench.querySelector(".carriage[data-car].active") || workbench.querySelector(".carriage[data-car]");
+      if (active) updateCarriageWorkbench(active);
+    });
     document.querySelectorAll(".carriage[data-car]").forEach(function (button) {
       button.addEventListener("click", function () {
         document.querySelectorAll(".carriage[data-car]").forEach(function (item) { item.classList.remove("active"); });
         button.classList.add("active");
         var title = document.querySelector("[data-car-title]");
         if (title && button.querySelector("b")) title.textContent = button.getAttribute("data-car") + "车 · " + button.querySelector("b").textContent;
+        updateCarriageWorkbench(button);
         showToast("已切换至" + button.getAttribute("data-car") + "车");
       });
     });

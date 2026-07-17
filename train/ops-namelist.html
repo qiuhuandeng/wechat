@@ -8,7 +8,12 @@
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/app.js" defer></script>
-  <style>.modal.wide .modal-card { width: min(920px, 94vw); }</style>
+  <style>
+    .modal.wide .modal-card { width: min(920px, 94vw); }
+    .check-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+    .check-grid label { display:flex; align-items:center; gap:7px; padding:8px 10px; border:1px solid #e3e8ed; border-radius:9px; background:#f8fafc; color:#536476; font-size:12px; }
+    @media (max-width: 720px) { .check-grid { grid-template-columns:1fr; } }
+  </style>
 </head>
 <body data-page="ops-namelist" data-title="名单总览">
   <header class="page-header">
@@ -18,7 +23,7 @@
       <p>汇总班期、团队、证件和特殊需求信息，支撑地接与铁路报备。</p>
     </div>
     <div class="page-actions">
-      <a class="button primary" href="ops-namelist-export.html">导出弹药名单</a>
+      <button class="button primary" type="button" data-modal-open="exportModal">导出弹药名单</button>
       <button class="button secondary" type="button" data-toast="已批量导出">批量导出</button>
     </div>
   </header>
@@ -57,5 +62,22 @@
     <div class="pagination"><span>共 12 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
   </section>
 
+  <div class="modal wide" id="exportModal" hidden>
+    <form class="modal-card" data-success="名单文件已导出下载">
+      <div class="modal-head"><h2>名单导出</h2><button class="modal-close" type="button" data-modal-close>×</button></div>
+      <div class="modal-body">
+        <div class="form-grid cols-2 full">
+          <label class="field"><span>导出范围*</span><select required><option>按班期</option><option>按团</option><option>按当前筛选结果</option></select></label>
+          <label class="field"><span>选择对象*</span><select required><option>KM20260925</option><option>1团</option><option>2团</option></select></label>
+          <label class="field"><span>导出模板*</span><select required><option>弹药标准格式</option><option>地接接待格式</option><option>铁路报备格式</option></select></label>
+          <div class="field"><span>文件格式</span><div class="segmented"><label><input type="radio" name="exportFormat" checked> Excel</label><label><input type="radio" name="exportFormat"> PDF</label></div></div>
+          <div class="field full"><span>包含字段</span><div class="check-grid">
+            <label><input type="checkbox" checked>姓名</label><label><input type="checkbox" checked>性别</label><label><input type="checkbox" checked>证件号</label><label><input type="checkbox" checked>手机号</label><label><input type="checkbox" checked>房型床位</label><label><input type="checkbox" checked>紧急联系人</label><label><input type="checkbox" checked>特殊需求</label><label><input type="checkbox">保险单号</label>
+          </div></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="button secondary" type="button" data-modal-close>取消</button><button class="button primary" type="submit">导出下载</button></div>
+    </form>
+  </div>
 </body>
 </html>

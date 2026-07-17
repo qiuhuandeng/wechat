@@ -3,62 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>待选铺单 · 专列ERP</title>
+  <title>待选铺单已收敛 · 专列ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/app.js" defer></script>
 </head>
-<body data-page="order-berth-pending" data-title="待选铺单">
+<body data-page="order-berth-assign" data-title="代客选铺">
   <header class="page-header">
     <div>
-      <div class="eyebrow">BERTH SELECTION</div>
-      <h1>待选铺单</h1>
-      <p>付款后开放选铺，客人自选或销售代选。</p>
+      <div class="eyebrow">BERTH WORKBENCH</div>
+      <h1>待选铺单已合并</h1>
+      <p>待分配订单已收敛到代客选铺页面左侧订单队列。</p>
     </div>
     <div class="page-actions">
-      <button class="button secondary" type="button" data-toast="已批量提醒待选铺客户">批量提醒</button>
-      <a class="button primary" href="order-berth-assign.html">进入铺位分配</a>
+      <a class="button primary" href="order-berth-assign.html">进入代客选铺</a>
     </div>
   </header>
 
-  <section class="metric-grid">
-    <article class="metric-card"><span class="metric-icon orange">待</span><div><span>待选铺</span><strong>5</strong><small>需销售跟进</small></div></article>
-    <article class="metric-card"><span class="metric-icon green">已</span><div><span>已选铺</span><strong>3</strong><small>本页样例订单</small></div></article>
-    <article class="metric-card"><span class="metric-icon blue">付</span><div><span>已付金额</span><strong>¥168988</strong><small>可开放选铺</small></div></article>
-    <article class="metric-card"><span class="metric-icon purple">班</span><div><span>当前班期</span><strong>09-25</strong><small>KM20260925</small></div></article>
-  </section>
-
-  <section class="panel">
-    <div class="filters" data-filter-scope="#pendingBerthTable">
-      <label class="field"><span>班期</span><select data-table-filter="#pendingBerthTable" data-filter-key="schedule"><option value="">全部班期</option><option>环云南9天 09-25</option><option>环云南9天 10-17</option></select></label>
-      <label class="field"><span>订单号</span><input data-table-search="#pendingBerthTable" placeholder="DD20260901"></label>
-      <label class="field"><span>选铺状态</span><select data-table-filter="#pendingBerthTable" data-filter-key="status"><option value="">全部状态</option><option>待选铺</option><option>已选铺</option></select></label>
-      <div class="filter-actions"><button class="button secondary small" data-apply-filters="#pendingBerthTable">查询</button><button class="button ghost small" data-reset-filters>重置</button></div>
-    </div>
-  </section>
-
   <section class="panel">
     <div class="panel-header">
-      <div><h2>待选铺订单</h2><p>仅展示已付款且符合选铺条件的订单。</p></div>
-      <span class="badge orange">付款后开放</span>
+      <div><h2>入口调整说明</h2><p>后续不再单独维护待选铺单页面。</p></div>
+      <span class="badge green">已收敛</span>
     </div>
-    <div class="table-wrap">
-      <table class="data-table selectable" id="pendingBerthTable">
-        <thead><tr><th>订单号</th><th>客户</th><th>产品班期</th><th>房型/人数</th><th>已付金额</th><th>选铺状态</th><th>付款时间</th><th>操作</th></tr></thead>
-        <tbody>
-          <tr class="selected" data-schedule="环云南9天 09-25" data-status="待选铺"><td>DD20260901</td><td><b>王建国</b></td><td>环云南9天 09-25</td><td>尊享房2人</td><td>¥25998</td><td><span class="badge orange">待选铺</span></td><td>2026-06-16</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 09-25" data-status="已选铺"><td>DD20260902</td><td><b>李秀兰</b></td><td>环云南9天 09-25</td><td>尊享房2人</td><td>¥25998</td><td><span class="badge green">已选铺</span></td><td>2026-06-16</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 09-25" data-status="待选铺"><td>DD20260903</td><td><b>康辉旅行社</b></td><td>环云南9天 09-25</td><td>品质房4人</td><td>¥23996</td><td><span class="badge orange">待选铺</span></td><td>2026-06-18</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 09-25" data-status="待选铺"><td>DD20260904</td><td><b>张伟</b></td><td>环云南9天 09-25</td><td>品质房2人</td><td>¥12798</td><td><span class="badge orange">待选铺</span></td><td>2026-06-19</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 09-25" data-status="已选铺"><td>DD20260905</td><td><b>夕阳红俱乐部</b></td><td>环云南9天 09-25</td><td>尊享房3人</td><td>¥33997</td><td><span class="badge green">已选铺</span></td><td>2026-06-20</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 10-17" data-status="待选铺"><td>DD20261001</td><td><b>赵玉芬</b></td><td>环云南9天 10-17</td><td>品质房4人</td><td>¥23996</td><td><span class="badge orange">待选铺</span></td><td>2026-07-01</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 10-17" data-status="已选铺"><td>DD20261002</td><td><b>周玉芬</b></td><td>环云南9天 10-17</td><td>尊享房2人</td><td>¥25998</td><td><span class="badge green">已选铺</span></td><td>2026-07-02</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-          <tr data-schedule="环云南9天 10-17" data-status="待选铺"><td>DD20261003</td><td><b>银发之家</b></td><td>环云南9天 10-17</td><td>品质房6人</td><td>¥35994</td><td><span class="badge orange">待选铺</span></td><td>2026-07-03</td><td><a class="button ghost small" href="order-berth-assign.html">代客选铺</a><button class="button ghost small" data-toast="订单详情已打开">查看</button></td></tr>
-        </tbody>
-      </table>
+    <div class="record-meta">
+      <span>左侧订单队列：待分配 / 已分配 / 全部</span>
+      <span>中间：整列车厢与包厢铺位</span>
+      <span>右侧：确认清单与规则校验</span>
     </div>
-    <div class="pagination"><span>共 8 条 · 每页 10 条</span><div><button>‹</button><button class="active">1</button><button>›</button></div></div>
   </section>
 </body>
 </html>
