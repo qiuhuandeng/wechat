@@ -107,8 +107,6 @@
   - 地接档案
 - 发团作业
   - 发团看板
-  - 行前提醒
-  - 证件复核
 - 变更协同
 
 ### 3.7 财务结算
@@ -234,9 +232,7 @@
 │   ├── 地接结算
 │   └── 地接档案
 ├── 发团作业
-│   ├── 发团看板
-│   ├── 行前提醒
-│   └── 证件复核
+│   └── 发团看板
 └── 变更协同
 
 7. 财务结算
@@ -304,7 +300,7 @@
   - `order-detail.html`、`order-create.html` 和 `order-doc-generate.html` 属于 `order-list.html`。
   - `order-ocr.html` 属于 `order-traveler-list.html`。
   - `ops-group-detail.html` 属于 `ops-group-list.html`。
-- 已收敛为页内能力或旧页残留的页面不登记路由关系，包括 `stock-berth-config.html`、`product-publish.html`、`price-berth.html`、`price-single-diff.html`、`channel-credit.html`、`distribution-permission.html`、`order-change.html`、`order-refund.html`、`order-refund-calc.html`、`order-refund-process.html`、`order-berth-pending.html`、`order-pay-remind.html`、`ops-group-split.html`、`ops-namelist-export.html`。
+- 已收敛为页内能力或旧页残留的页面不登记路由关系，包括 `stock-berth-config.html`、`product-publish.html`、`price-berth.html`、`price-single-diff.html`、`channel-credit.html`、`distribution-permission.html`、`order-change.html`、`order-refund.html`、`order-refund-calc.html`、`order-refund-process.html`、`order-berth-pending.html`、`order-pay-remind.html`、`ops-group-split.html`、`ops-namelist-export.html`、`ops-pre-notice.html`、`ops-doc-recheck.html`。
 
 入口形态判定：
 

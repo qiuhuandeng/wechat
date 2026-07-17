@@ -87,9 +87,7 @@
         { id: "ops-dmc-list", label: "地接档案", file: "ops-dmc-list.html" }
       ]},
       { label: "发团作业", items: [
-        { id: "ops-dispatch-board", label: "发团看板", file: "ops-dispatch-board.html" },
-        { id: "ops-pre-notice", label: "行前提醒", file: "ops-pre-notice.html" },
-        { id: "ops-doc-recheck", label: "证件复核", file: "ops-doc-recheck.html" }
+        { id: "ops-dispatch-board", label: "发团看板", file: "ops-dispatch-board.html" }
       ]},
       { label: "变更协同", hideTitle: true, items: [
         { id: "ops-change-collab", label: "变更协同", file: "ops-change-collab.html" }
