@@ -37,21 +37,20 @@
 
 ## 3. 页面清单
 
-### 3.1 运力库存（17 页）
+### 3.1 运力库存（16 页）
 
 | 文件名 | 页面 |
 | --- | --- |
 | `stock-traintype-list.html` | 列车车型 |
 | `stock-carriage-config.html` | 编组配置（二级页面：列车车型） |
 | `stock-cabin-config.html` | 房型包厢 |
-| `stock-berth-config.html` | 铺位规则（旧页残留，不登记路由） |
 | `stock-facility.html` | 设施服务 |
-| `stock-schedule-year.html` | 年度排期 |
+| `stock-schedule-year.html` | 年度班期 |
 | `stock-schedule-batch.html` | 系统开班（二级页面） |
 | `stock-schedule-list.html` | 班期列表 |
 | `stock-overview.html` | 库存总览 |
 | `stock-berth-board.html` | 铺位看板（二级页面：库存总览） |
-| `stock-log.html` | 库存日志 |
+| `stock-log.html` | 库存流水 |
 | `stock-display-rule.html` | 展示规则（二级页面：库存总览） |
 | `stock-hold-apply.html` | 守仓管理 |
 | `stock-hold-expire.html` | 守仓到期（二级页面：守仓管理） |
@@ -59,83 +58,68 @@
 | `stock-release-log.html` | 释放记录 |
 | `stock-warning.html` | 库存预警 |
 
-### 3.2 产品定价（16 页）
+### 3.2 产品定价（13 页）
 
 | 文件名 | 页面 |
 | --- | --- |
 | `product-list.html` | 产品列表 |
 | `product-edit.html` | 产品编辑（二级页面：产品列表） |
 | `product-schedule-link.html` | 班期关联（二级页面：产品列表） |
-| `product-publish.html` | 产品上架（旧页残留，不登记路由） |
 | `price-plan.html` | 价格方案 |
 | `price-headcount.html` | 价格方案配置（二级页面：价格方案） |
-| `price-berth.html` | 铺位定价（旧页残留，不登记路由） |
-| `price-single-diff.html` | 单房差价（旧页残留，不登记路由） |
 | `price-calendar.html` | 价格日历 |
 | `price-multi-system.html` | 多价体系 |
 | `refund-ladder.html` | 阶梯退改 |
-| `refund-anti-abuse.html` | 反薅规则 |
+| `refund-anti-abuse.html` | 退改风控 |
 | `refund-special.html` | 特殊规则 |
 | `promo-earlybird.html` | 早鸟团购（促销活动二级页，菜单不单列） |
 | `promo-commission.html` | 渠道返佣 |
 | `promo-activity-list.html` | 促销活动 |
 
-### 3.3 销售分销（11 页）
+### 3.3 销售分销（9 页）
 
 | 文件名 | 页面 |
 | --- | --- |
 | `sale-customer-list.html` | 我的客户 |
-| `sale-customer-merge.html` | 客户查重 |
+| `sale-customer-merge.html` | 客户合并 |
 | `sale-customer-tag.html` | 客户标签 |
 | `channel-list.html` | 渠道档案 |
-| `channel-credit.html` | 签约授信（旧页残留，不登记路由；已收敛为渠道档案列表弹窗） |
 | `channel-price.html` | 结算价格（二级页面，由渠道档案列表进入） |
 | `channel-reconcile.html` | 返佣对账 |
-| `channel-order-log.html` | 下单记录 |
+| `channel-order-log.html` | 渠道订单 |
 | `distribution-account.html` | 分销账号 |
-| `distribution-permission.html` | 分销权限（旧页残留，不登记路由；已收敛为分销账号列表弹窗） |
 | `distribution-audit.html` | 分销审核 |
 
-### 3.4 订单交易（19 页，含售后收敛页）
+### 3.4 订单交易（13 页，含售后收敛页）
 
 | 文件名 | 页面 |
 | --- | --- |
 | `order-list.html` | 订单列表 |
-| `order-after-sales.html` | 售后列表 |
+| `order-after-sales.html` | 售后工单 |
 | `order-detail.html` | 订单详情（二级页面：订单列表） |
 | `order-create.html` | 新建订单（二级页面：订单列表） |
-| `order-change.html` | 订单变更（旧页残留，不登记路由；已收敛为订单列表弹窗） |
-| `order-traveler-list.html` | 出行名单 |
-| `order-ocr.html` | 证件识别（二级页面：出行名单） |
+| `order-traveler-list.html` | 旅客名单 |
+| `order-ocr.html` | 证件识别（二级页面：旅客名单） |
 | `order-doc-check.html` | 证件核验 |
 | `order-doc-generate.html` | 单据生成（二级页面：订单列表） |
 | `order-doc-manage.html` | 单据管理（待补设计页） |
-| `order-berth-pending.html` | 待选铺单（旧页残留，不登记路由；已收敛为代客选铺左侧订单队列） |
 | `order-berth-assign.html` | 代客选铺（合并选铺工作台：订单队列 / 列车铺位 / 确认信息） |
 | `order-berth-log.html` | 换铺记录 |
 | `order-payment.html` | 收款记录 |
 | `order-online-pay.html` | 在线流水 |
-| `order-pay-remind.html` | 收款提醒（旧页残留，不登记路由；已收敛为订单列表收款弹窗和收款记录） |
-| `order-refund.html` | 退改申请（旧页残留，不登记路由；已收敛为售后列表的新建/处理能力） |
-| `order-refund-calc.html` | 违约计算（旧页残留，不登记路由；已收敛为售后列表的费用计算弹窗） |
-| `order-refund-process.html` | 退款处理（旧页残留，不登记路由；已收敛为售后列表的财务退款节点） |
 
-### 3.5 计调操作（12 页）
+### 3.5 计调作业（8 页）
 
 | 文件名 | 页面 |
 | --- | --- |
-| `ops-group-split.html` | 班期分团（旧页残留，不登记路由；后置分团调整收敛到团队列表行操作） |
-| `ops-group-list.html` | 团队列表 |
-| `ops-group-detail.html` | 团队详情（二级页面：团队列表） |
-| `ops-namelist.html` | 名单总览（归属分团管理） |
-| `ops-namelist-export.html` | 名单导出（旧页残留，不登记路由；已收敛为名单总览弹窗，导出不做预览） |
-| `ops-dmc-plan.html` | 下达计划（列表页；下达地接表单为弹窗） |
+| `ops-group-list.html` | 团队管理 |
+| `ops-group-detail.html` | 团队详情（二级页面：团队管理） |
+| `ops-namelist.html` | 团队名单（归属分团管理） |
+| `ops-dmc-plan.html` | 接待计划（列表页；下达地接表单为弹窗） |
 | `ops-dmc-settle.html` | 地接结算 |
 | `ops-dmc-list.html` | 地接档案 |
 | `ops-dispatch-board.html` | 发团看板（班期发团总控台：准备度检查 / 团队矩阵 / 最终确认） |
-| `ops-pre-notice.html` | 行前提醒（旧页残留，不登记路由；已收敛为发团看板客服通知抽屉） |
-| `ops-doc-recheck.html` | 证件复核（旧页残留，不登记路由；已收敛为发团看板名单证件抽屉） |
-| `ops-change-collab.html` | 变更协同（发团作业下的协同任务入口） |
+| `ops-change-collab.html` | 订单变更（发团作业下的协同任务入口） |
 
 ### 3.6 财务结算（13 页）
 
@@ -263,21 +247,21 @@
 
 本模块按订单主链路收敛：订单列表负责订单入口，售后列表负责退订退款、改期换房、加减人、投诉和财务退款节点，旧退改三页不再作为菜单入口。
 
-- 订单管理：订单列表 / 售后列表；订单详情、新建订单由订单列表进入，订单变更在订单列表弹窗处理。
-- 出行人员：出行名单 / 证件核验；证件识别由出行名单或订单录入中的证件上传入口进入。
+- 订单管理：订单列表 / 售后工单；订单详情、新建订单由订单列表进入，订单变更在订单列表弹窗处理。
+- 旅客资料：旅客名单 / 证件核验；证件识别由旅客名单或订单录入中的证件上传入口进入。
 - 单据生成：由订单列表行操作进入，确认件 / 收款单 / 发团通知书 / 分团单在同页 Tab。
 - 选铺管理：代客选铺 / 换铺记录；待选铺订单已收敛为代客选铺页左侧订单队列。
 - 收款管理：收款记录 / 在线流水；订单列表行操作“收款”直接打开登记收款弹窗，支付配置放在在线流水页弹窗维护。
-- 售后列表：统一承接售后申请、审核处理、费用计算和财务退款。
+- 售后工单：统一承接售后申请、审核处理、费用计算和财务退款。
 
-已撤销的聚合页 `order-berth-manage.html` 不再保留；订单列表中的“单据”进入二级页面，“变更”在列表弹窗内处理；`order-refund.html`、`order-refund-calc.html`、`order-refund-process.html`、`order-pay-remind.html` 作为旧页残留，不登记菜单或二级路由。
+已撤销的聚合页 `order-berth-manage.html` 不再保留；订单列表中的“单据”进入二级页面，“变更”在列表弹窗内处理；退改申请、违约计算、退款处理、收款提醒旧页已删除，对应能力收敛到售后工单、订单列表和收款记录。
 
-### 计调操作
+### 计调作业
 
 计调操作当前菜单只保留主列表入口，配置动作通过列表行操作或弹窗进入：
 
-- 分团管理：团队列表 / 名单总览；团队详情由团队列表进入，班期分团旧页不登记路由，后置分团调整作为列表行操作，名单导出收敛为名单总览弹窗且不再展示预览表。
-- 地接计划：下达计划 / 地接结算 / 地接档案；下达地接表单在下达计划列表中以弹窗打开。
+- 分团管理：团队管理 / 团队名单；团队详情由团队管理进入，后置分团调整作为列表行操作，名单导出收敛为团队名单弹窗且不再展示预览表。
+- 地接计划：接待计划 / 地接结算 / 地接档案；下达地接表单在接待计划列表中以弹窗打开。
 - 发团作业：发团看板 / 变更协同；行前提醒和证件复核收敛为看板内的客服通知、名单证件检查抽屉，最终发团必须经过准备度检查和确认弹窗。
 
 ## 6. 建议主演示动线
