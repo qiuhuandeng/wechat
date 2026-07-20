@@ -187,7 +187,7 @@
     <!-- MODAL 1: 新建/编辑 SOP 规则 -->
     <!-- ============================================== -->
     <div id="rule-modal" class="fixed inset-0 bg-black/40 z-[50] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-[850px] flex flex-col h-[90vh] max-h-[850px]">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-[1080px] flex flex-col h-[90vh] max-h-[860px]">
             <!-- 头部 -->
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-slate-50 rounded-t-xl shrink-0">
                 <h3 class="text-[15px] font-bold text-gray-800">新建自动化跟进 SOP</h3>
@@ -197,7 +197,7 @@
             </div>
             
             <!-- 滚动内容区 -->
-            <div class="p-6 overflow-y-auto flex-1 bg-white">
+            <div class="p-5 overflow-y-auto flex-1 bg-white">
                 
                 <!-- 规则来源模式 -->
                 <div class="mb-6">
@@ -250,9 +250,9 @@
                 </div>
 
                 <!-- ================= 模式 B：本地自动化跟进配置 ================= -->
-                <div id="mode-local-config" class="space-y-6">
+                <div id="mode-local-config" class="space-y-5">
                     <!-- 基本信息 -->
-                    <div class="grid grid-cols-2 gap-5 bg-slate-50 p-4 rounded-lg border border-gray-100">
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-lg border border-gray-100">
                         <div>
                             <label class="block text-[13px] text-gray-500 font-medium mb-1.5">客户状态</label>
                             <select class="w-full border border-blue-300 rounded-lg p-2 text-[13px] outline-none bg-white text-slate-700 focus:ring-2 focus:ring-blue-100 transition-all">
@@ -271,10 +271,12 @@
                     </div>
 
                     <!-- 动态时间轴渲染区 -->
-                    <div class="border-t border-gray-100 pt-5">
-                        <h4 class="text-[14px] font-bold text-gray-800 mb-4">执行动作与话术</h4>
+                    <div class="pt-0">
+                        <div class="pb-3 border-b border-blue-50 mb-4">
+                            <h4 class="text-[15px] font-bold text-gray-800">执行动作与话术</h4>
+                        </div>
                         <!-- Timeline 容器 -->
-                        <div id="dynamic-sop-stages-container" class="relative pl-6 space-y-6 pb-4">
+                        <div id="dynamic-sop-stages-container" class="relative pl-6 space-y-5 pb-4">
                             <!-- 垂直引导线在 JS 中动态判定渲染 -->
                             <!-- JS Engine Content Injected Here -->
                         </div>
@@ -360,22 +362,120 @@
         // ==========================================
         // Timeline Dynamic Engine State
         // ==========================================
+        const SOP_VARIABLES = ['客户昵称', '专属顾问', '预约时间', '门店名称', '门店地址'];
+        const SOP_TRIGGER_UNITS = [
+            { value: 'minute', label: '分钟' },
+            { value: 'hour', label: '小时' },
+            { value: 'day', label: '天' }
+        ];
+        const SOP_PRIORITIES = ['P0', 'P1', 'P2'];
+
         let sopStagesState = [
             {
                 id: 'stage-' + Date.now(),
-                timing: 'immediate', // 'immediate' | 'delayed'
-                delayDays: 1,
-                delayTime: '09:00',
-                priority: 'P2 常规',
+                triggerEvent: '加微',
+                triggerMode: 'absolute', // 'relative' | 'absolute'
+                relativeValue: 10,
+                relativeUnit: 'minute',
+                absoluteDays: 10,
+                absoluteTime: '09:00',
+                priority: 'P2',
                 messages: [
                     { id: 'msg-' + Date.now(), type: 'text', content: '' }
                 ]
             }
         ];
 
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeNumber(value, fallback, minValue) {
+            const parsed = parseInt(value, 10);
+            if (Number.isNaN(parsed)) return fallback;
+            return Math.max(minValue, parsed);
+        }
+
+        function normalizeSopStage(stage) {
+            stage.triggerEvent = stage.triggerEvent || '加微';
+            stage.triggerMode = stage.triggerMode || (stage.timing === 'delayed' ? 'absolute' : 'relative');
+            stage.relativeValue = normalizeNumber(stage.relativeValue, stage.timing === 'immediate' ? 0 : 10, 0);
+            stage.relativeUnit = stage.relativeUnit || 'minute';
+            stage.absoluteDays = normalizeNumber(stage.absoluteDays ?? stage.delayDays, 1, 1);
+            stage.absoluteTime = stage.absoluteTime || stage.delayTime || '09:00';
+            stage.priority = String(stage.priority || 'P2').split(' ')[0];
+            if (!Array.isArray(stage.messages) || stage.messages.length === 0) {
+                stage.messages = [{ id: 'msg-' + Date.now(), type: 'text', content: '' }];
+            }
+            return stage;
+        }
+
+        function getUnitLabel(unitValue) {
+            const unit = SOP_TRIGGER_UNITS.find(item => item.value === unitValue);
+            return unit ? unit.label : '分钟';
+        }
+
+        function renderTriggerUnitOptions(activeUnit) {
+            return SOP_TRIGGER_UNITS.map(unit => `
+                <option value="${unit.value}" ${activeUnit === unit.value ? 'selected' : ''}>${unit.label}</option>
+            `).join('');
+        }
+
+        function renderPriorityOptions(activePriority) {
+            return SOP_PRIORITIES.map(priority => `
+                <option value="${priority}" ${activePriority === priority ? 'selected' : ''}>${priority}</option>
+            `).join('');
+        }
+
+        function getStageTriggerSummary(stage) {
+            normalizeSopStage(stage);
+            if (stage.triggerMode === 'relative') {
+                if (stage.relativeValue === 0) return `${stage.triggerEvent}后立即触发`;
+                return `${stage.triggerEvent}后${stage.relativeValue}${getUnitLabel(stage.relativeUnit)}触发`;
+            }
+            return `${stage.triggerEvent}后第${stage.absoluteDays}天 ${stage.absoluteTime} 批量触发`;
+        }
+
+        function buildRuleConditionSummary() {
+            return sopStagesState.map(getStageTriggerSummary).join(' / ');
+        }
+
+        function renderStageTriggerBuilder(stage) {
+            const eventTag = `<span class="text-[#2f8cff] font-bold">[${escapeHtml(stage.triggerEvent)}]</span>`;
+            const sharedInputClass = "h-8 border border-gray-300 rounded bg-white text-[13px] text-gray-700 outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-blue-100 transition-all";
+
+            if (stage.triggerMode === 'relative') {
+                return `
+                    ${eventTag}
+                    <span>后</span>
+                    <input type="number" min="0" value="${escapeHtml(stage.relativeValue)}" onchange="updateStageRelativeValue('${stage.id}', this.value)" class="${sharedInputClass} w-16 px-2 text-center">
+                    <select onchange="updateStageRelativeUnit('${stage.id}', this.value)" class="${sharedInputClass} px-2 pr-7 cursor-pointer">
+                        ${renderTriggerUnitOptions(stage.relativeUnit)}
+                    </select>
+                    <span>触发</span>
+                `;
+            }
+
+            return `
+                ${eventTag}
+                <span>后第</span>
+                <input type="number" min="1" value="${escapeHtml(stage.absoluteDays)}" onchange="updateStageAbsoluteDays('${stage.id}', this.value)" class="${sharedInputClass} w-16 px-2 text-center">
+                <span>天</span>
+                <input type="time" value="${escapeHtml(stage.absoluteTime)}" onchange="updateStageAbsoluteTime('${stage.id}', this.value)" class="${sharedInputClass} w-28 px-2">
+                <span>触发</span>
+            `;
+        }
+
         function renderDynamicStages() {
             const container = document.getElementById('dynamic-sop-stages-container');
             if (!container) return;
+
+            sopStagesState.forEach(normalizeSopStage);
 
             const stagesHtml = sopStagesState.map((stage, stageIndex) => {
                 const isLast = stageIndex === sopStagesState.length - 1;
@@ -383,80 +483,51 @@
                 return `
                     <div class="relative z-10 group">
                         <!-- 时序圆圈 -->
-                        <div class="absolute -left-[27px] top-6 w-3 h-3 rounded-full border-2 border-[#1677ff] bg-white z-10 ring-4 ring-white"></div>
+                        <div class="absolute -left-[25px] top-5 w-3 h-3 rounded-full border-2 border-[#2f8cff] bg-white z-10 ring-4 ring-white"></div>
                         <!-- 连接线 (如果不是最后一个) -->
-                        ${!isLast ? `<div class="absolute -left-[22px] top-9 bottom-[-24px] w-[2px] bg-blue-100 z-0"></div>` : ''}
+                        ${!isLast ? `<div class="absolute -left-[20px] top-8 bottom-[-20px] w-[2px] bg-blue-100 z-0"></div>` : ''}
 
                         <!-- 阶段主卡片 -->
-                        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm mb-6 transition-all hover:border-blue-200">
+                        <div class="bg-white border border-[#dfe7f2] rounded-lg px-5 py-4 shadow-sm mb-5 transition-all hover:border-blue-200">
                             
                             <!-- 头部配置：执行时机 & 优先级 -->
-                            <div class="flex items-center justify-between mb-5 flex-wrap gap-4">
-                                <div class="flex items-center space-x-3">
-                                    <label class="text-[13px] font-bold text-gray-700 flex items-center">
-                                        <span class="text-red-500 mr-1">*</span>执行时机
-                                    </label>
-                                    
-                                    <!-- 极简分段控制器 (Segmented Control) -->
-                                    <div class="flex bg-gray-100 p-0.5 rounded-md border border-gray-200/50">
-                                        <button type="button" onclick="updateStageTiming('${stage.id}', 'immediate')" class="px-4 py-1.5 text-[13px] rounded ${stage.timing === 'immediate' ? 'bg-white text-[#1677ff] shadow-sm font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'} transition-all">立即执行</button>
-                                        <button type="button" onclick="updateStageTiming('${stage.id}', 'delayed')" class="px-4 py-1.5 text-[13px] rounded ${stage.timing === 'delayed' ? 'bg-white text-[#1677ff] shadow-sm font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'} transition-all">延时执行</button>
+                            <div class="flex items-start justify-between mb-4 gap-4">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center flex-wrap gap-x-2 gap-y-2 text-[14px] leading-8 font-semibold text-gray-800">
+                                        ${renderStageTriggerBuilder(stage)}
                                     </div>
-
-                                    <!-- 延时配置输入 (仅在选了延时执行时展现) -->
-                                    ${stage.timing === 'delayed' ? `
-                                        <div class="flex items-center space-x-2 text-gray-600 animate-[fadeIn_0.2s_ease-out]">
-                                            <span class="text-[12px]">上一步完成</span>
-                                            <input type="number" value="${stage.delayDays}" onchange="updateStageDelayDays('${stage.id}', this.value)" class="border border-gray-300 w-12 px-2 py-1 text-center text-[12px] rounded focus:border-[#1677ff] outline-none">
-                                            <select class="border border-gray-300 px-2 py-1 text-[12px] rounded focus:border-[#1677ff] outline-none bg-white">
-                                                <option>天</option>
-                                            </select>
-                                            <span class="text-[12px]">后</span>
-                                            <div class="relative">
-                                                <input type="time" value="${stage.delayTime}" onchange="updateStageDelayTime('${stage.id}', this.value)" class="border border-gray-300 px-2 py-1 pl-7 text-[12px] rounded focus:border-[#1677ff] outline-none w-28">
-                                                <svg class="w-3.5 h-3.5 text-gray-400 absolute left-2 top-[6px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            </div>
-                                            <span class="text-[12px]">执行</span>
+                                    <div class="mt-2 flex items-center flex-wrap gap-2">
+                                        <div class="inline-flex bg-gray-100 p-0.5 rounded-md border border-gray-200/80">
+                                            <button type="button" onclick="updateStageTriggerMode('${stage.id}', 'relative')" class="px-2.5 py-1 text-[12px] rounded ${stage.triggerMode === 'relative' ? 'bg-white text-[#1677ff] shadow-sm font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'} transition-all">相对时间</button>
+                                            <button type="button" onclick="updateStageTriggerMode('${stage.id}', 'absolute')" class="px-2.5 py-1 text-[12px] rounded ${stage.triggerMode === 'absolute' ? 'bg-white text-[#1677ff] shadow-sm font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'} transition-all">定点批量</button>
                                         </div>
-                                    ` : ''}
+                                    </div>
                                 </div>
                                 
                                 <!-- 右侧优先级 -->
                                 <div class="flex items-center space-x-2 shrink-0">
-                                    <span class="text-[12px] text-gray-400">优先级配置:</span>
                                     <div class="relative">
-                                        <select onchange="updateStagePriority('${stage.id}', this.value)" class="appearance-none border border-gray-300 rounded px-2.5 py-1 pr-6 bg-white text-[12px] text-gray-600 focus:border-[#1677ff] outline-none hover:border-gray-400 transition-colors">
-                                            <option value="P0 紧急" ${stage.priority === 'P0 紧急' ? 'selected' : ''}>P0 紧急</option>
-                                            <option value="P1 重要" ${stage.priority === 'P1 重要' ? 'selected' : ''}>P1 重要</option>
-                                            <option value="P2 常规" ${stage.priority === 'P2 常规' ? 'selected' : ''}>P2 常规</option>
+                                        <select onchange="updateStagePriority('${stage.id}', this.value)" class="appearance-none h-8 w-24 border border-gray-300 rounded px-3 pr-7 bg-white text-[13px] text-gray-600 focus:border-[#1677ff] focus:ring-2 focus:ring-blue-100 outline-none hover:border-gray-400 transition-colors">
+                                            ${renderPriorityOptions(stage.priority)}
                                         </select>
-                                        <div class="pointer-events-none absolute inset-y-0 right-1.5 flex items-center text-gray-400">
-                                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-gray-400">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7"></path></svg>
                                         </div>
                                     </div>
                                     ${stageIndex > 0 ? `
-                                    <button type="button" onclick="deleteSopStage('${stage.id}')" class="ml-2 text-gray-300 hover:text-red-500 transition-colors p-1" title="删除此阶段">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    <button type="button" onclick="deleteSopStage('${stage.id}')" class="text-gray-300 hover:text-red-500 transition-colors p-1" title="删除此时间节点">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                     ` : ''}
                                 </div>
                             </div>
 
-                            <!-- 立即执行时的友好提示 -->
-                            ${stage.timing === 'immediate' ? `
-                                <div class="mb-5 text-[12px] bg-[#f6ffed] border border-[#b7eb8f] rounded px-3 py-2 text-[#52c41a] flex items-center font-medium">
-                                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    上一步状态条件满足后，系统将立即生成并下发 SOP 任务。
-                                </div>
-                            ` : ''}
-
-                            <!-- 消息节点区域 (灰色底色块收纳) -->
-                            <div class="space-y-3 bg-[#fafafa] border border-gray-100 rounded-lg p-4">
+                            <!-- 消息节点区域 -->
+                            <div class="space-y-3">
                                 ${stage.messages.map(msg => renderMessageNode(stage.id, msg)).join('')}
                                 
-                                <!-- 添加消息按钮 (极简风格) -->
-                                <button type="button" onclick="addSopMessage('${stage.id}')" class="w-full py-2.5 mt-2 border border-dashed border-gray-300 rounded-lg text-[#1677ff] text-[13px] flex items-center justify-center hover:bg-white hover:border-[#1677ff] transition-all font-medium">
-                                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                <button type="button" onclick="addSopMessage('${stage.id}')" class="inline-flex items-center text-[#1677ff] text-[13px] hover:text-[#4096ff] transition-all font-medium pt-2">
+                                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4"></path></svg>
                                     添加消息
                                 </button>
                             </div>
@@ -467,8 +538,8 @@
 
             const addStageBtn = `
                 <div class="relative z-10 pt-2">
-                    <button type="button" onclick="addSopStage()" class="w-full py-3 border border-dashed border-[#1677ff]/50 text-[#1677ff] rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center font-medium text-[13px] bg-white">
-                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <button type="button" onclick="addSopStage()" class="w-full py-3 border border-dashed border-[#b7d8ff] text-[#1677ff] rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center font-medium text-[13px] bg-white">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4"></path></svg>
                         添加时间节点
                     </button>
                 </div>
@@ -483,30 +554,32 @@
             const isImage = msg.type === 'image';
             const isVideo = msg.type === 'video';
 
-            // 依据截图高度还原的下拉框外观
             const typeSelectorHtml = `
-                <div class="flex items-center space-x-2">
-                    <span class="text-[12px] text-gray-500 font-medium">消息类型</span>
-                    <div class="relative w-28">
-                        <select onchange="updateSopMsgType('${stageId}', '${msg.id}', this.value)" class="appearance-none bg-white border border-gray-300 text-gray-700 text-[13px] rounded px-3 py-1.5 pr-8 focus:outline-none focus:border-[#1677ff] w-full cursor-pointer hover:border-gray-400 transition-colors font-medium shadow-sm">
-                            <option value="text" ${isText ? 'selected' : ''}>${isText ? '✓ ' : ''}文字</option>
-                            <option value="image" ${isImage ? 'selected' : ''}>${isImage ? '✓ ' : ''}图片</option>
-                            <option value="video" ${isVideo ? 'selected' : ''}>${isVideo ? '✓ ' : ''}视频</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
-                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
+                <div class="relative w-[180px] max-w-full">
+                    <select onchange="updateSopMsgType('${stageId}', '${msg.id}', this.value)" class="appearance-none h-8 bg-white border border-[#d5dce7] text-gray-700 text-[13px] rounded px-3 pr-8 focus:outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-blue-100 w-full cursor-pointer hover:border-gray-400 transition-colors shadow-sm">
+                        <option value="text" ${isText ? 'selected' : ''}>文本</option>
+                        <option value="image" ${isImage ? 'selected' : ''}>图片</option>
+                        <option value="video" ${isVideo ? 'selected' : ''}>视频</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-gray-400">
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                 </div>
             `;
 
             let contentHtml = '';
             if (isText) {
-                // 文字输入框（已移除旧的变量按钮）
+                const variableButtons = SOP_VARIABLES.map(variable => `
+                    <button type="button" onclick="insertSopVariable('${stageId}', '${msg.id}', '${variable}')" class="px-2 py-1 rounded border border-blue-200 bg-blue-50 text-[#2f8cff] text-[12px] hover:bg-white hover:border-[#2f8cff] transition-colors">
+                        {${variable}}
+                    </button>
+                `).join('');
                 contentHtml = `
-                    <div class="mt-4 border border-gray-300 rounded bg-white relative">
-                        <textarea rows="3" placeholder="请输入话术内容..." class="w-full p-3 text-[13px] outline-none focus:border-[#1677ff] rounded resize-none" onchange="updateSopMsgContent('${stageId}', '${msg.id}', this.value)">${msg.content}</textarea>
-                    </div>`;
+                    <div class="mt-3 flex items-center flex-wrap gap-2">
+                        <span class="text-[13px] text-gray-400">变量：</span>
+                        ${variableButtons}
+                    </div>
+                    <textarea id="${getMsgTextareaId(stageId, msg.id)}" rows="4" placeholder="请输入话术内容，可点击变量快捷插入" class="mt-3 w-full p-3 text-[13px] leading-5 bg-white border border-[#d5dce7] rounded outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-blue-100 resize-y min-h-[92px] text-gray-700" oninput="updateSopMsgContent('${stageId}', '${msg.id}', this.value)">${escapeHtml(msg.content)}</textarea>`;
             } else {
                 // 媒体（图片/视频）上传占位区域
                 const iconPath = isImage 
@@ -515,21 +588,21 @@
                 const labelStr = isImage ? '图片' : '视频';
                 
                 contentHtml = `
-                    <div class="mt-4 flex flex-col items-center justify-center border border-dashed border-gray-300 rounded p-8 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer group">
-                        <div class="w-10 h-10 bg-blue-50 text-[#1677ff] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">${iconPath}</svg>
+                    <div class="mt-3 flex flex-col items-center justify-center border border-dashed border-[#d5dce7] rounded p-6 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer group">
+                        <div class="w-8 h-8 bg-blue-50 text-[#1677ff] rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">${iconPath}</svg>
                         </div>
-                        <p class="text-[13px] text-gray-500 font-medium">点击此处上传${labelStr}文件</p>
+                        <p class="text-[12px] text-gray-500 font-medium">点击此处上传${labelStr}文件</p>
                         <p class="text-[11px] text-gray-400 mt-1">支持拖拽上传</p>
                     </div>`;
             }
 
             return `
-                <div class="bg-white border border-gray-200 rounded-lg p-4 relative shadow-sm">
+                <div class="bg-[#f7f9fc] border border-[#e5eaf2] rounded-lg p-4 relative">
                     <div class="flex items-center justify-between">
                         ${typeSelectorHtml}
-                        <button onclick="deleteSopMessage('${stageId}', '${msg.id}')" class="text-red-300 hover:text-red-500 transition-colors p-1" title="删除此消息">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        <button onclick="deleteSopMessage('${stageId}', '${msg.id}')" class="text-red-400 hover:text-red-500 transition-colors p-1.5" title="删除此消息">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>
                     ${contentHtml}
@@ -541,10 +614,13 @@
         function addSopStage() {
             sopStagesState.push({
                 id: 'stage-' + Date.now(),
-                timing: 'delayed', // 新增默认延时
-                delayDays: 1,
-                delayTime: '09:00',
-                priority: 'P2 常规',
+                triggerEvent: '加微',
+                triggerMode: 'relative',
+                relativeValue: 10,
+                relativeUnit: 'minute',
+                absoluteDays: 1,
+                absoluteTime: '09:00',
+                priority: 'P2',
                 messages: [{ id: 'msg-' + Date.now(), type: 'text', content: '' }]
             });
             renderDynamicStages();
@@ -557,18 +633,53 @@
 
         function updateStageTiming(stageId, timing) {
             const stage = sopStagesState.find(s => s.id === stageId);
-            if (stage) stage.timing = timing;
+            if (stage) {
+                stage.triggerMode = timing === 'delayed' ? 'absolute' : 'relative';
+                if (timing === 'immediate') {
+                    stage.relativeValue = 0;
+                    stage.relativeUnit = 'minute';
+                }
+            }
             renderDynamicStages();
         }
 
         function updateStageDelayDays(stageId, days) {
             const stage = sopStagesState.find(s => s.id === stageId);
-            if (stage) stage.delayDays = days;
+            if (stage) stage.absoluteDays = normalizeNumber(days, 1, 1);
         }
 
         function updateStageDelayTime(stageId, time) {
             const stage = sopStagesState.find(s => s.id === stageId);
-            if (stage) stage.delayTime = time;
+            if (stage) stage.absoluteTime = time || '09:00';
+        }
+
+        function updateStageTriggerMode(stageId, mode) {
+            const stage = sopStagesState.find(s => s.id === stageId);
+            if (stage) {
+                stage.triggerMode = mode;
+                normalizeSopStage(stage);
+            }
+            renderDynamicStages();
+        }
+
+        function updateStageRelativeValue(stageId, value) {
+            const stage = sopStagesState.find(s => s.id === stageId);
+            if (stage) stage.relativeValue = normalizeNumber(value, 10, 0);
+        }
+
+        function updateStageRelativeUnit(stageId, unit) {
+            const stage = sopStagesState.find(s => s.id === stageId);
+            if (stage) stage.relativeUnit = unit;
+        }
+
+        function updateStageAbsoluteDays(stageId, days) {
+            const stage = sopStagesState.find(s => s.id === stageId);
+            if (stage) stage.absoluteDays = normalizeNumber(days, 1, 1);
+        }
+
+        function updateStageAbsoluteTime(stageId, time) {
+            const stage = sopStagesState.find(s => s.id === stageId);
+            if (stage) stage.absoluteTime = time || '09:00';
         }
 
         function updateStagePriority(stageId, priority) {
@@ -610,6 +721,23 @@
                 const msg = stage.messages.find(m => m.id === msgId);
                 if (msg) msg.content = content;
             }
+        }
+
+        function getMsgTextareaId(stageId, msgId) {
+            return `sop-msg-${stageId}-${msgId}`;
+        }
+
+        function insertSopVariable(stageId, msgId, variable) {
+            const textarea = document.getElementById(getMsgTextareaId(stageId, msgId));
+            if (!textarea) return;
+
+            const token = `{${variable}}`;
+            const start = textarea.selectionStart ?? textarea.value.length;
+            const end = textarea.selectionEnd ?? textarea.value.length;
+            textarea.value = `${textarea.value.slice(0, start)}${token}${textarea.value.slice(end)}`;
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + token.length;
+            updateSopMsgContent(stageId, msgId, textarea.value);
         }
 
         // ==========================================
@@ -691,7 +819,9 @@
                     <td class="p-4 text-center text-gray-500">${idx + 1}</td>
                     <td class="p-4 font-medium text-gray-700">${rule.name}</td>
                     <td class="p-4 text-gray-600">${rule.type}</td>
-                    <td class="p-4 text-gray-600">${rule.condition}</td>
+                    <td class="p-4 text-gray-600 max-w-[260px]">
+                        <span class="block truncate" title="${escapeHtml(rule.condition)}">${escapeHtml(rule.condition)}</span>
+                    </td>
                     <td class="p-4">${generateBoundTagsHtml(rule.boundCustomers)}</td>
                     <td class="p-4">
                         <button onclick="toggleRuleActive(${rule.id})" class="ant-switch ${rule.active ? 'ant-switch-checked' : ''}"></button>
@@ -785,16 +915,21 @@
                     url: "https://api.system.com/pull", driver: "定时驱动", limit: 20, queue: "slow 慢通道", active: true, boundCustomers: []
                 });
             } else {
+                sopStagesState.forEach(normalizeSopStage);
                 rulesData.unshift({
                     id: Date.now(), mode: 'local', name: `新本地SOP-${Date.now().toString().slice(-4)}`,
-                    type: "新客转化", condition: "首次加微", active: true, boundCustomers: []
+                    type: "新客转化",
+                    condition: buildRuleConditionSummary(),
+                    stages: JSON.parse(JSON.stringify(sopStagesState)),
+                    active: true,
+                    boundCustomers: []
                 });
             }
             
             closeModal();
             switchRuleTab(mode);
             renderRules();
-            showToast("✅ SOP 规则已成功发布启用！");
+            showToast("SOP 规则已成功发布启用！");
         }
 
         function showToast(message) {
@@ -899,7 +1034,7 @@
                 const checkboxes = document.querySelectorAll('.customer-checkbox:checked');
                 rule.boundCustomers = Array.from(checkboxes).map(cb => cb.value);
                 renderRules(); // 刷新表格以展示最新绑定的内容
-                showToast("✅ 客服账号绑定配置已成功保存！");
+                showToast("客服账号绑定配置已成功保存！");
             }
             closeBindCustomerModal();
         }
