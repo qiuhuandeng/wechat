@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>美智达 AI销售辅助系统</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="workspace">
+    <section class="wecom-shell" aria-label="企业微信聊天窗口">
+      <aside class="contact-rail">
+        <div class="rail-logo">企</div>
+        <button class="rail-btn is-active" aria-label="聊天"></button>
+        <button class="rail-btn" aria-label="客户"></button>
+        <button class="rail-btn" aria-label="日程"></button>
+        <button class="rail-btn" aria-label="设置"></button>
+      </aside>
+
+      <aside class="conversation-list">
+        <div class="list-header">
+          <div>
+            <strong>客户会话</strong>
+            <span>今日新增 16 位</span>
+          </div>
+          <button class="icon-btn" aria-label="新建会话">+</button>
+        </div>
+        <label class="mini-search">
+          <span></span>
+          <input value="客户昵称 / 标签" aria-label="搜索客户">
+        </label>
+        <article class="conversation-item active">
+          <div class="avatar warm">周</div>
+          <div>
+            <strong>周女士</strong>
+            <p>你们这个比我之前看的贵不少...</p>
+          </div>
+          <time>14:28</time>
+        </article>
+        <article class="conversation-item">
+          <div class="avatar teal">林</div>
+          <div>
+            <strong>林小姐</strong>
+            <p>我先问问朋友，晚点回复你</p>
+          </div>
+          <time>13:47</time>
+        </article>
+        <article class="conversation-item">
+          <div class="avatar blue">陈</div>
+          <div>
+            <strong>陈女士</strong>
+            <p>做完多久能看到效果呀？</p>
+          </div>
+          <time>12:10</time>
+        </article>
+      </aside>
+
+      <section class="chat-panel">
+        <header class="chat-header">
+          <div>
+            <strong>周女士</strong>
+            <span>外部联系人 · 皮肤管理意向 · 加微第 3 天</span>
+          </div>
+          <div class="chat-actions">
+            <button>客户资料</button>
+            <button>预约单</button>
+          </div>
+        </header>
+        <div class="chat-body" id="chatBody">
+          <div class="time-divider">今天 14:21</div>
+          <div class="message-row customer">
+            <div class="bubble">你们这个光子嫩肤是不是有点贵，我之前看的店才 198。</div>
+          </div>
+          <div class="message-row sales">
+            <div class="bubble">姐姐我懂，你肯定也是想选到效果稳定、别踩坑的方案。</div>
+          </div>
+          <div class="message-row customer">
+            <div class="bubble">主要我怕花了钱没效果。</div>
+          </div>
+          <div class="message-row sales">
+            <div class="bubble">我们先不急着定，我给你拆一下这两个价格里包含的东西。</div>
+          </div>
+        </div>
+        <footer class="composer">
+          <div class="composer-tools">
+            <button>表情</button>
+            <button>图片</button>
+            <button>文件</button>
+            <span>侧边栏话术可一键复制到这里</span>
+          </div>
+          <textarea id="chatComposer" aria-label="聊天输入框" placeholder="输入消息"></textarea>
+          <div class="composer-actions">
+            <button class="ghost-btn" id="clearComposer">清空</button>
+            <button class="send-btn" id="sendMessage">发送</button>
+          </div>
+        </footer>
+      </section>
+    </section>
+
+    <aside class="assistant-panel" aria-label="美智达企微侧边栏">
+      <header class="assistant-header">
+        <div class="brand-line">
+          <div class="brand-mark">美</div>
+          <div>
+            <strong>美智达</strong>
+            <span>AI销售辅助</span>
+          </div>
+          <button class="ghost-pill" id="resetState">重置</button>
+        </div>
+        <label class="search-box">
+          <span class="search-icon"></span>
+          <textarea id="scriptSearch" rows="1" placeholder="搜索话术，或粘贴客户原话"></textarea>
+          <button id="voiceBtn" aria-label="语音输入">录音</button>
+        </label>
+        <div class="quick-tags" id="quickTags" aria-label="热门标签"></div>
+      </header>
+
+      <nav class="tab-bar" aria-label="功能模块">
+        <button class="tab-btn active" data-tab="scripts">话术</button>
+        <button class="tab-btn" data-tab="flow">流程</button>
+        <button class="tab-btn" data-tab="cases">案例</button>
+        <button class="tab-btn" data-tab="analysis">复盘</button>
+      </nav>
+
+      <div class="panel-scroll">
+        <section class="tab-panel active" id="tab-scripts">
+          <div class="state-strip">
+            <div>
+              <span>当前阶段</span>
+              <strong id="currentStageName">异议处理</strong>
+            </div>
+            <div>
+              <span>客户状态</span>
+              <strong id="customerStateText">中意向 · 未收定</strong>
+            </div>
+          </div>
+
+          <div class="category-grid" id="categoryGrid" aria-label="客户旅程阶段"></div>
+
+          <div class="result-head">
+            <div>
+              <strong id="resultTitle">推荐话术</strong>
+              <span id="resultMeta">匹配 3 个场景 · 预计 0.4s</span>
+            </div>
+            <button class="link-btn" id="clearSearch">清除</button>
+          </div>
+
+          <div class="scene-list" id="sceneList"></div>
+        </section>
+
+        <section class="tab-panel" id="tab-flow">
+          <div class="flow-card">
+            <div class="section-title">
+              <strong>销冠心法五步曲</strong>
+              <button class="link-btn" id="openStatus">快速标记</button>
+            </div>
+            <div class="flow-steps" id="flowSteps"></div>
+          </div>
+
+          <div class="check-card">
+            <div class="section-title compact">
+              <strong id="checklistTitle">第三步「项目推荐」关键动作</strong>
+              <span id="checkProgress">2/4</span>
+            </div>
+            <div class="checklist" id="checklist"></div>
+          </div>
+
+          <div class="next-card">
+            <div class="next-label">下一步建议</div>
+            <strong id="nextAdviceTitle">先共情，再做价值拆解</strong>
+            <p id="nextAdviceText">客户同时提到价格和效果，建议使用“价值塑造法”开头，随后补充真实案例增强确定感。</p>
+            <div class="next-actions">
+              <button class="primary-btn" data-switch-tab="scripts">查看本步话术</button>
+              <button class="ghost-btn" data-open-case="case-a">参考成交案例</button>
+            </div>
+          </div>
+
+          <div class="reminder-list">
+            <div class="section-title compact">
+              <strong>智能提醒</strong>
+              <span>基于手动标记</span>
+            </div>
+            <article class="reminder danger">
+              <strong>高价值客户 48h 未更新</strong>
+              <p>周女士已进入异议处理，建议今天 18:00 前完成一次价值补强。</p>
+            </article>
+            <article class="reminder">
+              <strong>加微第 3 天未收定</strong>
+              <p>若客户继续犹豫，可切换到限时权益锁定话术。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-cases">
+          <div class="case-filter">
+            <select id="typeFilter" aria-label="客户类型筛选">
+              <option value="all">客户类型：全部</option>
+              <option value="犹豫型">犹豫型</option>
+              <option value="价格敏感">价格敏感</option>
+              <option value="效果质疑">效果质疑</option>
+              <option value="距离顾虑">距离顾虑</option>
+            </select>
+            <select id="projectFilter" aria-label="项目类型筛选">
+              <option value="all">项目：全部</option>
+              <option value="光子嫩肤">光子嫩肤</option>
+              <option value="身体SPA">身体SPA</option>
+              <option value="抗衰紧致">抗衰紧致</option>
+            </select>
+            <select id="difficultyFilter" aria-label="难度筛选">
+              <option value="all">难度：全部</option>
+              <option value="高">高</option>
+              <option value="中">中</option>
+            </select>
+          </div>
+          <div class="case-list" id="caseList"></div>
+        </section>
+
+        <section class="tab-panel" id="tab-analysis">
+          <div class="upload-card" id="uploadZone">
+            <input id="screenInput" type="file" accept="image/*" multiple>
+            <div class="upload-visual">
+              <span></span>
+            </div>
+            <strong>上传聊天截图</strong>
+            <p>支持多张截图，生成对话阶段、客户意图和下一步策略建议。</p>
+          </div>
+          <div class="thumb-list" id="thumbList"></div>
+
+          <button class="primary-btn full" id="startAnalysis">开始复盘分析</button>
+
+          <div class="analysis-progress" id="analysisProgress" hidden>
+            <div class="progress-top">
+              <strong id="analysisStep">图片压缩中</strong>
+              <span id="analysisPercent">12%</span>
+            </div>
+            <div class="progress-bar"><i id="progressFill"></i></div>
+            <p id="analysisHint">正在准备截图内容...</p>
+          </div>
+
+          <div class="report-card" id="analysisReport" hidden>
+            <div class="report-head">
+              <div>
+                <span>对话分析报告</span>
+                <strong>异议处理阶段</strong>
+              </div>
+              <b>3.5 / 5</b>
+            </div>
+            <div class="report-grid">
+              <div>
+                <span>客户意图</span>
+                <strong>价格犹豫 + 效果质疑</strong>
+              </div>
+              <div>
+                <span>当前风险</span>
+                <strong>对比竞品价格</strong>
+              </div>
+            </div>
+            <div class="report-block">
+              <strong>改进建议</strong>
+              <ol>
+                <li>第 3 句回复偏急，先承接客户担心，再解释差异。</li>
+                <li>缺少效果案例佐证，建议补发同肤质对比图。</li>
+                <li>下一轮不要继续报价，先拆服务内容和仪器差别。</li>
+              </ol>
+            </div>
+            <div class="recommended-script">
+              <span>推荐下一句</span>
+              <p>姐姐你这个担心很正常，价格差通常不是单次项目名称的差异，而是仪器能量、操作手法、术后修护和复查跟进都不一样。我给你拆开看，会更直观。</p>
+              <button class="copy-btn" data-copy="姐姐你这个担心很正常，价格差通常不是单次项目名称的差异，而是仪器能量、操作手法、术后修护和复查跟进都不一样。我给你拆开看，会更直观。">复制话术</button>
+            </div>
+            <button class="link-card" data-open-case="case-a">相似案例：犹豫型客户 3 天成交全流程</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <div class="drawer-mask" id="caseDrawer" hidden>
+    <section class="case-drawer" role="dialog" aria-modal="true" aria-labelledby="caseTitle">
+      <header>
+        <div>
+          <span id="caseSubtitle">销冠案例</span>
+          <strong id="caseTitle">犹豫型客户 3 天成交全流程</strong>
+        </div>
+        <button class="icon-btn" id="closeCase" aria-label="关闭">×</button>
+      </header>
+      <div class="case-detail-body" id="caseDetailBody"></div>
+    </section>
+  </div>
+
+  <div class="status-popover" id="statusPopover" hidden>
+    <div class="status-card">
+      <header>
+        <strong>快速记录客户状态</strong>
+        <button class="icon-btn" id="closeStatus" aria-label="关闭">×</button>
+      </header>
+
+      <div class="field-group">
+        <span>客户意向</span>
+        <div class="segmented" id="intentGroup">
+          <button data-value="高">高</button>
+          <button class="active" data-value="中">中</button>
+          <button data-value="低">低</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span>当前卡点</span>
+        <div class="chip-select" id="blockerGroup">
+          <button class="active" data-value="价格">价格</button>
+          <button class="active" data-value="效果">效果</button>
+          <button data-value="距离">距离</button>
+          <button data-value="时间">时间</button>
+          <button data-value="家人">家人</button>
+          <button data-value="犹豫">犹豫</button>
+          <button data-value="已读不回">已读不回</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span>已完成步骤</span>
+        <div class="chip-select two" id="doneStepGroup">
+          <button class="active" data-step="0">破冰</button>
+          <button class="active" data-step="1">挖需</button>
+          <button class="active" data-step="2">推荐</button>
+          <button data-step="3">破异</button>
+          <button data-step="4">锁单</button>
+        </div>
+      </div>
+
+      <button class="primary-btn full" id="saveStatus">保存状态</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
