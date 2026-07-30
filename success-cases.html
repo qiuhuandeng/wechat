@@ -644,37 +644,30 @@ button, input, textarea, select {
 
 /* ====== Case Library (Tab 2) ====== */
 .case-filters {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
-  margin: -2px -12px 12px;
-  padding: 2px 12px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  margin-bottom: 12px;
 }
 
-.case-filters::-webkit-scrollbar { display: none; }
-
-.filter-btn {
-  height: 30px;
-  padding: 0 12px;
-  border-radius: 999px;
+.case-filter-select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
   font-size: 12px;
   font-family: inherit;
   border: 1px solid var(--gray-200);
   background: white;
   color: var(--gray-600);
   cursor: pointer;
+  outline: none;
   transition: var(--transition);
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
-.filter-btn:hover, .filter-btn.active {
+.case-filter-select:focus {
   border-color: var(--primary);
-  background: var(--primary-light);
-  color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(22,119,255,0.10);
 }
 
 .case-grid {
@@ -909,6 +902,82 @@ button, input, textarea, select {
 }
 
 /* ====== Practice Module (Tab 3) ====== */
+.practice-ai-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, white, #f8fbff);
+  border: 1px solid rgba(22,119,255,0.18);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.practice-ai-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(22,119,255,0.20);
+}
+
+.practice-ai-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.practice-ai-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 6px;
+}
+
+.practice-ai-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.practice-ai-tag {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.practice-ai-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.practice-ai-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 4px rgba(22,119,255,0.12);
+}
+
 .practice-scenarios {
   display: grid;
   grid-template-columns: 1fr;
@@ -917,18 +986,20 @@ button, input, textarea, select {
 }
 
 .scenario-card {
+  position: relative;
   background: white;
   border-radius: var(--radius-md);
   padding: 14px;
-  border: 1px solid var(--gray-200);
+  border: 1px solid rgba(22,119,255,0.14);
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .scenario-card:hover {
   border-color: var(--primary);
-  box-shadow: var(--shadow-sm);
-  transform: none;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .scenario-card-header {
@@ -941,6 +1012,30 @@ button, input, textarea, select {
 .scenario-title {
   font-size: 14px;
   font-weight: 600;
+}
+
+.scenario-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.scenario-ai-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scenario-ai-icon svg {
+  width: 15px;
+  height: 15px;
 }
 
 .difficulty-badge {
@@ -958,16 +1053,47 @@ button, input, textarea, select {
 .scenario-desc {
   font-size: 13px;
   color: var(--gray-500);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   line-height: 1.55;
 }
 
 .scenario-meta {
   font-size: 11px;
-  color: var(--gray-400);
   display: flex;
-  gap: 6px 10px;
+  gap: 6px;
   flex-wrap: wrap;
+}
+
+.scenario-meta span {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  display: inline-flex;
+  align-items: center;
+}
+
+.scenario-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.45;
+}
+
+.scenario-preview svg {
+  width: 15px;
+  height: 15px;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 /* Chat practice interface */
@@ -1727,12 +1853,21 @@ button, input, textarea, select {
       <div class="section-subtitle panel-intro">真实成交案例还原，学习销冠的沟通节奏与策略</div>
 
       <div class="case-filters">
-        <button class="filter-btn active" onclick="filterCaseLib(this, 'all')">全部</button>
-        <button class="filter-btn" onclick="filterCaseLib(this, 'hesitant')">犹豫型</button>
-        <button class="filter-btn" onclick="filterCaseLib(this, 'price')">价格敏感</button>
-        <button class="filter-btn" onclick="filterCaseLib(this, 'doubt')">效果质疑</button>
-        <button class="filter-btn" onclick="filterCaseLib(this, 'cold')">冷淡型</button>
-        <button class="filter-btn" onclick="filterCaseLib(this, 'distance')">嫌远型</button>
+        <select class="case-filter-select" id="caseTypeFilter" onchange="filterCaseLib()">
+          <option value="all">客户类型：全部</option>
+          <option value="hesitant">犹豫型</option>
+          <option value="price">价格敏感</option>
+          <option value="doubt">效果质疑</option>
+          <option value="cold">冷淡型</option>
+          <option value="distance">嫌远型</option>
+        </select>
+        <select class="case-filter-select" id="caseProjectFilter" onchange="filterCaseLib()">
+          <option value="all">项目类型：全部</option>
+          <option value="skin">皮肤管理</option>
+          <option value="body">身体SPA</option>
+          <option value="lightmed">轻医美/水光</option>
+          <option value="antiaging">抗衰项目</option>
+        </select>
       </div>
 
       <div class="case-grid" id="caseLibGrid"></div>
@@ -1751,6 +1886,19 @@ button, input, textarea, select {
           AI模拟对练
         </div>
         <div class="section-subtitle panel-intro">选择一个场景，AI扮演客户与你实战对话，结束后获得评分反馈</div>
+
+        <div class="practice-ai-panel">
+          <div class="practice-ai-avatar">AI</div>
+          <div class="practice-ai-content">
+            <div class="practice-ai-title">AI情景教练</div>
+            <div class="practice-ai-tags">
+              <span class="practice-ai-tag">客户角色</span>
+              <span class="practice-ai-tag">情绪响应</span>
+              <span class="practice-ai-tag">评分模型</span>
+            </div>
+          </div>
+          <div class="practice-ai-status">在线</div>
+        </div>
 
         <div class="practice-scenarios" id="scenarioGrid"></div>
       </div>
@@ -2755,12 +2903,25 @@ function selectQuizOption(day, qIdx, oIdx, correct) {
 }
 
 // ====== Case Library ======
-function renderCaseLib(filter) {
-  const filtered = filter === 'all' ? CASE_LIB_DATA : CASE_LIB_DATA.filter(c => c.type === filter);
+function getCaseProjectCategory(project) {
+  if (project.includes('SPA') || project.includes('身体')) return 'body';
+  if (project.includes('水光') || project.includes('光子')) return 'lightmed';
+  if (project.includes('抗衰')) return 'antiaging';
+  return 'skin';
+}
+
+function renderCaseLib(filters = {}) {
+  const type = filters.type || 'all';
+  const project = filters.project || 'all';
+  const filtered = CASE_LIB_DATA.filter(c => {
+    const typeMatched = type === 'all' || c.type === type;
+    const projectMatched = project === 'all' || getCaseProjectCategory(c.project) === project;
+    return typeMatched && projectMatched;
+  });
   const grid = document.getElementById('caseLibGrid');
 
   if (filtered.length === 0) {
-    grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400)">暂无该类型案例</div>';
+    grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400)">暂无符合条件的案例</div>';
     return;
   }
 
@@ -2784,10 +2945,11 @@ function renderCaseLib(filter) {
   }).join('');
 }
 
-function filterCaseLib(btn, type) {
-  document.querySelectorAll('.case-filters .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderCaseLib(type);
+function filterCaseLib() {
+  renderCaseLib({
+    type: document.getElementById('caseTypeFilter').value,
+    project: document.getElementById('caseProjectFilter').value
+  });
 }
 
 function openCaseDetail(id) {
@@ -2834,7 +2996,22 @@ function renderScenarios() {
   document.getElementById('scenarioGrid').innerHTML = PRACTICE_SCENARIOS.map(s => `
     <div class="scenario-card" onclick="startPractice(${s.id})">
       <div class="scenario-card-header">
-        <span class="scenario-title">${s.title}</span>
+        <div class="scenario-title-group">
+          <span class="scenario-ai-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4"/>
+              <path d="M12 18v4"/>
+              <path d="M4.93 4.93l2.83 2.83"/>
+              <path d="M16.24 16.24l2.83 2.83"/>
+              <path d="M2 12h4"/>
+              <path d="M18 12h4"/>
+              <path d="M4.93 19.07l2.83-2.83"/>
+              <path d="M16.24 7.76l2.83-2.83"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+          <span class="scenario-title">${s.title}</span>
+        </div>
         <span class="difficulty-badge ${s.diffClass}">${s.difficultyLabel}</span>
       </div>
       <div class="scenario-desc">${s.desc}</div>
@@ -2842,6 +3019,15 @@ function renderScenarios() {
         <span>${s.customerType}</span>
         <span>${s.passStandard}</span>
         <span>${s.rounds}</span>
+      </div>
+      <div class="scenario-preview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          <path d="M8 10h.01"/>
+          <path d="M12 10h.01"/>
+          <path d="M16 10h.01"/>
+        </svg>
+        <span>AI客户将按「${s.customerType}」语气连续回应</span>
       </div>
     </div>
   `).join('');
@@ -3032,7 +3218,7 @@ function showToast(msg) {
 
 // ====== Init ======
 document.addEventListener('DOMContentLoaded', function() {
-  renderCaseLib('all');
+  renderCaseLib();
   renderScenarios();
 });
 </script>

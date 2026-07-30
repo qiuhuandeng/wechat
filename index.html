@@ -622,23 +622,37 @@ button, input, textarea, select {
 .filter-bar {
   display: flex;
   gap: 6px;
-  margin-bottom: 12px;
+  margin: -2px -12px 12px;
+  padding: 2px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-.filter-select {
-  flex: 1;
-  padding: 6px 8px;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-sm);
+.filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.case-filter-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
   font-size: 12px;
-  color: var(--gray-600);
+  font-weight: 600;
+  border: 1px solid var(--gray-200);
   background: white;
-  outline: none;
+  color: var(--gray-600);
   cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.filter-select:focus {
+.case-filter-chip:hover,
+.case-filter-chip.active {
   border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .case-card {
@@ -1230,26 +1244,11 @@ button, input, textarea, select {
     <!-- Tab 3: 案例库 -->
     <div class="tab-panel" id="panel-cases">
       <div class="filter-bar">
-        <select class="filter-select" id="filterType" onchange="filterCases()">
-          <option value="">客户类型</option>
-          <option value="hesitant">犹豫型</option>
-          <option value="price">价格敏感型</option>
-          <option value="doubt">效果质疑型</option>
-          <option value="cold">冷淡型</option>
-        </select>
-        <select class="filter-select" id="filterProject" onchange="filterCases()">
-          <option value="">项目类型</option>
-          <option value="skin">皮肤管理</option>
-          <option value="body">身体项目</option>
-          <option value="antiaging">抗衰项目</option>
-          <option value="lightmed">轻医美</option>
-        </select>
-        <select class="filter-select" id="filterDifficulty" onchange="filterCases()">
-          <option value="">难度</option>
-          <option value="easy">简单</option>
-          <option value="medium">中等</option>
-          <option value="hard">困难</option>
-        </select>
+        <button class="case-filter-chip active" onclick="filterCases(this, 'all')">全部</button>
+        <button class="case-filter-chip" onclick="filterCases(this, 'hesitant')">犹豫型</button>
+        <button class="case-filter-chip" onclick="filterCases(this, 'price')">价格敏感</button>
+        <button class="case-filter-chip" onclick="filterCases(this, 'distance')">距离远</button>
+        <button class="case-filter-chip" onclick="filterCases(this, 'fast')">快速成交</button>
       </div>
 
       <div id="caseListContainer">
@@ -1828,9 +1827,19 @@ function saveStatus() {
 }
 
 // ====== Case Library ======
-function renderCaseList() {
+function renderCaseList(list = CASE_DATA) {
   const container = document.getElementById('caseListContainer');
-  container.innerHTML = CASE_DATA.map(c => `
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">—</div>
+        <div class="empty-state-text">暂无匹配案例<br>换个标签试试</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list.map(c => `
     <div class="case-card" onclick="openCase(${c.id})">
       <div class="case-card-top">
         <span class="case-card-title">${ICONS.award} ${c.title}</span>
@@ -1848,43 +1857,22 @@ function renderCaseList() {
   `).join('');
 }
 
-function filterCases() {
-  const type = document.getElementById('filterType').value;
-  const project = document.getElementById('filterProject').value;
-  const difficulty = document.getElementById('filterDifficulty').value;
+function filterCases(btn, type = 'all') {
+  document.querySelectorAll('.case-filter-chip').forEach(chip => chip.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 
   let filtered = CASE_DATA;
-  if (type) filtered = filtered.filter(c => c.customerType === type);
-  if (project) filtered = filtered.filter(c => c.projectType === project);
-  if (difficulty) filtered = filtered.filter(c => c.difficulty === difficulty);
-
-  const container = document.getElementById('caseListContainer');
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">—</div>
-        <div class="empty-state-text">没有符合条件的案例<br>试试调整筛选条件</div>
-      </div>
-    `;
-    return;
+  if (type === 'hesitant') {
+    filtered = CASE_DATA.filter(c => c.customerType === 'hesitant');
+  } else if (type === 'price') {
+    filtered = CASE_DATA.filter(c => c.customerType === 'price' || c.title.includes('价格'));
+  } else if (type === 'distance') {
+    filtered = CASE_DATA.filter(c => c.title.includes('远') || c.projectType === 'body');
+  } else if (type === 'fast') {
+    filtered = CASE_DATA.filter(c => c.days <= 1 || c.highlights.some(h => h.includes('快速')));
   }
 
-  container.innerHTML = filtered.map(c => `
-    <div class="case-card" onclick="openCase(${c.id})">
-      <div class="case-card-top">
-        <span class="case-card-title">${ICONS.award} ${c.title}</span>
-        <span class="case-card-badge badge-success">${c.result}</span>
-      </div>
-      <div class="case-card-meta">
-        <span>${c.salesName}</span>
-        <span>${c.days}天成交</span>
-        <span>¥${c.depositAmount}</span>
-      </div>
-      <div class="case-card-highlights">
-        ${c.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join('')}
-      </div>
-    </div>
-  `).join('');
+  renderCaseList(filtered);
 }
 
 // ====== Case Detail Modal ======
