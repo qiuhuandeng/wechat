@@ -1,0 +1,3068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI智聘 - 招聘端</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        ai: { 50: '#faf5ff', 100: '#f3e8ff', 500: '#a855f7', 600: '#9333ea' }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.03)',
+                        'float': '0 10px 30px -5px rgba(37, 99, 235, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        body { background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        #app-container {
+            width: 100%;
+            max-width: 448px;
+            height: 100vh;
+            background-color: #f8fafc;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @media (min-height: 850px) {
+            #app-container { height: 850px; border-radius: 32px; border: 8px solid #0f172a; }
+        }
+
+        .view-layer { 
+            position: absolute; inset: 0; display: none; flex-direction: column; background: #f8fafc; z-index: 1; 
+        }
+        .view-layer.active { 
+            display: flex; z-index: 2; animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
+        
+        @keyframes slideIn { 
+            from { transform: translateX(30px); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        
+        @keyframes fadeUp {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .page-header {
+            @apply flex items-center justify-between px-4 h-14 bg-white/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-100;
+        }
+
+        .tap-active { @apply active:scale-[0.98] active:opacity-80 transition-all duration-200; }
+        .pb-safe { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+<div id="app-container">
+
+    <!-- 全局 Toast -->
+    <div id="toast" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white px-5 py-3 rounded-2xl text-sm font-medium shadow-2xl z-[9999] hidden" style="animation: fadeUp 0.3s ease;">
+        操作成功
+    </div>
+
+    <!-- 视图 1：首页 -->
+    <div id="view-home" class="view-layer active">
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-24">
+            
+            <!-- Hero Banner -->
+            <div class="relative h-60 flex flex-col justify-center px-6 overflow-hidden z-10">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center"></div>
+                <div class="absolute inset-0 bg-slate-900/50"></div>
+                
+                <div class="relative z-10 mt-4">
+                    <h1 class="text-2xl font-extrabold text-white mb-1.5 tracking-wide">AI赋能招聘新时代</h1>
+                    <p class="text-slate-200 text-xs font-medium opacity-90">智能匹配，高效招聘</p>
+                </div>
+            </div>
+
+            <!-- 核心行动按钮 (CTA) -->
+            <div class="px-4 -mt-10 relative z-20 tap-active" onclick="navTo('view-create-job')">
+                <div class="bg-blue-600 rounded-2xl p-5 shadow-lg shadow-blue-500/30 flex justify-between items-center cursor-pointer">
+                    <div>
+                        <h2 class="text-lg font-bold text-white mb-1">发布招聘岗位</h2>
+                        <p class="text-xs text-blue-100 opacity-90">先创建岗位画像，再添加候选人推进面试</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-white">
+                        <i data-lucide="briefcase" class="w-8 h-8 stroke-[2.5]"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 在招岗位列表 -->
+            <div class="px-4 mt-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">在招岗位</h3>
+                        <p id="home-job-count" class="text-[11px] text-slate-400 mt-0.5">2 个岗位正在招聘</p>
+                    </div>
+                    <!-- 优化后的“添加候选人”紧凑快捷入口 -->
+                    <button onclick="openModal('modal-add-candidate')" class="text-xs text-blue-600 bg-blue-50/80 hover:bg-blue-100 border border-blue-100/40 font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all tap-active">
+                        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                        <span>添加候选人</span>
+                    </button>
+                </div>
+
+                <div class="relative mb-4">
+                    <input type="text" id="home-job-search" placeholder="搜索岗位名称、城市、经验或薪资" class="w-full bg-white border border-slate-200 rounded-2xl pl-10 pr-10 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-300 shadow-sm" oninput="filterHomeJobs()">
+                    <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-300"></i>
+                    <button type="button" id="home-job-search-clear" class="hidden absolute right-3 top-2.5 w-7 h-7 rounded-full text-slate-300 hover:text-slate-500 hover:bg-slate-100 tap-active" onclick="clearHomeJobSearch()" aria-label="清空搜索">
+                        <i data-lucide="x" class="w-4 h-4 mx-auto"></i>
+                    </button>
+                </div>
+                
+                <div id="home-jobs-list">
+                    <!-- 岗位卡片 1 -->
+                    <div class="home-job-card bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100 cursor-pointer tap-active" data-keywords="高级前端工程师 前端 工程师 react vue 杭州 3-5年 15k-25k 在招" onclick="navTo('view-job-board')">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <h4 class="text-base font-bold text-slate-900">高级前端工程师</h4>
+                            <span class="text-blue-500 text-sm font-medium hover:underline" onclick="event.stopPropagation(); navTo('view-jd-generation')">查看jd</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">杭州 · 3-5年 · 15k-25k</p>
+                        
+                        <div class="border-t border-slate-100 pt-4 flex text-center">
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">12</div>
+                                <div class="text-xs text-slate-400 mt-0.5">新简历</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">3</div>
+                                <div class="text-xs text-slate-400 mt-0.5">待初试</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">1</div>
+                                <div class="text-xs text-slate-400 mt-0.5">待复试</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 岗位卡片 2 -->
+                    <div class="home-job-card bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100 cursor-pointer tap-active" data-keywords="产品经理 产品 pm 北京 1-3年 12k-18k 在招" onclick="navTo('view-job-board')">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <h4 class="text-base font-bold text-slate-900">产品经理</h4>
+                            <span class="text-blue-500 text-sm font-medium hover:underline" onclick="event.stopPropagation(); navTo('view-jd-generation')">查看jd</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">北京 · 1-3年 · 12k-18k</p>
+                        
+                        <div class="border-t border-slate-100 pt-4 flex text-center">
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">5</div>
+                                <div class="text-xs text-slate-400 mt-0.5">新简历</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">0</div>
+                                <div class="text-xs text-slate-400 mt-0.5">待初试</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-slate-900">2</div>
+                                <div class="text-xs text-slate-400 mt-0.5">待复试</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="home-job-empty" class="hidden bg-white rounded-2xl p-8 text-center border border-dashed border-slate-200 shadow-sm">
+                    <div class="w-12 h-12 mx-auto mb-3 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
+                        <i data-lucide="search-x" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-slate-700">没有找到匹配岗位</h4>
+                    <p class="text-xs text-slate-400 mt-1.5">换个关键词试试，支持岗位、城市、经验和薪资搜索</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 pb-safe flex justify-around items-center h-16 z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <div class="flex flex-col items-center justify-center w-20 text-blue-500 cursor-pointer tap-active">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-bold">招聘首页</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-ai-recruitment')">
+                <i data-lucide="sparkles" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">AI招聘</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-talent-pool')">
+                <i data-lucide="folder-open" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">人才库</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-my-recruitment')">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">我的招聘</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图：AI招聘大盘任务列表页面 -->
+    <div id="view-ai-recruitment" class="view-layer bg-slate-50">
+        <!-- 顶部导航栏 -->
+        <div class="page-header justify-between">
+            <div class="w-10"></div>
+            <h2 class="text-base font-extrabold text-slate-900 text-center">AI 智能招聘</h2>
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 relative tap-active animate-pulse" onclick="showToast('当前无新通知')">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-rose-500 rounded-full"></span>
+            </button>
+        </div>
+
+        <!-- 任务搜索与状态过滤 -->
+        <div class="px-4 pt-3 space-y-3 bg-white pb-3 border-b border-slate-100 shrink-0">
+            <div class="relative">
+                <input type="text" id="ai-task-search" placeholder="输入岗位名称搜索招聘任务..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-400" oninput="filterAiTasksCombined()">
+                <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-slate-400"></i>
+            </div>
+            <div class="flex gap-2 overflow-x-auto no-scrollbar py-0.5">
+                <button onclick="switchTaskTab('全部')" class="task-tab-btn px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm shrink-0 transition-all">全部</button>
+                <button onclick="switchTaskTab('进行中')" class="task-tab-btn px-4 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-xl shrink-0 transition-all">进行中</button>
+                <button onclick="switchTaskTab('已结束')" class="task-tab-btn px-4 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-xl shrink-0 transition-all">已结束</button>
+            </div>
+        </div>
+
+        <!-- 任务卡片滚动列表容器 -->
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-3 pb-32" id="ai-tasks-container">
+            <!-- 由 JS 动态渲染任务卡片 -->
+        </div>
+
+        <!-- 底部固定悬浮创建任务按钮 -->
+        <button onclick="navTo('view-ai-recruitment-create')" class="absolute bottom-20 right-5 w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/40 z-40 tap-active transition-all">
+            <i data-lucide="plus" class="w-6 h-6 stroke-[2.5]"></i>
+        </button>
+
+        <!-- 底部主导航栏 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 pb-safe flex justify-around items-center h-16 z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-home')">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">招聘首页</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-blue-500 cursor-pointer tap-active">
+                <i data-lucide="sparkles" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-bold">AI招聘</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-talent-pool')">
+                <i data-lucide="folder-open" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">人才库</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-my-recruitment')">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">我的招聘</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图：发布/发起AI智能找简历 (根据 image_0e8466.png 深度优化重构版) -->
+    <div id="view-ai-recruitment-create" class="view-layer bg-slate-50/50">
+        <!-- 顶部导航栏 -->
+        <div class="page-header justify-between bg-white border-b border-slate-100">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-sm font-extrabold text-slate-900 text-center tracking-wide">AI 智能找简历</h2>
+            <div class="w-10"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-5 space-y-4 pb-28">
+            
+            <!-- Step 1 Card: 选择岗位 -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-xs flex items-center justify-center font-bold">01</span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">选择目标岗位</h3>
+                </div>
+                
+                <div class="relative">
+                    <select id="ai-job-select-dropdown" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all cursor-pointer">
+                        <option value="高级前端工程师">高级前端工程师</option>
+                        <option value="产品经理">产品经理</option>
+                        <option value="美学顾问">美学顾问</option>
+                        <option value="高级大客户经理">高级大客户经理</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3.5 top-3 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <!-- Step 2 Card: 告诉AI你的招聘要求 -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft space-y-3.5">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-xs flex items-center justify-center font-bold">02</span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">告诉 AI 你的具体招聘偏好</h3>
+                </div>
+
+                <!-- 优化后的现代感、清爽紫色提示 bubble -->
+                <div class="bg-indigo-50/40 border border-indigo-100/30 rounded-xl p-3 flex items-center gap-2.5 text-xs font-semibold text-indigo-600 leading-normal">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-indigo-500 shrink-0"></i>
+                    <span>这不需要标准的 JD 格式，请直接对 AI 提问或提出方向。</span>
+                </div>
+
+                <!-- 极简高雅文本输入框及计数器 -->
+                <div class="relative border border-slate-200/80 rounded-xl p-3.5 bg-slate-50/50 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all duration-200">
+                    <textarea id="ai-custom-prompt-input" rows="5" maxlength="500" placeholder="例：我希望寻找一个在金融或电商行业做过C端产品的候选人，有过从0到1的产品设计经验更好，性格主动且能快速执行，不需要特别资深但要有发展潜力..." class="w-full bg-transparent text-xs focus:outline-none leading-relaxed resize-none placeholder:text-slate-300 font-medium text-slate-700" oninput="updatePromptCharCounter()"></textarea>
+                    <span id="prompt-char-counter" class="absolute bottom-2 right-3 text-[9px] text-slate-300 font-bold tracking-wider">0/500字</span>
+                </div>
+            </div>
+
+            <!-- Step 3 Card: 必要条件 -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft space-y-3.5">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-xs flex items-center justify-center font-bold">03</span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">设定刚性/必要条件</h3>
+                </div>
+                
+                <div class="space-y-2.5">
+                    <div class="relative">
+                        <input type="text" id="ai-mandatory-input-1" placeholder="必要条件1：例如 “统筹开发过万人级高并发系统”" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all placeholder:text-slate-300 font-medium text-slate-700">
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="ai-mandatory-input-2" placeholder="必要条件2：例如 “全日制重点本科以上学历”" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all placeholder:text-slate-300 font-medium text-slate-700">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部智能执行按钮 -->
+            <div class="pt-2">
+                <button onclick="startAiMatchingFlow()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl py-4 text-xs font-bold shadow-md hover:shadow-lg transition-all tap-active flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
+                    <span>开始 AI 智能搜索</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图：人才库 -->
+    <div id="view-talent-pool" class="view-layer bg-slate-50">
+        <div class="page-header">
+            <h2 class="text-base font-extrabold text-slate-900 flex-1 text-center">AI 智能人才库</h2>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 pb-24">
+            <!-- 状态优先的人才筛选 -->
+            <div class="mb-5">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">候选人状态</h3>
+                        <p id="talent-result-count" class="text-[11px] text-slate-400 mt-0.5">共 4 位候选人</p>
+                    </div>
+                    <button type="button" onclick="toggleTalentFilters()" class="h-8 px-3 rounded-xl bg-white border border-slate-200 text-slate-500 text-[11px] font-bold flex items-center gap-1.5 tap-active shadow-sm">
+                        <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                        <span>筛选</span>
+                    </button>
+                </div>
+
+                <div class="flex gap-2 mb-3">
+                    <div class="relative flex-1">
+                        <input type="text" id="talent-search" placeholder="搜索候选人、岗位或标签" class="w-full bg-white border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-300" oninput="filterTalentsCombined()">
+                        <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-300"></i>
+                    </div>
+                </div>
+
+                <div id="talent-status-tabs" class="flex gap-2 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4">
+                    <button type="button" class="talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md shadow-blue-600/20" data-status="all" onclick="switchTalentStatusTab('all')">全部 <span class="talent-status-count ml-1 opacity-80" data-count-for="all">4</span></button>
+                    <button type="button" class="talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200" data-status="待初试" onclick="switchTalentStatusTab('待初试')">待初试 <span class="talent-status-count ml-1 text-slate-400" data-count-for="待初试">1</span></button>
+                    <button type="button" class="talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200" data-status="已初试" onclick="switchTalentStatusTab('已初试')">已初试 <span class="talent-status-count ml-1 text-slate-400" data-count-for="已初试">1</span></button>
+                    <button type="button" class="talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200" data-status="待复试" onclick="switchTalentStatusTab('待复试')">待复试 <span class="talent-status-count ml-1 text-slate-400" data-count-for="待复试">1</span></button>
+                    <button type="button" class="talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200" data-status="复试通过" onclick="switchTalentStatusTab('复试通过')">复试通过 <span class="talent-status-count ml-1 text-slate-400" data-count-for="复试通过">1</span></button>
+                </div>
+                
+                <div id="talent-advanced-filters" class="hidden grid grid-cols-2 gap-2 mt-3">
+                    <div class="relative">
+                        <select id="filter-job" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-[11px] font-semibold text-slate-600 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer" onchange="filterTalentsCombined()">
+                            <option value="all">全部岗位</option>
+                            <option value="高级前端工程师">前端开发</option>
+                            <option value="美学顾问">美学顾问</option>
+                            <option value="高级大客户经理">大客户经理</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-2.5 top-3 w-3 h-3 text-slate-400 pointer-events-none"></i>
+                    </div>
+                    <div class="relative">
+                        <select id="filter-time" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-[11px] font-semibold text-slate-600 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer" onchange="filterTalentsCombined()">
+                            <option value="all">全部时间</option>
+                            <option value="recent">近30天</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-2.5 top-3 w-3 h-3 text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 人才列表容器 -->
+            <div id="talents-list" class="space-y-4">
+                <!-- 候选人 1: 刘芳 - 待初试 -->
+                <div class="talent-card bg-white rounded-3xl p-5 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" data-tags="医美操盘,高匹配" data-job="美学顾问" data-status="待初试" data-days="11" onclick="navTo('view-resume-detail')">
+                    <!-- 科技感渐变左边缘高光线 -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-3.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">刘芳</h3>
+                                <span class="text-xs text-slate-400 font-medium">女 · 36岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">美学顾问</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>14年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">10.00分</span>
+                    </div>
+
+                    <!-- 标签区 -->
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 15-30K (匹配)</span>
+                    </div>
+
+                    <!-- 可视化招聘管线 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black text-blue-600">待初试</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+                            <span class="text-[10px] font-bold text-slate-300">主管复试</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : Qiu</div>
+                            <div>创建于：2026-05-25 09:54</div>
+                        </div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 shadow-md shadow-blue-600/10 transition-all tap-active" onclick="event.stopPropagation(); openModal('modal-interview-type')">
+                            发起AI面试
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 候选人 2: 崔晓磊 - 已初试 -->
+                <div class="talent-card bg-white rounded-3xl p-5 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" data-tags="大厂背景" data-job="高级大客户经理" data-status="已初试" data-days="2" onclick="navTo('view-resume-detail')">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">崔晓磊</h3>
+                                <span class="text-xs text-slate-400 font-medium">男 · 29岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">高级大客户经理</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>7年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">8.80分</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 18-30K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 20-25K</span>
+                    </div>
+
+                    <!-- 管线步骤 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-black text-emerald-600">已初试 (88分)</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+                            <span class="text-[10px] font-bold text-slate-300">待复试</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-03 14:20</div>
+                        </div>
+                        <button class="bg-[#f1f5f9] hover:bg-[#e2e8f0] text-slate-700 font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 border border-slate-200 transition-all tap-active" onclick="event.stopPropagation(); navTo('view-first-report')">
+                            查看初试报告
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 候选人 3: 李明 - 待复试 -->
+                <div class="talent-card bg-white rounded-3xl p-5 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" data-tags="大厂背景,高匹配" data-job="高级前端工程师" data-status="待复试" data-days="0" onclick="navTo('view-resume-detail')">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">李明</h3>
+                                <span class="text-xs text-slate-400 font-medium">男 · 26岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">高级前端工程师</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>4年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">9.20分</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 18-22K (高度匹配)</span>
+                    </div>
+
+                    <!-- 管线步骤 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">已初试</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black text-blue-600">待复试</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-05 10:15</div>
+                        </div>
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 shadow-md shadow-indigo-600/10 transition-all tap-active" onclick="event.stopPropagation(); shareToManager()">
+                            分享主管面试
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 候选人 4: 张磊 - 复试通过 -->
+                <div class="talent-card bg-white rounded-3xl p-5 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" data-tags="大厂背景" data-job="高级前端工程师" data-status="复试通过" data-days="4" onclick="navTo('view-resume-detail')">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">张磊</h3>
+                                <span class="text-xs text-slate-400 font-medium">男 · 32岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">前端专家</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>8年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">9.50分</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 22-28K (优秀)</span>
+                    </div>
+
+                    <!-- 管线步骤 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">已初试</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black text-emerald-600">复试通过</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-02 09:10</div>
+                        </div>
+                        <button class="bg-[#eff6ff] hover:bg-[#dbeafe] text-blue-600 font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 border border-blue-200 transition-all tap-active" onclick="event.stopPropagation(); navTo('view-final-report')">
+                            查看复试报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="talent-empty" class="hidden bg-white rounded-2xl p-8 text-center border border-dashed border-slate-200 shadow-sm">
+                <div class="w-12 h-12 mx-auto mb-3 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
+                    <i data-lucide="user-search" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-sm font-bold text-slate-700">当前状态下没有候选人</h4>
+                <p class="text-xs text-slate-400 mt-1.5">可以切换状态，或调整搜索与筛选条件</p>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 pb-safe flex justify-around items-center h-16 z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-home')">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">招聘首页</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-ai-recruitment')">
+                <i data-lucide="sparkles" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">AI招聘</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-blue-500 cursor-pointer tap-active">
+                <i data-lucide="folder-open" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-bold">人才库</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-my-recruitment')">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">我的招聘</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图：我的招聘 -->
+    <div id="view-my-recruitment" class="view-layer bg-slate-50">
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 pb-24">
+            
+            <!-- 头部：用户基本卡片 -->
+            <div class="bg-white rounded-3xl p-5 mb-6 mt-2 shadow-soft border border-slate-100/60 flex items-center gap-4 relative">
+                <!-- 头像 -->
+                <div class="relative w-16 h-16 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Qiu" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/120x120/e2e8f0/64748b?text=Qiu'">
+                </div>
+                <!-- 姓名与基本信息 -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <h3 class="text-lg font-bold text-slate-900 leading-none">Qiu</h3>
+                        <button class="text-slate-400 hover:text-slate-600 tap-active p-1" onclick="showToast('正在编辑个人资料...')">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1.5 font-medium flex items-center gap-1.5">
+                        <span class="tracking-wide">13063063592</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                        <span>身份权限：老板</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 企业个性化标题 -->
+            <h3 class="text-sm font-bold text-slate-500 mb-3 pl-1">企业个性化</h3>
+
+            <!-- 企业个性化列表项 (聚合卡片模式) -->
+            <div class="bg-white rounded-[24px] border border-slate-100 shadow-soft overflow-hidden divide-y divide-slate-100/60">
+                
+                <!-- 行 1：品牌介绍 -->
+                <div class="p-5 flex gap-4 items-start cursor-pointer hover:bg-slate-50/50 transition-colors tap-active" onclick="showToast('正在上传/编辑品牌介绍...')">
+                    <div class="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-500 shrink-0">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-slate-800 mb-1">品牌介绍</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            请上传公司简介、发展历程。AI将在面试开场时自动向候选人介绍公司优势。
+                        </p>
+                    </div>
+                    <div class="self-center text-slate-300 ml-1">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- 行 2：公司展示素材 -->
+                <div class="p-5 flex gap-4 items-start cursor-pointer hover:bg-slate-50/50 transition-colors tap-active" onclick="showToast('正在编辑公司展示素材...')">
+                    <div class="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-500 shrink-0">
+                        <i data-lucide="image" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-slate-800 mb-1">公司展示素材</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            支持上传图片/视频，最多 5 个，在 AI 初试完成页向候选人展示工作环境。
+                        </p>
+                    </div>
+                    <div class="self-center flex items-center gap-1 text-slate-300 ml-1">
+                        <span class="text-xs font-bold text-slate-400">4/5</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- 行 3：福利待遇 -->
+                <div class="p-5 flex gap-4 items-start cursor-pointer hover:bg-slate-50/50 transition-colors tap-active" onclick="showToast('正在管理福利待遇标签...')">
+                    <div class="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-500 shrink-0">
+                        <i data-lucide="gift" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-slate-800 mb-1">福利待遇</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            标签式选择或输入五险一金、免费培训、年度旅游等信息
+                        </p>
+                    </div>
+                    <div class="self-center text-slate-300 ml-1">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 退出登录按钮 -->
+            <div class="mt-6">
+                <button class="w-full bg-white border border-slate-100 hover:bg-slate-50 rounded-2xl py-4 text-sm font-bold text-rose-500 shadow-soft tap-active" onclick="showToast('已安全退出登录')">
+                    退出登录
+                </button>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 pb-safe flex justify-around items-center h-16 z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-home')">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">招聘首页</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-ai-recruitment')">
+                <i data-lucide="sparkles" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">AI招聘</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-slate-400 hover:text-slate-600 cursor-pointer tap-active" onclick="navTo('view-talent-pool')">
+                <i data-lucide="folder-open" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">人才库</span>
+            </div>
+            <div class="flex flex-col items-center justify-center w-20 text-blue-500 cursor-pointer tap-active">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-bold">我的招聘</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图 2：创建/发布岗位 -->
+    <div id="view-create-job" class="view-layer bg-slate-50">
+        <div class="page-header">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-base font-bold flex-1 text-center pr-8">发布新岗位</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-36">
+            <!-- 基础输入 -->
+            <div class="space-y-4 mb-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wider">职位名称</label>
+                    <input type="text" id="jd-title-input" placeholder="例如：高级前端工程师" class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-300">
+                </div>
+            </div>
+
+            <!-- 页签导航 (双态) -->
+            <div class="flex bg-slate-200/60 p-1 rounded-2xl mb-4 gap-1">
+                <button id="btn-subtab-voice" onclick="switchCreateJobSubTab('voice')" class="flex-1 py-3 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all bg-white text-blue-600 shadow-sm relative">
+                    <i data-lucide="mic" class="w-4 h-4"></i> 语音聊需求
+                    <span class="absolute -top-1.5 -right-1 bg-green-500 text-[8px] text-white px-1.5 py-0.5 rounded-full scale-90 font-bold">推荐</span>
+                </button>
+                <button id="btn-subtab-paste" onclick="switchCreateJobSubTab('paste')" class="flex-1 py-3 text-xs font-medium rounded-xl flex items-center justify-center gap-1.5 transition-all text-slate-500 hover:text-slate-700">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> 粘贴已有 JD
+                </button>
+            </div>
+
+            <!-- 子页签内容 1：语音聊需求 -->
+            <div id="content-create-voice" class="block space-y-4">
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 bg-blue-100 flex items-center justify-center text-lg">👩‍💼</div>
+                        <div class="space-y-1.5">
+                            <h4 class="text-sm font-bold text-slate-900">你好，我是你的岗位画像教练。</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                接下来，请用语音告诉我，你想招一个什么样的人？不用字斟句酌，按你心里最真实的想法，试着回答这四个问题：
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 my-1"></div>
+
+                    <!-- 引导问题列表 -->
+                    <div class="space-y-3.5 pl-2">
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-800">解决什么问题？</h5>
+                            <p class="text-[11px] text-slate-400 mt-0.5">(比如背负的业绩、要带的团队或攻克的难题)</p>
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-800">需要什么能力？</h5>
+                            <p class="text-[11px] text-slate-400 mt-0.5">(最关键的硬技能和软素质)</p>
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-800">团队气场契合？</h5>
+                            <p class="text-[11px] text-slate-400 mt-0.5">(哪种性格的人能在我们这存活，给2-3个词)</p>
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-800">一句话总结！</h5>
+                            <p class="text-[11px] text-slate-400 mt-0.5">(到底要个什么样的人？)</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <p class="text-xs text-center text-slate-400 font-semibold pt-1">准备好了吗？点击下方按钮开始吧。</p>
+                </div>
+            </div>
+
+            <!-- 子页签内容 2：粘贴已有 JD -->
+            <div id="content-create-paste" class="hidden">
+                <div class="bg-white rounded-3xl p-4 border border-slate-100 shadow-sm relative">
+                    <textarea id="jd-paste-textarea" rows="10" placeholder="在此粘贴您已有的岗位描述草稿、历史 JD、或任何相关的文字要求。哪怕格式混乱也没关系，AI 会自动为您提取关键信息，并重新生成结构化的标准岗位画像。" class="w-full bg-slate-50/50 text-xs border border-slate-100 rounded-2xl p-4 focus:outline-none focus:ring-1 focus:ring-blue-500/20 leading-relaxed resize-none"></textarea>
+                    
+                    <div class="flex justify-end gap-2.5 mt-3">
+                        <button onclick="clearPasteJD()" class="bg-slate-100 text-slate-500 font-bold text-[11px] px-3 py-1.5 rounded-lg tap-active">清空</button>
+                        <button onclick="mockPasteJD()" class="bg-blue-50 text-blue-600 font-bold text-[11px] px-3 py-1.5 rounded-lg tap-active">一键粘贴</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部动态固定操作区 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30">
+            <!-- 语音状态下的按钮 (初始) -->
+            <div id="action-voice-group" class="block">
+                <button onclick="startVoiceRecording()" class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-2xl py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 tap-active">
+                    <i data-lucide="mic" class="w-5 h-5 animate-pulse"></i> 点击开始录音
+                </button>
+            </div>
+            <!-- 正在录音状态下的按钮 -->
+            <div id="action-recording-group" class="hidden flex-col items-center space-y-3">
+                <div class="text-xs text-slate-400 font-medium tracking-wide">
+                    正在录音 <span id="recording-timer" class="font-mono">00:00</span> / 10:00
+                </div>
+                <div class="flex w-full gap-3">
+                    <button id="btn-pause-recording" onclick="togglePauseRecording()" class="flex-1 bg-[#5c5eff] hover:bg-[#4a4cd9] text-white rounded-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all tap-active">
+                        <i id="icon-pause" data-lucide="pause" class="w-4 h-4"></i> <span id="text-pause">暂停录音</span>
+                    </button>
+                    <button onclick="endVoiceRecording()" class="flex-1 bg-[#ff452c] hover:bg-[#e0241b] text-white rounded-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all tap-active">
+                        <i data-lucide="check" class="w-4 h-4"></i> 结束录音
+                    </button>
+                </div>
+            </div>
+            <!-- 粘贴状态下的按钮 -->
+            <div id="action-paste-group" class="hidden space-y-2.5">
+                <button onclick="optimizePasteJD()" class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-2xl py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 tap-active">
+                    一键帮你优化岗位JD
+                </button>
+                <button onclick="saveJob()" class="w-full bg-white border border-slate-200 text-slate-700 rounded-2xl py-3.5 text-sm font-bold tap-active">
+                    不优化直接保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 视图 3：岗位候选人看板 -->
+    <div id="view-job-board" class="view-layer">
+        <div class="page-header !pb-0 !h-auto flex-col items-stretch border-none bg-white shadow-sm z-20">
+            <div class="flex items-center h-14">
+                <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <div class="flex-1 text-center pr-8">
+                    <h2 class="text-base font-bold text-slate-900 leading-tight">高级前端工程师</h2>
+                    <span class="text-[10px] text-slate-500">在招 · 杭州</span>
+                </div>
+            </div>
+            
+            <!-- Tab -->
+            <div class="flex mt-2 px-2">
+                <div class="tab flex-1 text-center py-3 text-[13px] font-bold text-blue-600 border-b-2 border-blue-600 cursor-pointer" onclick="switchTab(this, 'resume')">简历初筛 (1)</div>
+                <div class="tab flex-1 text-center py-3 text-[13px] font-medium text-slate-500 border-b-2 border-transparent cursor-pointer" onclick="switchTab(this, 'first-round')">初试评估 (1)</div>
+                <div class="tab flex-1 text-center py-3 text-[13px] font-medium text-slate-500 border-b-2 border-transparent cursor-pointer" onclick="switchTab(this, 'second-round')">主管复试 (1)</div>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 pb-24">
+            
+            <!-- 列表一：简历初筛 -->
+            <div id="tab-resume" class="tab-content block">
+                <div class="talent-card bg-white rounded-3xl p-5 mb-4 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" onclick="navTo('view-resume-detail')">
+                    <!-- 科技感渐变左边缘高光线 -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">李明</h3>
+                                <span class="text-xs text-slate-400 font-medium">男 · 26岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">高级前端工程师</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>4年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">9.20分</span>
+                    </div>
+
+                    <!-- 标签区 -->
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 18-22K (匹配)</span>
+                    </div>
+
+                    <!-- 可视化招聘生命周期生命管线 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black text-blue-600">待初试</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+                            <span class="text-[10px] font-bold text-slate-300">主管复试</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-05 10:15</div>
+                        </div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 shadow-md shadow-blue-600/10 transition-all tap-active" onclick="event.stopPropagation(); openModal('modal-interview-type')">
+                            发起AI面试
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 列表二：初试评估 -->
+            <div id="tab-first-round" class="tab-content hidden">
+                <div class="talent-card bg-white rounded-3xl p-5 mb-4 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" onclick="navTo('view-first-report')">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">王伟</h3>
+                                <span class="text-xs text-slate-400 font-medium">· 男 · 28岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">前端开发</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>5年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">8.80分</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 15-20K</span>
+                    </div>
+                    
+                    <!-- 可视化生命管线：已初试 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-black text-emerald-600">已初试 (88分)</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            <span class="text-[10px] font-bold text-blue-600">待复试</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-04 14:20</div>
+                        </div>
+                        <button class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 shadow-md transition-all tap-active" onclick="event.stopPropagation(); navTo('view-first-report')">
+                            查看初试报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 列表三：主管复试 -->
+            <div id="tab-second-round" class="tab-content hidden">
+                <div class="talent-card bg-white rounded-3xl p-5 mb-4 shadow-soft border border-slate-100/80 cursor-pointer tap-active relative overflow-hidden transition-all duration-300 hover:shadow-md" onclick="navTo('view-final-report')">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-ai-500"></div>
+                    
+                    <div class="flex justify-between items-start mb-2.5 pl-1.5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-slate-900">张磊</h3>
+                                <span class="text-xs text-slate-400 font-medium">· 男 · 32岁</span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                                <span class="text-slate-700">前端专家</span>
+                                <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                <span>8年经验</span>
+                            </p>
+                        </div>
+                        <span class="text-blue-600 bg-blue-50/80 border border-blue-100/60 text-[11px] font-extrabold px-2.5 py-1 rounded-lg">9.50分</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-1.5 mb-4 pl-1.5">
+                        <span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-100">岗位薪资 15-25K</span>
+                        <span class="bg-primary-50 text-primary-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100/50">意向 22-28K (优秀)</span>
+                    </div>
+                    
+                    <!-- 可视化生命管线：复试完成 -->
+                    <div class="flex items-center justify-between py-2 px-3 bg-slate-50/50 rounded-2xl border border-slate-100/40 mb-4 ml-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">简历初筛</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-bold text-slate-400">已初试</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        <div class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-[10px] font-black text-emerald-600">复试通过 (待决策)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium border-t border-slate-50 pt-3.5 ml-1.5">
+                        <div class="space-y-0.5">
+                            <div>负责人 : HR Qiu</div>
+                            <div>创建于：2026-06-02 09:10</div>
+                        </div>
+                        <button class="bg-[#eff6ff] hover:bg-[#dbeafe] text-blue-600 font-bold px-4 py-2 rounded-xl text-[11px] flex items-center gap-1 border border-blue-200 transition-all tap-active" onclick="event.stopPropagation(); navTo('view-final-report')">
+                            查看复试报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 看板底部：“添加候选人”入口 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30">
+            <button class="w-full bg-white border border-slate-200 text-slate-700 rounded-2xl py-3.5 text-[15px] font-bold shadow-sm flex justify-center items-center gap-2 tap-active" onclick="openModal('modal-add-candidate')">
+                <i data-lucide="user-plus" class="w-5 h-5 text-slate-400"></i> 添加候选人
+            </button>
+        </div>
+    </div>
+
+    <!-- 视图 4：简历详情与AI分析 -->
+    <div id="view-resume-detail" class="view-layer bg-slate-50">
+        <div class="page-header bg-white/80">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-base font-bold flex-1 text-center pr-8">简历详情</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-32">
+            <!-- 头部信息 -->
+            <div class="flex items-center gap-4 mb-5">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-slate-200 to-slate-100 border-2 border-white shadow-sm flex items-center justify-center text-3xl shrink-0">👨‍💻</div>
+                <div>
+                    <h2 id="detail-name" class="text-2xl font-bold text-slate-900 mb-1">李明</h2>
+                    <p id="detail-meta" class="text-sm text-slate-500 font-medium">男 | 26岁 | 本科 | 4年经验</p>
+                </div>
+            </div>
+
+            <!-- 简历快捷工具栏 -->
+            <div class="grid grid-cols-2 gap-3 mb-5">
+                <button onclick="openModal('modal-edit-resume')" class="bg-white border border-slate-200 text-slate-700 rounded-2xl py-3 text-xs font-bold flex items-center justify-center gap-2 shadow-sm tap-active">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-blue-500"></i> 修改简历
+                </button>
+                <button onclick="openModal('modal-attachment-resume')" class="bg-white border border-slate-200 text-slate-700 rounded-2xl py-3 text-xs font-bold flex items-center justify-center gap-2 shadow-sm tap-active">
+                    <i data-lucide="paperclip" class="w-4 h-4 text-blue-500"></i> 原附件简历
+                </button>
+            </div>
+
+            <!-- 面试评估报告入口 -->
+            <div class="bg-white rounded-3xl p-5 shadow-soft border border-slate-100 mb-5">
+                <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <div class="w-1 h-4 bg-blue-500 rounded-full"></div> 面试评估报告
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-100/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center"><i data-lucide="bot" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">初试评估 (AI面试)</div>
+                                <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">智能评定 88分 · 建议复试</div>
+                            </div>
+                        </div>
+                        <button onclick="navTo('view-first-report')" class="bg-white border border-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm tap-active">查看报告</button>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-100/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><i data-lucide="user-check" class="w-5 h-5"></i></div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">复试评估 (最终决策)</div>
+                                <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">综合评定 9.50分 · 强烈录用</div>
+                            </div>
+                        </div>
+                        <button onclick="navTo('view-final-report')" class="bg-white border border-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm tap-active">查看报告</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 高级 AI 分析卡片 -->
+            <div class="bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-3xl p-5 mb-5 shadow-soft relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="bot" class="w-24 h-24 text-purple-500"></i></div>
+                
+                <div class="flex justify-between items-center mb-4 relative z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-purple-500 text-white rounded p-1"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+                        <span class="font-bold text-slate-900">AI 深度评估</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-purple-600 font-bold mb-0.5">岗位匹配度</div>
+                        <div class="text-3xl font-black text-purple-600 leading-none">92<span class="text-base">%</span></div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 relative z-10">
+                    <div class="bg-white/60 rounded-xl p-3">
+                        <h4 class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1"><i data-lucide="target" class="w-3.5 h-3.5 text-blue-500"></i> 核心优势</h4>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">候选人精通 React/Vue，主导过大型 SaaS 前端重构，与岗位 JD 中要求的高级前端开发技能高度契合。</p>
+                    </div>
+                    <div class="bg-emerald-50/50 rounded-xl p-3">
+                        <h4 class="text-xs font-bold text-emerald-700 mb-1 flex items-center gap-1"><i data-lucide="lightbulb" class="w-3.5 h-3.5 text-emerald-500"></i> 决策建议</h4>
+                        <p class="text-[13px] text-slate-600 leading-relaxed font-medium">极高潜力候选人，建议尽快锁定，强烈建议发起初面。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 工作经历卡片 -->
+            <div class="bg-white rounded-3xl p-5 mb-5 shadow-soft border border-slate-100">
+                <h3 class="text-base font-bold text-slate-900 mb-5 flex items-center gap-2">
+                    <div class="w-1 h-4 bg-blue-500 rounded-full"></div> 工作经历
+                </h3>
+                
+                <!-- 拟真时间轴 -->
+                <div class="relative pl-5 border-l border-blue-100 space-y-6 ml-2">
+                    <div class="relative">
+                        <div class="absolute -left-[26px] top-1.5 w-3 h-3 rounded-full border border-blue-500 bg-white flex items-center justify-center"></div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            -- 婕熹卡医美集团上海分公司 <span class="text-slate-500 font-medium">HR负责人</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 mt-2 text-[11px] text-slate-600 leading-relaxed">
+                            搭建HR三支柱服务模型，提升服务响应效率；落地防御体系，实现劳资纠纷0发生；主导招聘计划，团队规模增长121%；担任组织政委，提升沟通效率。
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[26px] top-1.5 w-3 h-3 rounded-full border border-blue-500 bg-white flex items-center justify-center"></div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            -- 水果连锁公司 <span class="text-slate-500 font-medium">HRD</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 mt-2 text-[11px] text-slate-600 leading-relaxed">
+                            统统连锁分公司 150家门店 + 业务 HRBP 团队管理，搭建后端 HR 级常态工作流程，团队人效能提升 43%。
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[26px] top-1.5 w-3 h-3 rounded-full border border-blue-500 bg-white flex items-center justify-center"></div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            -- 京东集团 <span class="text-slate-500 font-medium">招聘 - HRBP - SSC - 用工管理</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 mt-2 text-[11px] text-slate-600 leading-relaxed">
+                            统筹用工管理，降低人力成本；搭建SSC标准化体系，提升工作效率；聚焦招聘与HRBP，优化流程，降低流失率；开展培训，缩短工伤处理时效。
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[26px] top-1.5 w-3 h-3 rounded-full border border-blue-500 bg-white flex items-center justify-center"></div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            -- 百度 <span class="text-slate-500 font-medium">销售经理/主管</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 mt-2 text-[11px] text-slate-600 leading-relaxed">
+                            带领团队完成业绩目标，提升销售效率，创新合作模式，提升市场份额。
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[26px] top-1.5 w-3 h-3 rounded-full border border-blue-500 bg-white flex items-center justify-center"></div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            -- 爱分享科技 <span class="text-slate-500 font-medium">公司负责人</span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-3.5 mt-2 text-[11px] text-slate-600 leading-relaxed">
+                            独立操盘项目，搭建团队与流程体系，具备经营思维与落地能力。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-100 p-4 pb-safe z-30 flex gap-3">
+            <button class="flex-1 bg-slate-100 text-slate-600 rounded-2xl py-3.5 text-[15px] font-bold tap-active" onclick="navBack()">淘汰</button>
+            <button class="flex-[2] bg-blue-600 text-white rounded-2xl py-3.5 text-[15px] font-bold shadow-lg shadow-blue-600/20 tap-active" onclick="openModal('modal-interview-type')">发起初试安排</button>
+        </div>
+    </div>
+
+    <!-- 视图 5：初试报告 -->
+    <div id="view-first-report" class="view-layer bg-slate-50">
+        <div class="page-header bg-white/80">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-base font-bold flex-1 text-center pr-8">AI初试评估报告</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 pb-24">
+            
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-2xl shrink-0">👨‍💼</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">崔晓磊</h3>
+                        <p class="text-xs text-slate-400 mt-1">男 | 29岁 | 重点本科 | 7年开发经验</p>
+                        <div class="flex gap-1.5 mt-2">
+                            <span class="bg-slate-50 text-slate-500 text-[10px] px-2 py-0.5 rounded-md font-semibold border border-slate-100">意向岗位：高级客户经理</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">综合面议</span>
+                    <span class="bg-emerald-50 text-emerald-600 text-xs font-bold px-3 py-1 rounded-full">建议进入复试</span>
+                </div>
+                <div class="flex items-baseline gap-1 mb-3">
+                    <span class="text-sm text-slate-500">综合推荐度：</span>
+                    <span class="text-4xl font-black text-emerald-600 tracking-tight">77</span>
+                    <span class="text-xs text-slate-400">/ 100分</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                    该候选人具有出色的KA客户拓展与服务能力，曾主导过多个大型品牌客户的技术咨询对接与二次扩容，抗压与团队协调能力出色。其技术背景在与客户方案交涉时是一大竞争壁垒。
+                </p>
+            </div>
+
+            <!-- AI 优势与风险评估 -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-4">
+                    <h4 class="text-xs font-bold text-emerald-800 mb-2.5 flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i> AI 优势评估
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-emerald-700 font-medium">
+                        <li class="flex items-start gap-1">✨ 主观主动性极强，具备高度责任心。</li>
+                        <li class="flex items-start gap-1">✨ KA客户沟通经验极其饱满。</li>
+                        <li class="flex items-start gap-1">✨ 前端开发技术底子在方案策划时很加分。</li>
+                    </ul>
+                </div>
+                <div class="bg-rose-50/50 border border-rose-100 rounded-3xl p-4">
+                    <h4 class="text-xs font-bold text-rose-800 mb-2.5 flex items-center gap-1">
+                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-600"></i> AI 风险提示
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-rose-700 font-medium">
+                        <li class="flex items-start gap-1">⚠️ 期望薪资略高，可能超出预算。</li>
+                        <li class="flex items-start gap-1">⚠️ 经历中偶有1.5年期频繁异动。</li>
+                        <li class="flex items-start gap-1">⚠️ 缺乏15人以上管理团队宽度。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 进度条 -->
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">技术与能力指标</h3>
+                <div class="space-y-3.5">
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>客户协调与挽回</span><span class="text-blue-600">83%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[83%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>方案整合策划</span><span class="text-blue-600">75%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[75%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>商务对接拓展</span><span class="text-blue-600">78%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[78%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>抗压防纠纷稳定性</span><span class="text-blue-600">85%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[85%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 显性能力评估模块 -->
+            <div class="space-y-4 mb-4">
+                <div class="flex items-center gap-2 px-1">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">显性能力评估</span>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">专业与业务能力</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">连锁HRBP管理</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">优</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            具备大规模、多门店跨区域内的HRBP团队管理与体系搭建能力，有提升团队人效能的成功实绩。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “统筹连锁分公司 150家门店 + 业务 HRBP 团队管理，搭建后端 HR 级常态工作流程，团队人效能提升 43%。”
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 my-2"></div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">医美HR体系搭建</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">优</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            在医疗美容行业具有从零搭建创新体系，提升服务效率及构建风控体系的丰富成功经验。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “从0到1搭建上海分公司 HR 三支柱服务模型，系统防范劳资纠纷发生。”
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">执行与结果能力</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">快速招聘与人才供给</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">强</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            在业务快速扩张期，能制定并执行高效的招聘策略，整合内外部资源，保障人才供给线。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “主管区域 '人才攻坚计划'，45 天内员工从 120 人增长至 200 人，实现 121% 增长。”
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 冰山素质评估模块 -->
+            <div class="space-y-4 mb-4">
+                <div class="flex items-center gap-2 px-1">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">冰山素质评估</span>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">驱动力与自我意识</div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-slate-800">结果导向</h4>
+                            <span class="text-[10px] text-blue-600 font-bold">强</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            表现出强烈的以结果 and 数据驱动的工作意识，习惯衡量化成果来评估工作价值。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 决策建议 -->
+            <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 mb-4 space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">决判级推荐度</span>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> 支持筛选的因素
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-slate-600 leading-relaxed list-disc list-inside pl-1">
+                        <li>候选人具备医美行业特有的 HRBP/HRD 全面操盘经验。</li>
+                        <li>拥有全国连锁零售行业 HRD 管理经验，经验可迁移。</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30 flex gap-2">
+            <button class="px-4 bg-slate-100 text-slate-500 rounded-2xl text-xs font-bold tap-active" onclick="navBack()">淘汰</button>
+            <button class="flex-1 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-2xl py-3.5 text-xs font-bold flex items-center justify-center gap-1.5 tap-active" onclick="shareToCandidate()">
+                <i data-lucide="user" class="w-3.5 h-3.5"></i> 分享给候选人
+            </button>
+            <button class="flex-1 bg-blue-600 text-white rounded-2xl py-3.5 text-xs font-bold shadow-lg shadow-blue-600/20 flex items-center justify-center gap-1.5 tap-active" onclick="shareToManager()">
+                <i data-lucide="share" class="w-3.5 h-3.5"></i> 分享主管复试
+            </button>
+        </div>
+    </div>
+
+    <!-- 视图 6：主管录用决策 -->
+    <div id="view-final-report" class="view-layer bg-slate-50">
+        <div class="page-header bg-white/80">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-base font-bold flex-1 text-center pr-8">主管录用决策</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 pb-24">
+            
+            <!-- 个人基本卡片 -->
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-md shadow-emerald-500/30">录</div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">张磊</h2>
+                            <p class="text-xs text-slate-400 mt-1">男 | 32岁 | 重点本科 | 8年研发经验</p>
+                        </div>
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">强烈录用</span>
+                </div>
+            </div>
+
+            <!-- 初试与复试面评对比 -->
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">初试与复试综合评价</h3>
+                
+                <div class="relative pl-4 border-l-2 border-purple-200 mb-5">
+                    <div class="absolute w-3 h-3 bg-purple-500 rounded-full -left-[7px] top-1 shadow-[0_0_0_3px_#fff]"></div>
+                    <div class="flex justify-between items-center mb-1">
+                        <strong class="text-sm text-slate-900 font-bold">初试 (AI 面试官评价)</strong>
+                        <span class="text-purple-600 font-bold text-xs">92分 (优异)</span>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed bg-slate-50/50 p-2.5 rounded-xl mt-1">
+                        技术底层极其坚固，逻辑思维缜密，架构意识极佳。对高频业务场景的突发负载应对有成熟的自研经历，是团队技术梯队的有力补充。
+                    </p>
+                </div>
+                
+                <div class="relative pl-4 border-l-2 border-emerald-200">
+                    <div class="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[7px] top-1 shadow-[0_0_0_3px_#fff]"></div>
+                    <div class="flex justify-between items-center mb-1">
+                        <strong class="text-sm text-slate-900 font-bold">复试 (业务主管-赵总)</strong>
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded">通过</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed bg-emerald-50/30 p-2.5 rounded-xl mt-2 font-medium">
+                        "面试体验极佳，候选人技术深度有保证，更难得的是具备非常好的经营思考，能从商业变现、成本核算角度进行前端能效改进。能马上扛起核心业务线大梁，建议尽快发放Offer锁定候选人。"
+                    </p>
+                </div>
+            </div>
+
+            <!-- AI 优势与风险评估 -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-4">
+                    <h4 class="text-xs font-bold text-emerald-800 mb-2.5 flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i> AI 优势评估
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-emerald-700 font-medium">
+                        <li class="flex items-start gap-1">✨ 主观主动性极强，具备高度责任心。</li>
+                        <li class="flex items-start gap-1">✨ KA客户沟通经验极其饱满。</li>
+                        <li class="flex items-start gap-1">✨ 前端开发技术底子在方案策划时很加分。</li>
+                    </ul>
+                </div>
+                <div class="bg-rose-50/50 border border-rose-100 rounded-3xl p-4">
+                    <h4 class="text-xs font-bold text-rose-800 mb-2.5 flex items-center gap-1">
+                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-600"></i> AI 风险提示
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-rose-700 font-medium">
+                        <li class="flex items-start gap-1">⚠️ 期望薪资较预算偏高。</li>
+                        <li class="flex items-start gap-1">⚠️ 经历中偶有短频段跳槽。</li>
+                        <li class="flex items-start gap-1">⚠️ 缺乏超大规模管理经验。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 各项能力评估进度条 -->
+            <div class="bg-white rounded-3xl p-5 mb-4 shadow-sm border border-slate-100">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">各项能力评估</h3>
+                <div class="space-y-3.5">
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>客户协调与挽回</span><span class="text-blue-600">83%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[83%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>方案整合策划</span><span class="text-blue-600">75%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[75%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>商务对接拓展</span><span class="text-blue-600">78%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[78%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                            <span>抗压防纠纷稳定性</span><span class="text-blue-600">85%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full w-[85%] bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 显性能力评估 -->
+            <div class="space-y-4 mb-4">
+                <div class="flex items-center gap-2 px-1">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">显性能力评估</span>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">专业与业务能力</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">连锁HRBP管理</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">优</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            具备大规模、多门店跨区域内的HRBP团队管理与体系搭建能力。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “统筹连锁分公司 150家门店 + 业务 HRBP 团队管理，搭建后端 HR 级常态工作流程，团队人效能提升 43%。”
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 my-2"></div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">医美HR体系搭建</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">优</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            在医疗美容行业具有从零搭建创新体系，提升服务效率及构建风控体系。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “从0到1搭建上海分公司 HR 三支柱服务模型，系统防范劳资纠纷，全周期预防发生。”
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">执行与结果能力</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">快速招聘与人才供给</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">强</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            在业务快速扩张期，能制定并执行高效的招聘策略，保障人才供给线。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “主管区域 '人才攻坚计划'，45天内员工规模增长 121%。”
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 my-2"></div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">人效分析与优化</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">适</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            具备强大的数据分析与人效优化能力，能识别业务瓶颈并推进重组。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “用 Excel 手写大盘分析，第一个月节省了10万成本。”
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">组织与协同能力</div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">业务协同与影响</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">优</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            主动使用数据分析内因，引导高管进行决策，实现业务的高效协同和流程推进。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “私下沟通了总经理，分析原因后设立三维排班体系，达到控制成本的目的。”
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 my-2"></div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">员工关系与服务体系</h4>
+                            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded">良</span>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            设计分层服务和风险预防机制，提升HR服务和组织的效能满意度。
+                        </p>
+                        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100/50 text-[11px] text-slate-500 leading-relaxed italic">
+                            “搭建了三级防控体系，各部门的 HRBP 角色为员工提供一对一的专业服务。”
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 冰山素质评估 -->
+            <div class="space-y-4 mb-4">
+                <div class="flex items-center gap-2 px-1">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">冰山素质评估</span>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">驱动力与自我意识</div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-slate-800">结果导向</h4>
+                            <span class="text-[10px] text-blue-600 font-bold">强</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            强烈的结果与数据驱动工作意识，衡量成果（效率提升、成本缩减等）推动改革。
+                        </p>
+                    </div>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-slate-800">经营思维</h4>
+                            <span class="text-[10px] text-blue-600 font-bold">适</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            注重商业变现和能效产出，习惯从管理和经营者角度看待成本与能效。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">思维方式与问题解决</div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-slate-800">体系化思维</h4>
+                            <span class="text-[10px] text-blue-600 font-bold">适</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            善于结合公司情况对专业模型进行微创或工具的自研搭建（如自主排班体系、大盘大屏）。
+                        </p>
+                    </div>
+                    <div class="border-t border-slate-100 my-1"></div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-slate-800">风险与合规意识</h4>
+                            <span class="text-[10px] text-blue-600 font-bold">强</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            具备优秀合规劳务防御体系认知，擅长从合规、安全的制度层排除项目阻力。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 决策建议 -->
+            <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 mb-4 space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-4 bg-blue-600 rounded-full"></div>
+                    <span class="text-sm font-bold text-slate-900">决策级推荐</span>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> 支持录用的因素
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-slate-600 leading-relaxed list-disc list-inside pl-1">
+                        <li>候选人对 React 等框架的底层运行机制研究透彻，具备极强的前端技术能力底座。</li>
+                        <li>复试中展现出超出技术专家岗位的业务经营思考，能主动衡量成本变现、进行效能控制。</li>
+                        <li>具有极佳的团队合作性，对初入团队的工作任务适应力快，离职原因合规安全。</li>
+                    </ul>
+                </div>
+                <div class="border-t border-slate-100 my-2"></div>
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-amber-700 flex items-center gap-1.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i> 需关注的事项
+                    </h4>
+                    <ul class="space-y-2 text-[11px] text-slate-600 leading-relaxed list-disc list-inside pl-1">
+                        <li>期望薪资（22k-28k）较公司预算指标略偏高，需在入职谈判中参考 AI 建议区间进行合规锁定。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- AI 智能薪酬建议 -->
+            <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-5 shadow-soft border border-orange-100">
+                <h3 class="text-xs font-bold text-orange-800 mb-1 flex items-center gap-1.5">
+                    <i data-lucide="coins" class="w-4 h-4 text-orange-600"></i> AI 智能薪酬建议
+                </h3>
+                <div class="text-3xl font-black text-orange-500 my-2 tracking-tight">18k - 20k</div>
+                <p class="text-[11px] text-orange-700/80 leading-relaxed font-medium">综合候选人原薪资与期望值，结合市场同岗溢价，建议以此区间发出 Offer，发放成功率高达 94%。</p>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30 flex gap-3">
+            <button class="flex-1 bg-slate-100 text-slate-600 rounded-2xl py-3.5 text-[15px] font-bold tap-active" onclick="navBack()">暂入人才库</button>
+            <button class="flex-[2] bg-slate-900 text-white rounded-2xl py-3.5 text-[15px] font-bold shadow-xl shadow-slate-900/20 tap-active" onclick="showToast('已生成Offer审批流程...')">发放 Offer (录用)</button>
+        </div>
+    </div>
+
+    <!-- 视图 7：人才画像与 JD 生成 -->
+    <div id="view-jd-generation" class="view-layer bg-slate-50">
+        <div class="page-header bg-slate-50 border-none !h-12 flex justify-start items-center">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto no-scrollbar px-5 pb-32">
+            <!-- 头部说明文本 -->
+            <div class="text-center pb-6">
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">人才画像与 JD 生成</h1>
+                <p class="text-xs text-slate-400 mt-2.5 px-2 leading-relaxed">
+                    AI 已为你生成岗位画像和标准化 JD，可先查看，再决定是否手动编辑。
+                </p>
+            </div>
+
+            <!-- 卡片 1：智能人才画像 -->
+            <div class="bg-white rounded-[24px] p-5 mb-4 shadow-soft border border-slate-100/50">
+                <h3 class="text-base font-bold text-slate-800 mb-4">智能人才画像</h3>
+                
+                <div id="portrait-tags" class="flex flex-wrap gap-2.5 mb-4">
+                    <span class="bg-indigo-50/70 text-indigo-600 text-xs font-semibold px-3.5 py-2 rounded-full border border-indigo-100/30 flex items-center gap-1.5 tap-active" onclick="removeTag(this)">
+                        #3年以上店长经验 <i data-lucide="x" class="w-3.5 h-3.5 opacity-60"></i>
+                    </span>
+                    <span class="bg-indigo-50/70 text-indigo-600 text-xs font-semibold px-3.5 py-2 rounded-full border border-indigo-100/30 flex items-center gap-1.5 tap-active" onclick="removeTag(this)">
+                        #熟悉美业运营 <i data-lucide="x" class="w-3.5 h-3.5 opacity-60"></i>
+                    </span>
+                    <span class="bg-indigo-50/70 text-indigo-600 text-xs font-semibold px-3.5 py-2 rounded-full border border-indigo-100/30 flex items-center gap-1.5 tap-active" onclick="removeTag(this)">
+                        #具备团队管理力 <i data-lucide="x" class="w-3.5 h-3.5 opacity-60"></i>
+                    </span>
+                    <span class="bg-indigo-50/70 text-indigo-600 text-xs font-semibold px-3.5 py-2 rounded-full border border-indigo-100/30 flex items-center gap-1.5 tap-active" onclick="removeTag(this)">
+                        #有客户服务意识 <i data-lucide="x" class="w-3.5 h-3.5 opacity-60"></i>
+                    </span>
+                    <button class="border border-dashed border-slate-300 hover:border-primary-500 text-slate-400 hover:text-primary-500 text-xs font-medium px-3.5 py-2 rounded-full flex items-center gap-1 tap-active" onclick="addCustomTag()">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> 添加标签
+                    </button>
+                </div>
+                
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    AI 已提取岗位画像标签，你可以删除不准确的标签，或手动补充。
+                </p>
+            </div>
+
+            <!-- 卡片 2：标准化岗位 JD -->
+            <div class="bg-white rounded-[24px] p-5 mb-4 shadow-soft border border-slate-100/50">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-base font-bold text-slate-800">标准化岗位 JD</h3>
+                    <div class="flex gap-2">
+                        <button class="border border-primary-500 text-primary-600 hover:bg-primary-50 text-[11px] font-semibold px-3 py-1 rounded-full transition-all tap-active" onclick="showToast('已进入手动编辑模式')">手动编辑</button>
+                        <button class="border border-primary-500 text-primary-600 hover:bg-primary-50 text-[11px] font-semibold px-3 py-1 rounded-full transition-all tap-active" onclick="showToast('AI 正在重新微调...')">AI修正</button>
+                    </div>
+                </div>
+
+                <!-- 提示 Banner -->
+                <div class="bg-indigo-50/40 border border-indigo-100/20 rounded-xl p-3 text-xs text-slate-500 mb-4 flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                    <span>当前为只读查看模式，可上下滑动查看完整 JD。</span>
+                </div>
+
+                <!-- 岗位薪资 -->
+                <div class="mb-4">
+                    <label class="block text-xs font-bold text-slate-700 mb-2">岗位薪资</label>
+                    <input type="text" placeholder="选填，例如 10-15K" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all placeholder:text-slate-400">
+                </div>
+
+                <!-- JD 内容列表 (可上下滑动) -->
+                <div class="bg-slate-50/50 rounded-2xl p-4 border border-slate-100 text-xs text-slate-600 leading-relaxed max-h-60 overflow-y-auto space-y-4 no-scrollbar">
+                    <div>
+                        <strong class="text-slate-800 text-[13px] block mb-1">【岗位使命】</strong>
+                        <p>1. 在贝颜品牌定位下，以专业服务助女性实现美丽健康目标</p>
+                    </div>
+                    <div>
+                        <strong class="text-slate-800 text-[13px] block mb-1">【工作内容】</strong>
+                        <p>1. 负责门店日常运营，协调团队完成客户美肤服务，提升门店业绩</p>
+                    </div>
+                    <div>
+                        <strong class="text-slate-800 text-[13px] block mb-1">【我们希望你是】</strong>
+                        <p>1. 有3年以上美业店长经验，具备团队管理及客户服务能力者</p>
+                    </div>
+                    <div>
+                        <strong class="text-slate-800 text-[13px] block mb-1">【薪资与回报】</strong>
+                        <p>1. 提供非常有竞争力的绩效提成机制、五险一金以及丰厚年终奖等福利。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部确定按钮 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+            <button class="w-full bg-white border border-slate-300 text-slate-700 rounded-2xl py-3 text-sm font-bold shadow-sm tap-active" onclick="saveJobFromJDGen()">
+                确定
+            </button>
+        </div>
+    </div>
+
+    <!-- 视图 8：面试准备 (线下面试现场提纲辅助页面) -->
+    <div id="view-interview-prep" class="view-layer bg-slate-50">
+        <div class="page-header justify-between bg-white border-b border-slate-100">
+            <button class="w-10 h-10 flex items-center justify-center text-slate-600 tap-active -ml-2" onclick="navBack()">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-sm font-extrabold text-slate-900 text-center tracking-wide">面试准备</h2>
+            <!-- 微信小程序顶部的多任务控制按钮样式 -->
+            <div class="flex items-center gap-2 bg-slate-100/80 border border-slate-200/40 rounded-full px-2.5 py-1 text-slate-700">
+                <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                <span class="w-[1px] h-3 bg-slate-300"></span>
+                <i data-lucide="circle" class="w-3.5 h-3.5"></i>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4 pb-32">
+            <!-- 候选人基本信息 -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-2xl shrink-0">👨‍💻</div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">李明</h3>
+                    <p class="text-xs text-slate-400 font-semibold mt-1">男 | 26岁 | 本科 | 4年经验</p>
+                </div>
+            </div>
+
+            <!-- 简历附件卡片 -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800 leading-tight">【高级后端研发工程...</h4>
+                        <span class="text-[10px] text-slate-400 mt-1 block">249.4KB</span>
+                    </div>
+                </div>
+                <button onclick="openModal('modal-attachment-resume')" class="text-xs font-bold text-blue-600 hover:underline">查看</button>
+            </div>
+
+            <!-- 面试准备标题 -->
+            <div class="px-1">
+                <h3 class="text-base font-bold text-slate-900 leading-tight">面试准备 - <span class="text-blue-600 font-extrabold">店长</span> 岗位</h3>
+                <p class="text-xs text-slate-400 mt-1 font-medium">AI 已为您准备好面试提纲，建议先浏览一遍</p>
+            </div>
+
+            <!-- Step 1 Card -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft space-y-3">
+                <h4 class="text-sm font-bold text-slate-800">Step 1: 品牌介绍与破冰</h4>
+                <div class="bg-[#f8fafc] rounded-xl p-3.5 border border-slate-100 text-xs text-slate-600 leading-relaxed font-normal">
+                    您好！欢迎参加BEIFACE贝颜的店长岗位面试。我是今天的面试官。BEIFACE贝颜创立于2015年，经过近10年的高速发展，已成为横跨科美、医美、家美‘三美’领域的专业品牌，在全国拥有200家直营门店和近3000名员工。我们汇聚了顶尖的专业服务团队 and 先进技术，致力于为女性提供一站式美丽定制服务。我们正在寻找一位经验丰富、热爱美业、善于带领团队的伙伴，共同为‘创造健康与美丽’的使命而奋斗。今天的交流将帮助我们更好地了解彼此，期待您的精彩分享。
+                </div>
+            </div>
+
+            <!-- Step 2 Card -->
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft space-y-3">
+                <h4 class="text-sm font-bold text-slate-800">Step 2: 核心能力考察</h4>
+                <div class="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed">
+                    <span class="w-4 h-4 rounded-full border border-slate-300 shrink-0 mt-0.5"></span>
+                    <div>
+                        <p class="font-medium text-slate-700">请结合您过去3年以上的店长经验，分享一个您认为最成功的门店运营案例。具体说明您当时...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部吸底控制区 -->
+        <div class="absolute bottom-0 w-full bg-white border-t border-slate-100 p-4 pb-safe z-30 shadow-[0_-4px_15px_rgba(0,0,0,0.02)]">
+            <button id="btn-start-record" onclick="toggleOfflineRecording()" class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 tap-active">
+                <i data-lucide="mic" class="w-5 h-5"></i>
+                <span id="txt-record-state">开始面试录音</span>
+            </button>
+            <p class="text-center text-[10px] text-slate-400 mt-2 font-medium">点击开始后，系统将全程录音并生成评估报告</p>
+        </div>
+    </div>
+
+    <!-- 弹窗：选择分配录入岗位 -->
+    <div id="modal-add-candidate" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden flex-col justify-end" onclick="closeModal('modal-add-candidate')">
+        <div class="bg-white rounded-t-3xl p-6 pb-safe w-full max-w-[448px] mx-auto" onclick="event.stopPropagation()" style="animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+            <h3 class="text-lg font-bold text-slate-900 mb-2 text-center">选择录入岗位</h3>
+            <p class="text-xs text-slate-400 text-center mb-5">请选择要把新候选人添加至哪一个在招岗位下</p>
+            
+            <div class="space-y-2.5 mb-6 max-h-64 overflow-y-auto no-scrollbar">
+                <div class="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-2xl p-4 cursor-pointer tap-active flex items-center justify-between" onclick="selectJobAndClose('高级前端工程师')">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">高级前端工程师</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">杭州 · 3-5年 · 15k-25k</div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </div>
+
+                <div class="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-2xl p-4 cursor-pointer tap-active flex items-center justify-between" onclick="selectJobAndClose('产品经理')">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">产品经理</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">北京 · 1-3年 · 12k-18k</div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </div>
+
+                <div class="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-2xl p-4 cursor-pointer tap-active flex items-center justify-between" onclick="selectJobAndClose('美学顾问')">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">美学顾问</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">上海 · 3-5年 · 15k-25k</div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </div>
+
+                <div class="bg-slate-50 hover:bg-slate-100/80 border border-slate-100 rounded-2xl p-4 cursor-pointer tap-active flex items-center justify-between" onclick="selectJobAndClose('高级大客户经理')">
+                    <div>
+                        <div class="font-bold text-sm text-slate-800">高级大客户经理</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">深圳 · 5-10年 · 20k-35k</div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </div>
+            </div>
+            
+            <button class="w-full bg-slate-100 text-slate-700 rounded-2xl py-3.5 text-[15px] font-bold tap-active" onclick="closeModal('modal-add-candidate')">取消</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：选择面试方式 -->
+    <div id="modal-interview-type" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden flex-col justify-end" onclick="closeModal('modal-interview-type')">
+        <div class="bg-white rounded-t-3xl p-5 pb-safe w-full max-w-[448px] mx-auto max-h-[88vh] overflow-y-auto no-scrollbar" onclick="event.stopPropagation()" style="animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+            <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">请选择面试方式</h3>
+            
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-400 rounded-2xl p-4 mb-3 cursor-pointer tap-active relative overflow-hidden" onclick="sendAIInterview()">
+                <div class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-xl">推荐</div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 shrink-0"><i data-lucide="bot" class="w-7 h-7"></i></div>
+                    <div>
+                        <div class="font-bold text-[15px] text-blue-700 mb-1">全自动 AI 面试</div>
+                        <div class="text-xs text-slate-500 leading-snug">发送专属链接，AI 虚拟面试官自动完成面试并输出多维评估报告。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-3 cursor-pointer tap-active" onclick="startOnlineInterviewFlow()">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center text-sky-600 shrink-0">
+                        <i data-lucide="video" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-[15px] text-slate-800">线上人工面试</span>
+                            <span class="text-[9px] font-bold text-sky-600 bg-sky-50 border border-sky-100 px-1.5 py-0.5 rounded-md">腾讯会议闭环</span>
+                        </div>
+                        <div class="text-xs text-slate-500 leading-snug">创建腾讯会议，同时把 AI 面试官题单入口发给面试官；会议转写回传后自动生成面评报告。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 mb-5 cursor-pointer tap-active" onclick="startOfflineInterviewFlow()">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-600 shrink-0">
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-[15px] text-slate-800 mb-1">线下面试</div>
+                        <div class="text-xs text-slate-500 leading-snug">HR 线下现场沟通面试，AI 提供面试辅助与录音提纲，自动生成面评报告。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="w-full bg-slate-100 text-slate-700 rounded-2xl py-3.5 text-[15px] font-bold tap-active" onclick="closeModal('modal-interview-type')">取消</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：线上人工面试安排 -->
+    <div id="modal-online-interview" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[101] hidden flex-col justify-end" onclick="closeModal('modal-online-interview')">
+        <div class="bg-white rounded-t-3xl p-6 pb-safe w-full max-w-[448px] mx-auto max-h-[88vh] overflow-y-auto no-scrollbar" onclick="event.stopPropagation()" style="animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+            <div class="flex items-start justify-between gap-3 mb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">安排线上人工面试</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">面试在腾讯会议进行，面试官通过小程序题单看题和记录要点。</p>
+                </div>
+                <button onclick="closeModal('modal-online-interview')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center tap-active shrink-0">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 mb-4">
+                <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-4 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-xl">推荐流程</div>
+                    <div class="flex items-start gap-3 pr-10">
+                        <div class="w-9 h-9 rounded-xl bg-white shadow-sm flex items-center justify-center text-sky-600 shrink-0">
+                            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-sm font-extrabold text-slate-900 mb-1">AI 已生成面试官题单</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">题单会随会议邀请一起发给面试官。面试时，面试官一边开腾讯会议，一边在小程序题单页查看问题、追问提示和记录要点。</p>
+                        </div>
+                    </div>
+                    <button onclick="openOnlineQuestionSheet()" class="w-full bg-white border border-sky-100 text-sky-700 rounded-xl py-2.5 mt-3 text-xs font-bold tap-active flex items-center justify-center gap-2">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        <span>预览面试官题单</span>
+                    </button>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                            <i data-lucide="video" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-sm font-extrabold text-slate-900 mb-1">创建腾讯会议并开启数据回收</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">系统创建会议后，会默认开启云录制和转写。会议结束后通过 Webhook 回传逐字稿，再结合题单生成面评报告。</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mt-3">
+                        <div class="bg-slate-50 rounded-xl p-2 text-center">
+                            <div class="text-[10px] font-bold text-slate-700">会议链接</div>
+                            <div class="text-[9px] text-slate-400 mt-0.5">给双方</div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-2 text-center">
+                            <div class="text-[10px] font-bold text-slate-700">题单入口</div>
+                            <div class="text-[9px] text-slate-400 mt-0.5">给面试官</div>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-2 text-center">
+                            <div class="text-[10px] font-bold text-slate-700">转写回传</div>
+                            <div class="text-[9px] text-slate-400 mt-0.5">生成报告</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-100 rounded-2xl p-3 flex items-start gap-2.5">
+                    <i data-lucide="info" class="w-4 h-4 text-amber-600 mt-0.5 shrink-0"></i>
+                    <p class="text-[11px] text-amber-700 leading-relaxed">若临时改用微信电话或其他软件，可先使用同一份题单；面试后需要手动上传录音或粘贴纪要，系统才能生成报告。</p>
+                </div>
+            </div>
+
+            <button onclick="createTencentMeetingInterview()" class="w-full bg-sky-600 hover:bg-sky-700 text-white rounded-2xl py-3.5 text-sm font-bold shadow-lg shadow-sky-600/20 tap-active flex items-center justify-center gap-2">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>创建腾讯会议并发送邀请</span>
+            </button>
+            <button class="w-full bg-slate-100 text-slate-700 rounded-2xl py-3 mt-3 text-sm font-bold tap-active" onclick="closeModal('modal-online-interview')">稍后再安排</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：编辑/修改简历 -->
+    <div id="modal-edit-resume" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden flex-col justify-end" onclick="closeModal('modal-edit-resume')">
+        <div class="bg-white rounded-t-3xl p-6 pb-safe w-full max-w-[448px] mx-auto" onclick="event.stopPropagation()" style="animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900">修改简历信息</h3>
+                <button onclick="closeModal('modal-edit-resume')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">候选人姓名</label>
+                    <input type="text" id="edit-name" value="李明" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1.5">Age</label>
+                        <input type="text" id="edit-age" value="26岁" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1.5">工作经验</label>
+                        <input type="text" id="edit-exp" value="4年经验" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1.5">性别</label>
+                        <select id="edit-gender" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1.5">最高学历</label>
+                        <input type="text" id="edit-edu" value="本科" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                    </div>
+                </div>
+            </div>
+            <button onclick="saveResumeInfo()" class="w-full bg-blue-600 text-white rounded-2xl py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 tap-active">保存修改</button>
+        </div>
+    </div>
+
+    <!-- 弹窗：查看原附件简历 -->
+    <div id="modal-attachment-resume" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center p-4" onclick="closeModal('modal-attachment-resume')">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-[390px]" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-3.5 pb-2.5 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="text-rose-500"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800 leading-tight">李明_高级前端工程师_4年.pdf</h4>
+                        <span class="text-[10px] text-slate-400">1.2 MB · 原始简历原件</span>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-attachment-resume')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 h-96 overflow-y-auto no-scrollbar text-[11px] text-slate-600 leading-relaxed space-y-4">
+                <div class="text-center pb-3 border-b border-slate-200/60">
+                    <div class="text-base font-bold text-slate-900 mb-1">李明的个人简历</div>
+                    <div class="text-[10px] text-slate-400">电话：138-xxxx-xxxx | 邮箱：liming@outlook.com</div>
+                </div>
+                <div>
+                    <div class="font-bold text-slate-900 border-l-2 border-slate-400 pl-1.5 mb-1">教育背景</div>
+                    <div>2016 - 2020 · 某理工大学 · 计算机科学与技术 · 本科</div>
+                </div>
+                <div>
+                    <div class="font-bold text-slate-900 border-l-2 border-slate-400 pl-1.5 mb-1.5">工作经历</div>
+                    <div class="space-y-2">
+                        <div>
+                            <div class="flex justify-between font-semibold text-slate-800">
+                                <span>某科技（深圳）有限公司</span>
+                                <span>2022.07 - 至今</span>
+                            </div>
+                            <div class="text-blue-600 font-semibold">高级前端开发工程师</div>
+                            <div class="text-slate-500 scale-95 origin-left mt-0.5">负责 SaaS 平台核心大屏可视化与拖拽组件库自研，采用 Web Worker 机制优化十万级海量元数据渲染耗时。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2.5 mt-4">
+                <button onclick="showToast('📥 附件已开始下载')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 tap-active">
+                    <i data-lucide="download" class="w-4 h-4"></i> 下载PDF
+                </button>
+                <button onclick="closeModal('modal-attachment-resume')" class="flex-1 bg-blue-600 text-white rounded-xl py-2.5 text-xs font-bold flex items-center justify-center tap-active">
+                    确认无误
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 搜索匹配等待动画遮罩 -->
+    <div id="ai-loading-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[999] hidden flex-col items-center justify-center p-6" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-[340px] text-center shadow-2xl relative overflow-hidden">
+            <!-- 能量炫光背景 -->
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full filter blur-xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-blue-500/10 rounded-full filter blur-xl"></div>
+            
+            <div class="w-16 h-16 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-indigo-500/20 animate-bounce">
+                <i data-lucide="bot" class="w-8 h-8"></i>
+            </div>
+            
+            <h4 class="text-sm font-extrabold text-slate-800 mb-1">AI 正在深度搜索匹配...</h4>
+            <p class="text-[11px] text-slate-400 mb-4 h-4" id="ai-matching-step">正在比对关联岗位 JD 要求与核心画像...</p>
+            
+            <!-- 匹配加载进度条 -->
+            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-2">
+                <div id="ai-matching-progress" class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300" style="width: 15%"></div>
+            </div>
+            <span id="ai-matching-percent" class="text-[11px] font-extrabold text-slate-400">15%</span>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    </style>
+
+</div>
+
+<script>
+    // 初始化 Lucide 图标库
+    lucide.createIcons();
+
+    // 路由导航栈
+    let viewStack = ['view-home'];
+
+    // 路由跳转
+    function navTo(viewId) {
+        document.querySelectorAll('.view-layer').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        viewStack.push(viewId);
+        
+        // 确保新激活的图层图标被 Lucide 正确绘制
+        lucide.createIcons();
+
+        // 当跳转至 AI 招聘大盘时，刷新动态列表
+        if (viewId === 'view-ai-recruitment') {
+            renderAiTasks();
+        }
+    }
+
+    // 路由返回
+    function navBack() {
+        if (viewStack.length > 1) {
+            viewStack.pop();
+            const prevView = viewStack[viewStack.length - 1];
+            document.querySelectorAll('.view-layer').forEach(el => el.classList.remove('active'));
+            document.getElementById(prevView).classList.add('active');
+            lucide.createIcons();
+            
+            if (prevView === 'view-ai-recruitment') {
+                renderAiTasks();
+            }
+        }
+    }
+
+    function normalizeHomeJobKeyword(value) {
+        return (value || '').toString().toLowerCase().replace(/\s+/g, '');
+    }
+
+    // 招聘首页：搜索在招岗位
+    function filterHomeJobs() {
+        const input = document.getElementById('home-job-search');
+        const cards = document.querySelectorAll('#home-jobs-list .home-job-card');
+        const emptyState = document.getElementById('home-job-empty');
+        const countText = document.getElementById('home-job-count');
+        const clearBtn = document.getElementById('home-job-search-clear');
+        if (!input || cards.length === 0) return;
+
+        const query = normalizeHomeJobKeyword(input.value);
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const searchableText = normalizeHomeJobKeyword(`${card.innerText} ${card.dataset.keywords || ''}`);
+            const isMatched = !query || searchableText.includes(query);
+            card.classList.toggle('hidden', !isMatched);
+            if (isMatched) visibleCount++;
+        });
+
+        if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+        if (countText) countText.innerText = query ? `搜索到 ${visibleCount} 个在招岗位` : `${cards.length} 个岗位正在招聘`;
+        if (clearBtn) clearBtn.classList.toggle('hidden', !query);
+    }
+
+    function clearHomeJobSearch() {
+        const input = document.getElementById('home-job-search');
+        if (!input) return;
+        input.value = '';
+        filterHomeJobs();
+        input.focus();
+    }
+
+    // 数据模型：AI 智能招聘大盘任务
+    let aiTasks = [
+        { id: 1001, title: '高级前端工程师', status: '进行中', date: '2026-06-05', mandatoryCount: 3, bonusCount: 2, matched: 12, unread: 3, communicated: 5 },
+        { id: 1002, title: '产品经理', status: '进行中', date: '2026-06-03', mandatoryCount: 1, bonusCount: 1, matched: 5, unread: 0, communicated: 2 },
+        { id: 1003, title: 'UI设计师', status: '已结束', date: '2026-05-20', mandatoryCount: 4, bonusCount: 2, matched: 45, unread: 0, communicated: 18 }
+    ];
+
+    let currentTaskTab = '全部';
+    let taskSearchQuery = '';
+
+    // 任务状态切换
+    function switchTaskTab(tabName) {
+        currentTaskTab = tabName;
+        const buttons = document.querySelectorAll('.task-tab-btn');
+        buttons.forEach(btn => {
+            if (btn.innerText === tabName || (tabName === '草稿' && btn.innerText === '草稿箱')) {
+                btn.className = "task-tab-btn px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm shrink-0 transition-all";
+            } else {
+                btn.className = "task-tab-btn px-4 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-xl shrink-0 transition-all";
+            }
+        });
+        filterAiTasksCombined();
+    }
+
+    // 任务组合筛选
+    function filterAiTasksCombined() {
+        taskSearchQuery = document.getElementById('ai-task-search').value.toLowerCase();
+        renderAiTasks();
+    }
+
+    // 渲染 AI 智能任务大盘列表卡片 (精简和紧凑化：完全还原 image_28e18c.png 布局)
+    function renderAiTasks() {
+        const container = document.getElementById('ai-tasks-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        // 过滤逻辑
+        let filtered = aiTasks.filter(task => {
+            const matchesSearch = task.title.toLowerCase().includes(taskSearchQuery);
+            let matchesTab = true;
+            if (currentTaskTab === '进行中') matchesTab = (task.status === '进行中');
+            else if (currentTaskTab === '已结束') matchesTab = (task.status === '已结束');
+            else if (currentTaskTab === '草稿') matchesTab = (task.status === '草稿');
+            return matchesSearch && matchesTab;
+        });
+
+        // 空状态展现
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4 shadow-sm">
+                        <i data-lucide="folder-open" class="w-8 h-8 stroke-[1.5]"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-700">还没有招聘任务</h3>
+                    <p class="text-xs text-slate-400 mt-1.5 max-w-[210px] mx-auto leading-relaxed">没有搜索到符合条件的内容，点击下方按钮发起第一个 AI 匹配任务</p>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
+        }
+
+        // 遍历输出任务 white 卡 (根据 image_0eec6a.png 反馈：精简色彩，提升界面高级感)
+        filtered.forEach(task => {
+            let statusBadgeClass = '';
+            if (task.status === '进行中') {
+                statusBadgeClass = 'bg-[#effaf5] text-[#10b981] border border-[#d1fae5]';
+            } else if (task.status === '草稿') {
+                statusBadgeClass = 'bg-slate-100 text-slate-500 border border-slate-200/40';
+            } else {
+                statusBadgeClass = 'bg-slate-50 text-slate-400 border border-slate-100/40';
+            }
+
+            const card = document.createElement('div');
+            // 卡片主体可点击，直接去查看对应的简历
+            card.className = "bg-white rounded-2xl p-4 border border-slate-100/80 shadow-soft cursor-pointer tap-active relative transition-all duration-300 hover:shadow-md";
+            card.setAttribute('onclick', `viewTaskTalents('${task.title}')`);
+            
+            card.innerHTML = `
+                <!-- 顶部栏：标题 + 状态标签 + 更多操作(···) -->
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center gap-2">
+                        <h4 class="text-[14px] font-extrabold text-slate-900 tracking-tight">${task.title}</h4>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg ${statusBadgeClass}">${task.status}</span>
+                    </div>
+                    
+                    <!-- 更多选项触发器 -->
+                    <div class="relative" onclick="event.stopPropagation()">
+                        <button onclick="toggleTaskMenu(${task.id}, event)" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-full transition-all tap-active">
+                            <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <!-- 下拉选项菜单 -->
+                        <div id="task-menu-${task.id}" class="hidden absolute right-0 top-8 w-28 bg-white border border-slate-200/80 rounded-2xl shadow-xl z-30 py-1.5 overflow-hidden animate-fade">
+                            <button onclick="editTask(${task.id}); event.stopPropagation();" class="w-full text-left px-3.5 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1.5 transition-colors">
+                                <i data-lucide="edit-3" class="w-3.5 h-3.5 text-blue-500"></i> 编辑任务
+                            </button>
+                            <button onclick="copyTask(${task.id}); event.stopPropagation();" class="w-full text-left px-3.5 py-2 text-[11px] font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1.5 transition-colors">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-indigo-500"></i> 复制任务
+                            </button>
+                            <button onclick="endTask(${task.id}); event.stopPropagation();" class="w-full text-left px-3.5 py-2 text-[11px] font-bold text-rose-500 hover:bg-rose-50 flex items-center gap-1.5 transition-colors">
+                                <i data-lucide="power" class="w-3.5 h-3.5 text-rose-500"></i> 结束任务
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 次级行：发布时间、必选核心词数、加分词数 -->
+                <div class="flex items-center gap-2 text-[10px] text-slate-400 font-medium mb-3">
+                    <span>发布：${task.date}</span>
+                    <span class="text-slate-300">•</span>
+                    <span>必要条件：${task.mandatoryCount} 个</span>
+                </div>
+
+                <!-- 核心统计大数盒子 (根据 image_0eec6a.png 视觉反馈进行极致精简：统一灰黑，去除杂乱彩色) -->
+                <div class="grid grid-cols-3 gap-1 bg-[#f8fafc] p-3 rounded-2xl border border-slate-100/60 text-center">
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">AI已匹配简历</div>
+                        <div class="text-lg font-bold text-slate-800 mt-1">${task.matched}</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">待查看简历</div>
+                        <div class="text-lg font-bold text-slate-800 mt-1">${task.unread}</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">已沟通数</div>
+                        <div class="text-lg font-bold text-slate-800 mt-1">${task.communicated}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        lucide.createIcons();
+    }
+
+    // 菜单状态切换
+    function toggleTaskMenu(taskId, event) {
+        event.stopPropagation();
+        // 关闭其他已打开的菜单
+        document.querySelectorAll("[id^='task-menu-']").forEach(el => {
+            if (el.id !== `task-menu-${taskId}`) {
+                el.classList.add('hidden');
+            }
+        });
+        const targetMenu = document.getElementById(`task-menu-${taskId}`);
+        if (targetMenu) {
+            targetMenu.classList.toggle('hidden');
+        }
+    }
+
+    // 菜单外面点击自动闭合
+    window.addEventListener('click', function() {
+        document.querySelectorAll("[id^='task-menu-']").forEach(el => {
+            el.classList.add('hidden');
+        });
+    });
+
+    // 菜单功能 1：编辑
+    function editTask(taskId) {
+        const task = aiTasks.find(t => t.id === taskId);
+        if (task) {
+            // 装填基本信息至创建界面
+            const selectEl = document.getElementById('ai-job-select-dropdown');
+            if (selectEl) selectEl.value = task.title;
+            navTo('view-ai-recruitment-create');
+            showToast('已载入任务偏好配置进行微调编辑');
+        }
+    }
+
+    // 菜单功能 2：复制任务
+    function copyTask(taskId) {
+        const task = aiTasks.find(t => t.id === taskId);
+        if (task) {
+            const duplicated = {
+                ...task,
+                id: Math.floor(Math.random() * 9000) + 1000,
+                title: task.title + ' (副本)',
+                date: new Date().toISOString().split('T')[0]
+            };
+            aiTasks.unshift(duplicated);
+            renderAiTasks();
+            showToast('📋 任务复制克隆成功！');
+        }
+    }
+
+    // 菜单功能 3：结束任务
+    function endTask(taskId) {
+        const task = aiTasks.find(t => t.id === taskId);
+        if (task) {
+            task.status = '已结束';
+            renderAiTasks();
+            showToast('🔒 任务已归档，停止捕获新简历');
+        }
+    }
+
+    // “查看简历”快速筛选：跳转并联动筛选人才库
+    function viewTaskTalents(jobTitle) {
+        navTo('view-talent-pool');
+        currentTalentStatus = 'all';
+        updateTalentStatusTabs();
+        const filterSelect = document.getElementById('filter-job');
+        const advancedFilters = document.getElementById('talent-advanced-filters');
+        if (filterSelect) {
+            filterSelect.value = jobTitle;
+            if (advancedFilters) advancedFilters.classList.remove('hidden');
+            filterTalentsCombined();
+            showToast(`已为您自动筛选「${jobTitle}」的简历`);
+        }
+    }
+
+    // 页签点击事件：简历筛选
+    function switchTab(element, tabId) {
+        const tabs = element.parentElement.querySelectorAll('.tab');
+        tabs.forEach(t => {
+            t.className = 'tab flex-1 text-center py-3 text-[13px] font-medium text-slate-500 border-b-2 border-transparent cursor-pointer';
+        });
+        element.className = 'tab flex-1 text-center py-3 text-[13px] font-bold text-blue-600 border-b-2 border-blue-600 cursor-pointer';
+
+        const viewContainer = element.closest('.view-layer');
+        const contents = viewContainer.querySelectorAll('.tab-content');
+        contents.forEach(c => {
+            c.classList.remove('block');
+            c.classList.add('hidden');
+        });
+        const activeContent = document.getElementById('tab-' + tabId);
+        activeContent.classList.remove('hidden');
+        activeContent.classList.add('block');
+    }
+
+    // 切换“发布岗位”内部子页签 (语音 vs 粘贴)
+    function switchCreateJobSubTab(subTabId) {
+        const voiceBtn = document.getElementById('btn-subtab-voice');
+        const pasteBtn = document.getElementById('btn-subtab-paste');
+        const voiceContent = document.getElementById('content-create-voice');
+        const pasteContent = document.getElementById('content-create-paste');
+        const voiceActions = document.getElementById('action-voice-group');
+        const pasteActions = document.getElementById('action-paste-group');
+
+        if (subTabId === 'voice') {
+            voiceBtn.className = "flex-1 py-3 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all bg-white text-blue-600 shadow-sm relative";
+            pasteBtn.className = "flex-1 py-3 text-xs font-medium rounded-xl flex items-center justify-center gap-1.5 transition-all text-slate-500 hover:text-slate-700";
+            voiceContent.classList.replace('hidden', 'block');
+            pasteContent.classList.replace('block', 'hidden');
+            voiceActions.classList.replace('hidden', 'block');
+            pasteActions.classList.replace('block', 'hidden');
+        } else {
+            pasteBtn.className = "flex-1 py-3 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all bg-white text-blue-600 shadow-sm relative";
+            voiceBtn.className = "flex-1 py-3 text-xs font-medium rounded-xl flex items-center justify-center gap-1.5 transition-all text-slate-500 hover:text-slate-700";
+            pasteContent.classList.replace('hidden', 'block');
+            voiceContent.classList.replace('block', 'hidden');
+            pasteActions.classList.replace('hidden', 'block');
+            voiceActions.classList.replace('block', 'hidden');
+        }
+    }
+
+    // 模拟语音录音交互 -> 自动导入并跳转至画像评估页
+    let recordingInterval = null;
+    let recordingSeconds = 0;
+    let isRecordingPaused = false;
+
+    function startVoiceRecording() {
+        showToast('🎙️ 录音已开始，请开始畅聊您的需求...');
+        document.getElementById('action-voice-group').classList.add('hidden');
+        document.getElementById('action-recording-group').classList.remove('hidden');
+        document.getElementById('action-recording-group').classList.add('flex');
+        
+        recordingSeconds = 0;
+        isRecordingPaused = false;
+        updateTimerDisplay();
+
+        const textPause = document.getElementById('text-pause');
+        const btnPause = document.getElementById('btn-pause-recording');
+        const iconPause = btnPause.querySelector('i') || btnPause.querySelector('svg');
+
+        textPause.innerText = "暂停录音";
+        if (iconPause) {
+            iconPause.setAttribute('data-lucide', 'pause');
+        }
+        lucide.createIcons();
+
+        clearInterval(recordingInterval);
+        recordingInterval = setInterval(() => {
+            if (!isRecordingPaused) {
+                recordingSeconds++;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+        const secs = String(recordingSeconds % 60).padStart(2, '0');
+        document.getElementById('recording-timer').innerText = `${mins}:${secs}`;
+    }
+
+    function togglePauseRecording() {
+        isRecordingPaused = !isRecordingPaused;
+        const textPause = document.getElementById('text-pause');
+        const btnPause = document.getElementById('btn-pause-recording');
+        const iconPause = btnPause.querySelector('svg') || btnPause.querySelector('i');
+        
+        if (isRecordingPaused) {
+            textPause.innerText = "继续录音";
+            if (iconPause) {
+                iconPause.setAttribute('data-lucide', 'play');
+            }
+            showToast('⏸️ 录音已暂停');
+        } else {
+            textPause.innerText = "暂停录音";
+            if (iconPause) {
+                iconPause.setAttribute('data-lucide', 'pause');
+            }
+            showToast('🎙️ 录音继续...');
+        }
+        lucide.createIcons();
+    }
+
+    function endVoiceRecording() {
+        clearInterval(recordingInterval);
+        recordingInterval = null;
+        
+        showToast('🤖 AI 正在智能转译语音内容并建模...');
+        setTimeout(() => {
+            document.getElementById('jd-title-input').value = '高级前端工程师';
+            showToast('✨ 画像模型已建立，正在进行匹配...');
+            
+            document.getElementById('action-recording-group').classList.add('hidden');
+            document.getElementById('action-recording-group').classList.remove('flex');
+            document.getElementById('action-voice-group').classList.remove('hidden');
+            
+            setTimeout(() => {
+                navTo('view-jd-generation');
+            }, 1000);
+        }, 1500);
+    }
+
+    // 模拟一键粘贴
+    function mockPasteJD() {
+        document.getElementById('jd-paste-textarea').value = "招聘要求：我们需要招一个高级前端开发，最好懂React和Vue，工作经验在3到5年左右。工作地点在杭州。主要负责公司核心SaaS平台开发，要求能够抗压，沟通能力好，薪酬预算大体在15k-25k之间。";
+        showToast('📋 已从系统粘贴文本草稿');
+    }
+
+    // 模拟清空
+    function clearPasteJD() {
+        document.getElementById('jd-paste-textarea').value = '';
+        showToast('🗑️ 已清稿当前草稿');
+    }
+
+    // 一键帮你优化岗位JD
+    function optimizePasteJD() {
+        const textValue = document.getElementById('jd-paste-textarea').value;
+        if (!textValue) {
+            showToast('💡 请先填入或粘贴JD文本草稿');
+            return;
+        }
+        showToast('✨ AI 正在提炼、润色与格式化JD...');
+        setTimeout(() => {
+            navTo('view-jd-generation');
+        }, 1200);
+    }
+
+    // 不优化直接保存 (回到首页)
+    function saveJob() {
+        showToast('🚀 岗位已全网发布');
+        setTimeout(() => {
+            viewStack = ['view-home'];
+            document.querySelectorAll('.view-layer').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-home').classList.add('active');
+            lucide.createIcons();
+        }, 1000);
+    }
+
+    // 从 JD 画像生成页确定保存 (回到首页)
+    function saveJobFromJDGen() {
+        showToast('🚀 岗位优化发布成功！');
+        setTimeout(() => {
+            viewStack = ['view-home'];
+            document.querySelectorAll('.view-layer').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-home').classList.add('active');
+            lucide.createIcons();
+        }, 1000);
+    }
+
+    // 动态更新 Step 2 输入提示计数器
+    function updatePromptCharCounter() {
+        const input = document.getElementById('ai-custom-prompt-input');
+        const count = input.value.length;
+        document.getElementById('prompt-char-counter').innerText = `${count}/500字`;
+    }
+
+    // 启动 AI 深度检索并建立全新的找简历后台任务 (结合图2表单逻辑)
+    function startAiMatchingFlow() {
+        const loadingModal = document.getElementById('ai-loading-modal');
+        const progress = document.getElementById('ai-matching-progress');
+        const percentText = document.getElementById('ai-matching-percent');
+        const stepText = document.getElementById('ai-matching-step');
+
+        const activeJob = document.getElementById('ai-job-select-dropdown').value;
+        const customPrompt = document.getElementById('ai-custom-prompt-input').value;
+        const input1 = document.getElementById('ai-mandatory-input-1').value.trim();
+        const input2 = document.getElementById('ai-mandatory-input-2').value.trim();
+
+        // 统计填写的必要条件数
+        const mandatoryCount = [input1, input2].filter(Boolean).length;
+
+        loadingModal.classList.remove('hidden');
+        loadingModal.classList.add('flex');
+        
+        // 第一阶段
+        progress.style.width = "25%";
+        percentText.innerText = "25%";
+        stepText.innerText = "🔍 正在比对关联岗位 JD 要求与核心画像...";
+
+        // 第二阶段
+        setTimeout(() => {
+            progress.style.width = "55%";
+            percentText.innerText = "55%";
+            stepText.innerText = "🧠 正在扫描人才库简历硬性筛选条件...";
+        }, 700);
+
+        // 第三阶段
+        setTimeout(() => {
+            progress.style.width = "85%";
+            percentText.innerText = "85%";
+            stepText.innerText = "✨ 结合大模型语意深度计算必要条件匹配...";
+        }, 1400);
+
+        // 最终匹配完成
+        setTimeout(() => {
+            progress.style.width = "100%";
+            percentText.innerText = "100%";
+            stepText.innerText = "🎉 任务创建成功，AI 已开始全自动寻访！";
+            
+            setTimeout(() => {
+                loadingModal.classList.remove('flex');
+                loadingModal.classList.add('hidden');
+                
+                // 将全新建立的任务塞入大盘中进行展示
+                const generatedId = Math.floor(Math.random() * 9000) + 1000;
+                const newlyCreatedTask = {
+                    id: generatedId,
+                    title: activeJob,
+                    status: '进行中',
+                    date: new Date().toISOString().split('T')[0],
+                    mandatoryCount: mandatoryCount || 2, // 若无输入，默认按占位符填充2个条件
+                    bonusCount: 0,
+                    matched: Math.floor(Math.random() * 20) + 8,
+                    unread: Math.floor(Math.random() * 4) + 1,
+                    communicated: 0
+                };
+                aiTasks.unshift(newlyCreatedTask);
+                
+                // 清空输入框以备下次发起
+                document.getElementById('ai-custom-prompt-input').value = "";
+                document.getElementById('ai-mandatory-input-1').value = "";
+                document.getElementById('ai-mandatory-input-2').value = "";
+                document.getElementById('prompt-char-counter').innerText = "0/500字";
+                
+                // 返回大盘并重绘列表
+                navTo('view-ai-recruitment');
+                showToast('🚀 AI 已自动开启寻访，开始捕获精准候选人！');
+            }, 400);
+        }, 2200);
+    }
+
+    // 智能人才库：按分类过滤
+    function toggleFilter(button, filterType) {
+        document.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.className = "filter-pill shrink-0 bg-white border border-slate-200 text-slate-500 text-[11px] font-medium px-3 py-1.5 rounded-full transition-all";
+        });
+        button.className = "filter-pill shrink-0 bg-blue-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full shadow-sm transition-all";
+        
+        // 作用域限定：只过滤人才库下的卡片，隔离首页 Kanban 看板
+        const cards = document.querySelectorAll('#talents-list .talent-card');
+        cards.forEach(card => {
+            if (filterType === 'all') {
+                card.style.display = 'block';
+            } else {
+                const cardTags = card.getAttribute('data-tags');
+                if (cardTags.includes(filterType)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        });
+        showToast(`🔍 已为您筛选具有 #${filterType} 属性的人才`);
+    }
+
+    // 智能人才库：输入框搜索
+    function filterTalents() {
+        const query = document.getElementById('talent-search').value.toLowerCase();
+        // 作用域限定：只搜索人才库下的卡片
+        const cards = document.querySelectorAll('#talents-list .talent-card');
+        
+        cards.forEach(card => {
+            const textContent = card.innerText.toLowerCase();
+            if (textContent.includes(query)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // 删除标签元素
+    function removeTag(element) {
+        element.remove();
+        showToast('🗑️ 已删除该画像指标');
+    }
+
+    // 动态添加自定义画像标签
+    function addCustomTag() {
+        const tagName = prompt("请输入要添加的自定义画像标签：");
+        if (tagName) {
+            const cleanTagName = tagName.startsWith('#') ? tagName : '#' + tagName;
+            const tagsContainer = document.getElementById('portrait-tags');
+            const newTag = document.createElement('span');
+            newTag.className = "bg-indigo-50/70 text-indigo-600 text-xs font-semibold px-3.5 py-2 rounded-full border border-indigo-100/30 flex items-center gap-1.5 tap-active";
+            newTag.onclick = function() { removeTag(this); };
+            newTag.innerHTML = `${cleanTagName} <i data-lucide="x" class="w-3.5 h-3.5 opacity-60"></i>`;
+            tagsContainer.insertBefore(newTag, tagsContainer.lastElementChild);
+            lucide.createIcons();
+            showToast('✨ 新画像指标已加入评估模型');
+        }
+    }
+
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        lucide.createIcons();
+    }
+
+    // 优雅关闭弹窗
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // 选择分配录入岗位的点击事件并关闭弹窗返回首页
+    function selectJobAndClose(jobTitle) {
+        closeModal('modal-add-candidate');
+        showToast(`✅ 已成功创建并分配新候选人至【${jobTitle}】在招岗位`);
+        
+        // 导航切换返回首页
+        viewStack = ['view-home'];
+        document.querySelectorAll('.view-layer').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-home').classList.add('active');
+        lucide.createIcons();
+    }
+
+    let currentTalentStatus = 'all';
+
+    function normalizeTalentKeyword(value) {
+        return (value || '').toString().toLowerCase().replace(/\s+/g, '');
+    }
+
+    function updateTalentStatusTabs() {
+        const cards = Array.from(document.querySelectorAll('#talents-list .talent-card'));
+        const counts = cards.reduce((acc, card) => {
+            const status = card.getAttribute('data-status') || '';
+            acc.all += 1;
+            acc[status] = (acc[status] || 0) + 1;
+            return acc;
+        }, { all: 0 });
+
+        document.querySelectorAll('.talent-status-count').forEach(countEl => {
+            const status = countEl.getAttribute('data-count-for');
+            countEl.innerText = counts[status] || 0;
+        });
+
+        document.querySelectorAll('.talent-status-tab').forEach(tab => {
+            const isActive = tab.getAttribute('data-status') === currentTalentStatus;
+            tab.className = isActive
+                ? 'talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                : 'talent-status-tab shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200';
+            const countEl = tab.querySelector('.talent-status-count');
+            if (countEl) countEl.className = isActive ? 'talent-status-count ml-1 opacity-80' : 'talent-status-count ml-1 text-slate-400';
+        });
+    }
+
+    function switchTalentStatusTab(status) {
+        currentTalentStatus = status;
+        updateTalentStatusTabs();
+        filterTalentsCombined();
+    }
+
+    function toggleTalentFilters() {
+        const panel = document.getElementById('talent-advanced-filters');
+        if (!panel) return;
+        panel.classList.toggle('hidden');
+        lucide.createIcons();
+    }
+
+    // 人才库筛选：状态作为主维度，搜索/岗位/时间作为辅助条件
+    function filterTalentsCombined() {
+        const searchInput = document.getElementById('talent-search');
+        const jobSelect = document.getElementById('filter-job');
+        const timeSelect = document.getElementById('filter-time');
+        const searchVal = normalizeTalentKeyword(searchInput ? searchInput.value : '');
+        const jobVal = jobSelect ? jobSelect.value : 'all';
+        const timeVal = timeSelect ? timeSelect.value : 'all';
+        const cards = document.querySelectorAll('#talents-list .talent-card');
+        const emptyState = document.getElementById('talent-empty');
+        const resultCount = document.getElementById('talent-result-count');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const tags = card.getAttribute('data-tags') || '';
+            const cardJob = card.getAttribute('data-job') || '';
+            const cardStatus = card.getAttribute('data-status') || '';
+            const cardDays = parseInt(card.getAttribute('data-days') || '999');
+            const searchableText = normalizeTalentKeyword(`${card.innerText} ${tags} ${cardJob} ${cardStatus}`);
+
+            const matchesSearch = !searchVal || searchableText.includes(searchVal);
+            const matchesJob = (jobVal === 'all' || cardJob === jobVal);
+            const matchesStatus = (currentTalentStatus === 'all' || cardStatus === currentTalentStatus);
+            const matchesTime = (timeVal === 'all' || (timeVal === 'recent' && cardDays <= 30));
+            const isMatched = matchesSearch && matchesJob && matchesStatus && matchesTime;
+
+            card.style.display = isMatched ? 'block' : 'none';
+            if (isMatched) visibleCount++;
+        });
+
+        if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+        if (resultCount) resultCount.innerText = currentTalentStatus === 'all' ? `共 ${visibleCount} 位候选人` : `${currentTalentStatus} · ${visibleCount} 位候选人`;
+        updateTalentStatusTabs();
+    }
+
+    function saveResumeInfo() {
+        const nameInput = document.getElementById('edit-name').value;
+        const ageInput = document.getElementById('edit-age').value;
+        const expInput = document.getElementById('edit-exp').value;
+        const genderInput = document.getElementById('edit-gender').value;
+        const eduInput = document.getElementById('edit-edu').value;
+
+        document.getElementById('detail-name').innerText = nameInput;
+        document.getElementById('detail-meta').innerText = `${genderInput} | ${ageInput} | ${eduInput} | ${expInput}`;
+
+        closeModal('modal-edit-resume');
+        showToast('✅ 简历修改成功，已同步更新数据');
+    }
+
+    // 发起 AI 面试
+    function sendAIInterview() {
+        closeModal('modal-interview-type');
+        showToast('🤖 AI面试链接已通过微信发送给候选人');
+        setTimeout(() => { navBack(); }, 1500);
+    }
+
+    function resetInterviewPrepForOffline() {
+        const headerTitle = document.querySelector('#view-interview-prep .page-header h2');
+        const prepTitle = document.querySelector('#view-interview-prep .px-1 h3');
+        const prepDesc = document.querySelector('#view-interview-prep .px-1 p');
+        const btn = document.getElementById('btn-start-record');
+        const note = document.querySelector('#view-interview-prep .absolute.bottom-0 p');
+        if (headerTitle) headerTitle.innerText = '面试准备';
+        if (prepTitle) prepTitle.innerHTML = '面试准备 - <span class="text-blue-600 font-extrabold">店长</span> 岗位';
+        if (prepDesc) prepDesc.innerText = 'AI 已为您准备好面试提纲，建议先浏览一遍';
+        if (btn) {
+            btn.className = 'w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 tap-active';
+            btn.innerHTML = '<i data-lucide="mic" class="w-5 h-5"></i><span id="txt-record-state">开始面试录音</span>';
+            btn.onclick = toggleOfflineRecording;
+        }
+        if (note) note.innerText = '点击开始后，系统将全程录音并生成评估报告';
+        lucide.createIcons();
+    }
+
+    function prepareInterviewPrepForOnline() {
+        const headerTitle = document.querySelector('#view-interview-prep .page-header h2');
+        const prepTitle = document.querySelector('#view-interview-prep .px-1 h3');
+        const prepDesc = document.querySelector('#view-interview-prep .px-1 p');
+        const btn = document.getElementById('btn-start-record');
+        const note = document.querySelector('#view-interview-prep .absolute.bottom-0 p');
+        if (headerTitle) headerTitle.innerText = '面试官题单';
+        if (prepTitle) prepTitle.innerHTML = '线上复试题单 - <span class="text-blue-600 font-extrabold">高级前端工程师</span>';
+        if (prepDesc) prepDesc.innerText = '开腾讯会议时保持此页，可按题追问并记录要点';
+        if (btn) {
+            btn.className = 'w-full bg-sky-600 hover:bg-sky-700 text-white rounded-full py-3.5 text-sm font-bold shadow-lg shadow-sky-600/20 flex items-center justify-center gap-2 tap-active';
+            btn.innerHTML = '<i data-lucide="copy" class="w-5 h-5"></i><span>复制腾讯会议链接</span>';
+            btn.onclick = function() { showToast('会议链接已复制，可切回腾讯会议继续面试'); };
+        }
+        if (note) note.innerText = '会议结束后，腾讯会议转写会自动回传并生成面评报告';
+        lucide.createIcons();
+    }
+
+    // 发起线上人工面试
+    function startOnlineInterviewFlow() {
+        closeModal('modal-interview-type');
+        openModal('modal-online-interview');
+    }
+
+    function createTencentMeetingInterview() {
+        closeModal('modal-online-interview');
+        prepareInterviewPrepForOnline();
+        navTo('view-interview-prep');
+        showToast('腾讯会议链接已发送，已打开面试官题单');
+    }
+
+    function openOnlineQuestionSheet() {
+        closeModal('modal-online-interview');
+        prepareInterviewPrepForOnline();
+        navTo('view-interview-prep');
+    }
+
+    function createManualOnlineInterview() {
+        closeModal('modal-online-interview');
+        prepareInterviewPrepForOnline();
+        navTo('view-interview-prep');
+        showToast('已打开线上面试题单，面试后可上传录音或粘贴纪要');
+    }
+
+    // 发起人工面试
+    function sendHumanInterview() {
+        closeModal('modal-interview-type');
+        showToast('视频会议链接已生成并通知双方');
+        setTimeout(() => { navBack(); }, 1500);
+    }
+
+    function shareToCandidate() {
+        showToast('🔗 报告共享链接已生成，已通过短信/微信自动推送给候选人查看');
+    }
+
+    function shareToManager() {
+        showToast('🔗 复试评估卡片已复制，去发送给业务主管吧');
+        setTimeout(() => { navBack(); }, 1500);
+    }
+
+    // 跳转线下面试提纲准备页
+    function startOfflineInterviewFlow() {
+        closeModal('modal-interview-type');
+        resetInterviewPrepForOffline();
+        navTo('view-interview-prep');
+    }
+
+    let isOfflineRecording = false;
+    let offlineRecordingInterval = null;
+    let offlineRecordingSeconds = 0;
+
+    // 控制线下面试录音状态
+    function toggleOfflineRecording() {
+        const btn = document.getElementById('btn-start-record');
+        isOfflineRecording = !isOfflineRecording;
+        
+        if (isOfflineRecording) {
+            showToast('🎙️ 面试全程录音已开始，AI正在转译中...');
+            btn.className = "w-full bg-rose-600 hover:bg-rose-700 text-white rounded-full py-3.5 text-sm font-bold shadow-lg shadow-rose-600/20 flex items-center justify-center gap-2 tap-active";
+            btn.innerHTML = `<i data-lucide="square" class="w-5 h-5 animate-pulse"></i> <span id="txt-record-state">结束录音并生成面评报告 (<span id="offline-timer">00:00</span>)</span>`;
+            lucide.createIcons();
+            
+            offlineRecordingSeconds = 0;
+            offlineRecordingInterval = setInterval(() => {
+                offlineRecordingSeconds++;
+                const mins = String(Math.floor(offlineRecordingSeconds / 60)).padStart(2, '0');
+                const secs = String(offlineRecordingSeconds % 60).padStart(2, '0');
+                const timerEl = document.getElementById('offline-timer');
+                if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+        } else {
+            clearInterval(offlineRecordingInterval);
+            showToast('🧠 录音结束，AI正在快速生成面评报告...');
+            btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-3.5 text-sm font-bold shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 tap-active";
+            btn.innerHTML = `<i data-lucide="mic" class="w-5 h-5"></i> <span id="txt-record-state">开始面试录音</span>`;
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                navTo('view-first-report');
+            }, 1500);
+        }
+    }
+
+    let toastTimeout;
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.classList.remove('hidden');
+        toast.style.animation = 'none';
+        toast.offsetHeight;
+        toast.style.animation = 'fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+        
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2500);
+    }
+
+    document.getElementById('app-container').addEventListener('touchmove', function(e) {
+        if(e.target.closest('.overflow-y-auto') === null) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // 页面加载完成后自动绘制 AI 任务列表并渲染图标
+    window.onload = function() {
+        renderAiTasks();
+        filterHomeJobs();
+        filterTalentsCombined();
+    };
+
+</script>
+</body>
+</html>
