@@ -2906,6 +2906,40 @@
             background: #fff;
         }
 
+        .pc-new-conversation-notice {
+            margin: 8px 8px 0;
+            height: 32px;
+            width: calc(100% - 16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 1px solid #bfdbfe;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 650;
+            line-height: 1;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, .08);
+        }
+
+        .pc-new-conversation-notice.hidden {
+            display: none;
+        }
+
+        .pc-new-conversation-notice i {
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .pc-new-conversation-notice em {
+            color: #64748b;
+            font-size: 11px;
+            font-style: normal;
+            font-weight: 500;
+        }
+
         .pc-conversation-panel {
             width: 280px;
         }
@@ -3148,6 +3182,12 @@
 
                 </div>
             </div>
+
+            <button id="conversation-new-notice" type="button" onclick="flushPendingConversationUpdates()" class="pc-new-conversation-notice hidden">
+                <i class="ph ph-arrow-up"></i>
+                <span id="conversation-new-notice-text">有 3 条新会话</span>
+                <em>点击刷新</em>
+            </button>
 
             <!-- 会话列表 -->
             <div class="flex-1 overflow-y-auto" id="conversation-list">
@@ -4647,6 +4687,7 @@
         let headerHandlingMode = 'ai';
         let sendMode = 'auto';
         let activeDetailTab = 'customer';
+        let pendingNewConversationCount = 3;
 
         function toggleSortPopover(event) {
             event.stopPropagation();
@@ -4924,6 +4965,55 @@
             return metaB.followPriority - metaA.followPriority;
         }
 
+        function shouldDeferConversationRefresh() {
+            return currentSortMode === 'followPriority' || currentSortMode === 'lastReplyDesc';
+        }
+
+        function isConversationListAtTop() {
+            const list = document.getElementById('conversation-list');
+            return !list || list.scrollTop <= 8;
+        }
+
+        function updateNewConversationNotice() {
+            const notice = document.getElementById('conversation-new-notice');
+            const text = document.getElementById('conversation-new-notice-text');
+            if (!notice || !text) return;
+
+            const shouldShow = pendingNewConversationCount > 0 && shouldDeferConversationRefresh();
+            notice.classList.toggle('hidden', !shouldShow);
+            text.innerText = `有 ${pendingNewConversationCount} 条新会话`;
+            notice.title = '点击后按当前排序刷新会话列表';
+        }
+
+        function handleConversationListScroll() {
+            updateNewConversationNotice();
+        }
+
+        function receiveConversationUpdates(count = 1) {
+            pendingNewConversationCount += count;
+
+            if (!shouldDeferConversationRefresh() || isConversationListAtTop()) {
+                flushPendingConversationUpdates(false);
+                return;
+            }
+
+            updateNewConversationNotice();
+        }
+
+        function flushPendingConversationUpdates(showTip = true) {
+            if (pendingNewConversationCount <= 0) return;
+
+            const refreshedCount = pendingNewConversationCount;
+            pendingNewConversationCount = 0;
+            applyConversationControls();
+
+            const list = document.getElementById('conversation-list');
+            if (list) list.scrollTo({ top: 0, behavior: 'smooth' });
+
+            updateNewConversationNotice();
+            if (showTip) showToast(`已刷新 ${refreshedCount} 条新会话`);
+        }
+
         function ensureConversationEmptyState() {
             let emptyState = document.getElementById('conversation-empty-state');
             const list = document.getElementById('conversation-list');
@@ -4992,6 +5082,7 @@
             }
 
             updateFilterSummary(visibleKeys.length);
+            updateNewConversationNotice();
         }
 
         function toggleHeaderHandling() {
@@ -5246,6 +5337,8 @@
             selectConversation('jua');
             updateRailAccountTrigger();
             applyConversationControls();
+            document.getElementById('conversation-list')?.addEventListener('scroll', handleConversationListScroll);
+            updateNewConversationNotice();
 
             // 绑定 Textarea 的 Enter 发送事件 (不带 Shift 为直接发送)
             document.getElementById('chat-textarea').addEventListener('keydown', function(e) {
