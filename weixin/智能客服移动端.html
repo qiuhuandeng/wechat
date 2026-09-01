@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>企微会话中心</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
@@ -124,45 +125,26 @@ button { cursor:pointer; }
 .mode-badge.ai { background:var(--green-bg); color:var(--green); }
 
 /* ── LIST PAGE ── */
-.list-meta { background:var(--white); padding:10px 16px; border-bottom:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-.lm-label { font-size:12px; color:var(--c3); }
-.lm-select { display:inline-flex; align-items:center; gap:4px; background:var(--bg); border-radius:7px; padding:4px 9px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--border2); }
-.lm-sep { width:1px; height:14px; background:var(--border2); margin:0 6px; }
-.lm-device { font-size:12px; color:var(--c2); display:inline-flex; align-items:center; gap:4px; }
-.lm-dot { width:6px; height:6px; border-radius:50%; background:var(--green); flex-shrink:0; }
-.lm-device.offline .lm-dot { background:var(--red); }
-.lm-device.partial .lm-dot { background:var(--orange); }
 .account-option-check { width:22px; height:22px; color:var(--green); flex-shrink:0; display:none; }
 .account-option.on .account-option-check { display:block; }
 .bs-item-text .account-state { display:flex; align-items:center; gap:6px; margin-top:3px; }
 .account-state .dot-g,.account-state .dot-gray { width:6px; height:6px; display:inline-block; }
-.stat-bar { display:flex; gap:10px; padding:12px 14px; background:var(--bg); flex-shrink:0; }
-.sb-card { flex:1; background:var(--white); border-radius:var(--r-md); padding:12px 10px 10px; display:flex; flex-direction:column; align-items:center; gap:4px; box-shadow:var(--shadow-sm); cursor:pointer; position:relative; overflow:hidden; }
-.sb-card.on { box-shadow:0 5px 18px rgba(22,119,255,.16); transform:translateY(-1px); }
-.sb-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:var(--r-md) var(--r-md) 0 0; }
-.sb-card.total::before { background:var(--blue); }
-.sb-card.pending::before { background:var(--orange); }
-.sb-card.unread::before { background:var(--red); }
-.sb-card.sensitive::before { background:#FF4D4F; }
-.sb-num { font-size:24px; font-weight:800; line-height:1; }
-.sb-card.total .sb-num { color:var(--blue); }
-.sb-card.pending .sb-num { color:var(--orange); }
-.sb-card.unread .sb-num { color:var(--red); }
-.sb-card.sensitive .sb-num { color:#FF4D4F; }
-.sb-lbl { font-size:10px; color:var(--c3); font-weight:500; white-space:nowrap; }
-.filter-wrap { background:var(--white); border-bottom:1px solid var(--border); flex-shrink:0; }
-.filter-row1 { display:flex; overflow-x:auto; padding:0 14px; gap:4px; }
-.ft { flex-shrink:0; padding:11px 12px 9px; font-size:14px; color:var(--c3); position:relative; cursor:pointer; white-space:nowrap; font-weight:500; }
-.ft.on { color:var(--blue); }
-.ft.on::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:20px; height:2.5px; background:var(--blue); border-radius:2px; }
-.filter-row2 { display:flex; overflow-x:auto; padding:8px 14px; gap:7px; border-top:1px solid var(--border); }
-.fp { flex-shrink:0; padding:5px 14px; border-radius:14px; font-size:13px; background:var(--bg); color:var(--c2); border:1px solid var(--border2); cursor:pointer; font-weight:500; }
-.fp.on { background:var(--blue-bg); color:var(--blue); border-color:rgba(22,119,255,.2); }
-.search-bar { display:flex; align-items:center; background:var(--white); padding:8px 14px 10px; flex-shrink:0; border-bottom:1px solid var(--border); }
-.search-inner { flex:1; display:flex; align-items:center; background:var(--bg); border-radius:22px; padding:8px 14px; gap:8px; border:1px solid var(--border2); }
-.search-inner svg { width:15px; height:15px; color:var(--c4); flex-shrink:0; }
-.search-inner input { flex:1; font-size:14px; color:var(--c1); background:none; }
-.search-inner input::placeholder { color:var(--c4); }
+.list-head { background:#F8FAFC; padding:calc(12px + var(--sat)) 14px 10px; border-bottom:1px solid #E8EEF6; flex-shrink:0; }
+.list-search-row { display:flex; align-items:center; gap:8px; min-height:36px; }
+.search-inner { flex:1; height:36px; display:flex; align-items:center; background:#fff; border-radius:8px; padding:0 11px; gap:7px; border:1px solid #D4E0EF; }
+.search-inner i { color:#8B97A8; font-size:17px; line-height:1; flex-shrink:0; }
+.search-inner input { flex:1; min-width:0; font-size:13px; color:var(--c1); background:none; }
+.search-inner input::placeholder { color:#9BA7B7; }
+.list-filter-icon { width:36px; height:36px; border-radius:9px; border:1px solid #D4E0EF; background:#fff; color:#526B86; display:flex; align-items:center; justify-content:center; position:relative; }
+.list-filter-icon i { font-size:19px; line-height:1; }
+.list-filter-icon.has-filter::after { content:''; position:absolute; right:5px; top:5px; width:6px; height:6px; border-radius:50%; background:var(--blue); }
+.list-quick-row { display:flex; align-items:center; gap:8px; margin-top:10px; overflow-x:auto; scrollbar-width:none; min-height:28px; }
+.list-quick-row::-webkit-scrollbar { display:none; }
+.list-status-pill,.list-sort-pill { height:28px; flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; border-radius:7px; border:1px solid #D8E3F2; background:#fff; color:#475569; font-size:12px; font-weight:650; padding:0 12px; }
+.list-status-pill.on { color:var(--blue); background:#EAF3FF; border-color:#C8DDFF; }
+.list-sort-pill { gap:5px; margin-left:auto; color:#4F647C; padding:0 10px; }
+.list-sort-pill i { font-size:14px; color:#738399; line-height:1; }
+.list-sort-pill span { max-width:96px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* ── SESSION LIST ── */
 .sess-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--white); }
@@ -192,9 +174,40 @@ button { cursor:pointer; }
 .list-end::before,.list-end::after { content:''; flex:1; max-width:60px; height:1px; background:var(--border); }
 
 /* ── CHAT PAGE ── */
-#pg-chat { background:#EEF2F6; }
+#pg-chat { background:#EDF0F5; }
 #pg-chat .nb { background:var(--white); }
 #pg-list .nb { display:none; }
+.tab-panel { min-height:0; flex:1; display:none; flex-direction:column; }
+.tab-panel.active { display:flex; }
+.list-content { background:var(--white); }
+.mobile-tabbar { height:calc(58px + var(--sab)); padding:5px 0 var(--sab); flex-shrink:0; display:flex; align-items:center; background:rgba(255,255,255,.97); border-top:1px solid var(--border2); box-shadow:0 -3px 16px rgba(34,47,62,.05); z-index:8; }
+.mobile-tab { flex:1; height:48px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:#9AA1AB; font-size:11px; position:relative; }
+.mobile-tab i { font-size:23px; line-height:1; }
+.mobile-tab.on { color:var(--blue); font-weight:650; }
+.mobile-tab .tab-badge { position:absolute; left:calc(50% + 8px); top:1px; min-width:16px; height:16px; padding:0 4px; border-radius:9px; background:var(--red); color:#fff; border:2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; }
+.mine-content { overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--bg); padding:calc(14px + var(--sat)) 14px 18px; }
+.mine-section { margin-top:12px; background:var(--white); border:1px solid #ECEFF4; border-radius:8px; overflow:hidden; }
+.mine-section:first-child { margin-top:0; }
+.mine-row { width:100%; min-height:54px; padding:0 15px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); color:var(--c1); text-align:left; }
+.mine-row:last-child { border-bottom:none; }
+.mine-row:active { background:#F6F8FB; }
+.mine-row-icon { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:#F2F6FC; color:#526B86; flex-shrink:0; }
+.mine-row-icon i { font-size:19px; line-height:1; }
+.mine-row-main { flex:1; min-width:0; }
+.mine-row-main p { font-size:15px; font-weight:650; line-height:1.3; }
+.mine-row-main span { display:block; margin-top:3px; font-size:12px; color:var(--c3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lm-dot { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; vertical-align:1px; }
+#lm-device-status.offline .lm-dot { background:var(--c4); }
+#lm-device-status.partial .lm-dot { background:var(--orange); }
+.mine-row-value { color:#8A94A3; font-size:13px; max-width:36vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mine-row .ri-arrow-right-s-line { color:#C3CBD6; font-size:19px; flex-shrink:0; }
+.mine-row.danger .mine-row-icon { background:var(--red-bg); color:var(--red); }
+.mine-row.danger .mine-row-main p { color:var(--red); }
+.chat-heading { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); margin-top:calc(var(--sat)/2); text-align:center; pointer-events:none; }
+.chat-heading h2 { font-size:17px; line-height:1.15; font-weight:650; white-space:nowrap; }
+.chat-heading span { display:block; margin-top:3px; color:#8A9099; font-size:11px; line-height:1; }
+.chat-call-btn { color:#1F252D; }
+.chat-call-btn i,.chat-more-btn i { font-size:24px; }
 .msgs-wrap { flex:1; overflow-y:auto; padding:14px 0 8px; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
 .msg-date { text-align:center; margin:4px 0 12px; }
 .msg-date span { background:rgba(0,0,0,.08); color:var(--c2); font-size:11px; padding:3px 11px; border-radius:11px; }
@@ -202,13 +215,13 @@ button { cursor:pointer; }
 .msg-sys span { background:rgba(0,0,0,.06); color:var(--c2); font-size:11px; padding:3px 11px; border-radius:11px; display:inline-block; }
 .mrow { display:flex; padding:3px 14px; gap:9px; align-items:flex-end; }
 .mrow.me { flex-direction:row-reverse; }
-.mav { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.12); }
-.mbody { max-width:70%; display:flex; flex-direction:column; gap:2px; }
+.mav { width:38px; height:38px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.10); }
+.mbody { max-width:76%; display:flex; flex-direction:column; gap:2px; }
 .mrow.me .mbody { align-items:flex-end; }
 .mname { font-size:11px; color:var(--c3); padding:0 4px; margin-bottom:2px; }
 .mbub { padding:9px 13px; border-radius:16px; font-size:14px; line-height:1.6; word-break:break-word; }
 .mrow:not(.me) .mbub { background:var(--white); border-top-left-radius:4px; color:var(--c1); box-shadow:0 1px 4px rgba(0,0,0,.07); }
-.mrow.me .mbub.human-bub { background:var(--blue); border-top-right-radius:4px; color:#fff; box-shadow:0 2px 8px rgba(22,119,255,.25); }
+.mrow.me .mbub.human-bub { background:#BFE1FA; border-top-right-radius:4px; color:#171A1F; box-shadow:0 1px 3px rgba(38,97,135,.12); }
 .mrow.me .mbub.ai-bub { background:#EDFBF1; border-top-right-radius:4px; color:var(--c1); border:1px solid #C3EDD0; }
 .msender { font-size:10px; padding:2px 7px; border-radius:10px; margin-bottom:3px; display:inline-flex; align-items:center; gap:3px; font-weight:600; }
 .msender.human-tag { background:var(--blue-bg); color:var(--blue); }
@@ -238,14 +251,16 @@ button { cursor:pointer; }
 /* ── CHAT INPUT AREA ── */
 .chat-input-area { flex-shrink:0; background:var(--white); border-top:1px solid var(--border); padding-bottom:calc(6px + var(--sab)); position:relative; }
 
-/* Quick bar — 图1: 客户详情 + 订单记录 */
-.ci-quick-bar { display:flex; align-items:center; gap:8px; padding:8px 14px 6px; border-bottom:1px solid var(--border); }
+/* Quick bar — 统一轻量工具入口 */
+.ci-quick-bar { display:flex; align-items:center; gap:8px; padding:8px 12px 7px; overflow-x:auto; border-bottom:1px solid var(--border); scrollbar-width:none; }
+.ci-quick-bar::-webkit-scrollbar { display:none; }
 .chat-input-area.plus-open .ci-quick-bar { display:none; }
-.ci-quick-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 13px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid transparent; transition:opacity .15s; }
-.ci-quick-btn:active { opacity:.75; }
-.ci-quick-btn.cust { background:var(--green-bg); color:var(--green); border-color:rgba(7,193,96,.2); }
-.ci-quick-btn.order { background:var(--green-bg); color:var(--green); border-color:rgba(7,193,96,.2); }
-.ci-quick-btn svg { width:14px; height:14px; flex-shrink:0; }
+.ci-quick-btn { flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; min-height:30px; padding:6px 12px; border-radius:16px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid #DDE7F4; background:#F8FAFC; color:#4F647C; transition:background .15s,border-color .15s,opacity .15s; }
+.ci-quick-btn:active { opacity:.82; background:#EEF4FA; border-color:#CFDCEB; }
+.ci-quick-btn.cust,.ci-quick-btn.order,.ci-quick-btn.sidebar,.ci-quick-btn.money,.ci-quick-btn.reply { background:#F8FAFC; color:#4F647C; border-color:#DDE7F4; }
+.ci-quick-btn svg { width:14px; height:14px; flex-shrink:0; color:#5F748D; }
+.ci-quick-btn i { font-size:15px; color:#5F748D; }
+.ci-quick-btn.cust i,.ci-quick-btn.order i,.ci-quick-btn.sidebar i,.ci-quick-btn.money i,.ci-quick-btn.reply i { color:#5F748D; }
 
 /* Input row */
 .ci-row { display:flex; align-items:flex-end; gap:8px; padding:8px 12px 6px; }
@@ -279,10 +294,37 @@ button { cursor:pointer; }
 /* Plus panel — hidden until the + button opens it */
 .plus-panel { position:absolute; left:0; right:0; bottom:100%; background:var(--white); border-top:1px solid var(--border); padding:18px 14px 14px; transform:translateY(12px); opacity:0; visibility:hidden; transition:opacity .18s,transform .22s cubic-bezier(.4,0,.2,1),visibility 0s linear .22s; z-index:30; box-shadow:0 -4px 16px rgba(0,0,0,.08); pointer-events:none; }
 .plus-panel.show { transform:translateY(0); opacity:1; visibility:visible; transition-delay:0s; pointer-events:auto; }
-.plus-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px 8px; }
-.plus-item { display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; }
+.plus-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px 8px; }
+.plus-item { min-width:0; display:flex; flex-direction:column; align-items:center; gap:8px; color:#5E6672; font-size:12px; cursor:pointer; }
+.plus-item-icon { width:50px; height:50px; border-radius:13px; display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 3px 10px rgba(35,49,66,.12); }
+.plus-item-icon i { font-size:25px; }
+
+/* Chat side drawer */
+.chat-side-mask { position:fixed; inset:0; z-index:56; background:rgba(15,23,42,.22); opacity:0; pointer-events:none; transition:opacity .22s; }
+.chat-side-mask.show { opacity:1; pointer-events:auto; }
+.chat-side-drawer { position:fixed; right:0; top:0; bottom:0; z-index:57; width:min(84vw,336px); padding-top:var(--sat); background:#F7F8FA; transform:translateX(102%); transition:transform .28s cubic-bezier(.4,0,.2,1); border-left:1px solid #E7EAF0; display:flex; flex-direction:column; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.chat-side-drawer.show { transform:translateX(0); }
+.side-drawer-hd { height:56px; padding:0 14px 0 18px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid var(--border); }
+.side-drawer-hd strong { font-size:17px; }
+.side-close { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#636B75; background:#F4F5F7; border:1px solid #EBEEF3; }
+.side-close i { font-size:20px; }
+.side-customer { margin:12px; padding:15px; border-radius:8px; background:#fff; display:flex; gap:12px; align-items:center; border:1px solid #ECEFF4; }
+.side-customer-avatar { width:46px; height:46px; border-radius:12px; background:#E8624A; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; }
+.side-customer-info { flex:1; min-width:0; }
+.side-customer-info strong { display:block; font-size:15px; margin-bottom:4px; }
+.side-customer-info span { color:var(--c3); font-size:12px; }
+.side-status { padding:4px 9px; border-radius:10px; background:var(--blue-bg); color:var(--blue); font-size:11px; }
+.side-tool-grid { margin:0 12px 12px; padding:10px; border-radius:8px; background:#fff; display:grid; grid-template-columns:repeat(3,1fr); gap:6px; border:1px solid #ECEFF4; }
+.side-tool { min-height:78px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; border-radius:12px; color:#3C4654; font-size:12px; }
+.side-tool:active { background:#F1F5FA; }
+.side-tool i { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:#EEF4FF; color:#3977E8; font-size:21px; }
+.side-section { margin:0 12px 12px; border-radius:8px; background:#fff; overflow:hidden; border:1px solid #ECEFF4; }
+.side-row { min-height:48px; padding:0 15px; display:flex; align-items:center; gap:11px; border-bottom:1px solid var(--border); font-size:14px; }
+.side-row:last-child { border-bottom:none; }
+.side-row i { color:#7A8594; font-size:18px; }
+.side-row span { flex:1; }
+.side-row small { color:var(--c3); font-size:11px; }
 .plus-item:active { opacity:.7; }
-.plus-item-icon { width:54px; height:54px; border-radius:15px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.1); }
 .plus-item-icon svg { width:27px; height:27px; color:#fff; }
 .plus-item span { font-size:11px; color:var(--c2); font-weight:500; }
 
@@ -314,12 +356,12 @@ button { cursor:pointer; }
 .vs-btn-send svg { width:22px; height:22px; color:#fff; }
 
 /* ── BOTTOM SHEETS ── */
-.bs-mask { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:50; opacity:0; pointer-events:none; transition:opacity .22s; }
+.bs-mask { position:fixed; inset:0; background:rgba(0,0,0,.34); z-index:50; opacity:0; pointer-events:none; transition:opacity .22s; }
 .bs-mask.show { opacity:1; pointer-events:all; }
-.bs { position:fixed; left:0; right:0; bottom:0; background:var(--white); border-radius:20px 20px 0 0; z-index:51; transform:translateY(105%); transition:transform .28s cubic-bezier(.4,0,.2,1); padding-bottom:var(--sab); max-height:88vh; display:flex; flex-direction:column; }
+.bs { position:fixed; left:0; right:0; bottom:0; background:var(--white); border-radius:18px 18px 0 0; z-index:51; transform:translateY(105%); transition:transform .26s cubic-bezier(.4,0,.2,1); padding-bottom:var(--sab); max-height:88vh; display:flex; flex-direction:column; box-shadow:0 -6px 22px rgba(15,23,42,.08); overflow:hidden; }
 .bs.show { transform:translateY(0); }
-.bs-handle { width:36px; height:4px; background:var(--c4); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
-.bs-title { text-align:center; padding:13px 16px 11px; font-size:16px; font-weight:600; border-bottom:1px solid var(--border); flex-shrink:0; }
+.bs-handle { width:36px; height:4px; background:#C7C7C7; border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.bs-title { height:58px; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 16px; font-size:17px; font-weight:700; border-bottom:1px solid #EEF0F3; flex-shrink:0; }
 .bs-body { overflow-y:auto; flex:1; }
 .bs-item { display:flex; align-items:center; padding:14px 20px; gap:14px; cursor:pointer; border-bottom:1px solid var(--border); }
 .bs-item:last-child { border-bottom:none; }
@@ -330,8 +372,38 @@ button { cursor:pointer; }
 .bs-item-text p { font-size:15px; font-weight:500; }
 .bs-item-text span { font-size:12px; color:var(--c3); margin-top:2px; display:block; }
 .bs-item.danger .bs-item-text p { color:var(--red); }
-.bs-cancel { margin:8px 14px 6px; padding:14px; background:var(--bg); border-radius:var(--r-md); text-align:center; font-size:16px; color:var(--c2); cursor:pointer; flex-shrink:0; font-weight:500; }
+.bs-cancel { margin:8px 10px calc(6px + var(--sab)); height:52px; display:flex; align-items:center; justify-content:center; background:#F5F6F8; border-radius:10px; text-align:center; font-size:16px; color:#333; cursor:pointer; flex-shrink:0; font-weight:500; }
 .bs-cancel:active { background:var(--bg2); }
+.sheet-section { padding:15px 16px 4px; }
+.sheet-section + .sheet-section { border-top:1px solid var(--border); }
+.sheet-caption { margin-bottom:10px; color:#6B7280; font-size:13px; font-weight:700; }
+.sheet-chip-row { display:flex; flex-wrap:wrap; gap:9px; }
+.sheet-chip { height:32px; padding:0 13px; border-radius:16px; background:#F7F8FA; border:1px solid var(--border2); color:#4B5563; font-size:13px; font-weight:600; }
+.sheet-chip.on { background:var(--blue-bg); border-color:#CFE2FF; color:var(--blue); }
+.sheet-date-range { display:none; gap:8px; margin-top:10px; }
+.sheet-date-range.show { display:flex; }
+.sheet-date-range input { flex:1; min-width:0; height:34px; padding:0 8px; border-radius:8px; border:1px solid var(--border2); background:#F7F8FA; color:#4B5563; font-size:12px; }
+.sheet-actions { padding:12px 16px 8px; display:flex; gap:10px; border-top:1px solid var(--border); flex-shrink:0; }
+.sheet-reset,.sheet-apply { flex:1; height:42px; border-radius:var(--r-md); font-size:15px; font-weight:700; }
+.sheet-reset { background:#F7F8FA; color:#4B5563; border:1px solid var(--border2); }
+.sheet-apply { background:var(--blue); color:#fff; }
+.filter-sheet { background:#F8FAFC; border-radius:12px 12px 0 0; box-shadow:0 -4px 18px rgba(15,23,42,.06); }
+.filter-sheet .bs-body { padding:0 0 12px; background:#F8FAFC; }
+.filter-sheet-head { height:40px; padding:0 8px 0 14px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; background:#fff; border-bottom:1px solid #E9EEF5; font-size:13px; color:#1F2937; }
+.filter-sheet-reset { height:32px; padding:0 8px; color:#2F6FE5; font-size:12px; font-weight:600; }
+.filter-sheet .sheet-section { padding:12px 8px 2px; background:#F8FAFC; }
+.filter-sheet .sheet-section + .sheet-section { border-top:none; }
+.filter-sheet .sheet-caption { margin-bottom:9px; color:#7A8594; font-size:12px; font-weight:600; line-height:1; }
+.filter-sheet .sheet-chip-row { gap:8px 9px; }
+.filter-sheet .sheet-chip { height:30px; min-width:51px; border-radius:7px; padding:0 11px; background:#fff; color:#506173; border-color:#D8E3F2; font-size:12px; font-weight:600; }
+.filter-sheet .sheet-chip.on { color:var(--blue); background:#EAF3FF; border-color:#C9DEFF; }
+.filter-sheet .sheet-date-range { margin-top:9px; }
+.filter-sheet .sheet-date-range input { height:32px; border-radius:7px; background:#fff; }
+.sort-option { min-height:52px; padding:0 20px; border-bottom:1px solid #EEF0F3; display:flex; align-items:center; justify-content:space-between; color:#333; font-size:15px; font-weight:650; }
+.sort-option:last-child { border-bottom:none; }
+.sort-option i { color:var(--blue); font-size:18px; visibility:hidden; }
+.sort-option.on { color:var(--blue); background:#F1F7FF; }
+.sort-option.on i { visibility:visible; }
 .tr-search { padding:10px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
 .tr-sbox { display:flex; align-items:center; background:var(--bg); border-radius:10px; padding:8px 12px; gap:8px; border:1px solid var(--border2); }
 .tr-sbox svg { width:15px; height:15px; color:var(--c3); }
@@ -544,7 +616,7 @@ input[type=file] { display:none; }
 <div id="app">
 
 <!-- ██ LOGIN ██ -->
-<div class="page active" id="pg-login">
+<div class="page" id="pg-login">
   <div class="login-logo">
     <div class="login-logo-icon">
       <svg viewBox="0 0 42 42" fill="none" width="42" height="42">
@@ -555,45 +627,45 @@ input[type=file] { display:none; }
       </svg>
     </div>
     <h1>企微会话中心</h1>
-    <p>多帐号聚合客服工作台</p>
+    <p>多账号聚合客服工作台</p>
   </div>
   <div class="login-card">
     <h2>登录方式</h2>
     <div class="login-tabs">
-      <button class="login-tab" id="login-tab-ding" onclick="setLoginMethod('ding')">
+      <button class="login-tab on" id="login-tab-ding" onclick="setLoginMethod('ding')">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
-        企业 SSO
+        钉钉登录
       </button>
-      <button class="login-tab on" id="login-tab-account" onclick="setLoginMethod('account')">
+      <button class="login-tab" id="login-tab-account" onclick="setLoginMethod('account')">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-        帐号密码
+        账号密码
       </button>
     </div>
 
-    <div class="login-panel" id="login-panel-ding">
+    <div class="login-panel active" id="login-panel-ding">
       <div class="ding-login-hero">
         <div class="ding-login-icon">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
         </div>
-        <h3>使用企业 SSO 进入</h3>
-        <p>登录后会校验该身份对应的客服帐号授权，已授权后才展示可管理的企微帐号与客户会话。</p>
+        <h3>使用钉钉身份进入</h3>
+        <p>登录后会先校验你的钉钉号是否已绑定企微客服账号，绑定后才展示对应客户和聊天。</p>
       </div>
       <button class="ding-submit" onclick="doDingLogin()">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 3.2L4.5 1.7c-.9-.1-1.5.9-1 1.7l3.2 5.1-2.2-.2c-.8-.1-1.3.9-.8 1.5L11 21.2c.4.6 1.3.5 1.6-.2l1.9-5.3 4.9.4c.9.1 1.4-.9.9-1.6l-3.5-4.8 2.9.2c.8.1 1.4-.8.9-1.5l-3.9-5.5c-.3-.4-.7-.6-1.3-.7z"/></svg>
-        企业授权登录
+        钉钉授权登录
       </button>
       <div class="login-bind-note">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-        首次使用时，如果管理员还没有完成客服帐号授权，进入后会先看到授权提示页。
+        首次使用时，如果管理员还没有完成绑定，进入后会先看到绑定提示页。
       </div>
     </div>
 
-    <div class="login-panel active" id="login-panel-account">
+    <div class="login-panel" id="login-panel-account">
       <div class="lf-group">
         <div class="lf-label">账 号</div>
         <div class="lf-input-wrap">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-          <input type="text" id="inp-user" placeholder="请输入帐号" value="admin"/>
+          <input type="text" id="inp-user" placeholder="请输入账号" value="admin"/>
         </div>
       </div>
       <div class="lf-group">
@@ -630,7 +702,7 @@ input[type=file] { display:none; }
         <div class="ub-app-icon wecom">企微</div>
       </div>
       <h2>暂时看不到客户和聊天</h2>
-      <p>你已通过钉钉登录，但这个钉钉号还没有绑定系统里的企微客服帐号。</p>
+      <p>你已通过钉钉登录，但这个钉钉号还没有绑定系统里的企微客服账号。</p>
     </section>
 
     <section class="ub-status-strip">
@@ -647,7 +719,7 @@ input[type=file] { display:none; }
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
         为什么这里是空的？
       </div>
-      <p>客户和会话是按企微客服号归属展示的。系统现在只识别到你的钉钉身份，还不知道它对应哪个企微帐号，所以不会展示任何客户列表、聊天框或历史会话。</p>
+      <p>客户和会话是按企微客服号归属展示的。系统现在只识别到你的钉钉身份，还不知道它对应哪个企微账号，所以不会展示任何客户列表、聊天框或历史会话。</p>
     </section>
 
     <section class="ub-actions">
@@ -667,15 +739,15 @@ input[type=file] { display:none; }
       <div class="ub-step">
         <div class="ub-step-no">1</div>
         <div class="ub-step-body">
-          <p>联系管理员绑定帐号</p>
-          <span>请管理员在后台找到你的钉钉用户，并选择对应的系统企微客服帐号。</span>
+          <p>联系管理员绑定账号</p>
+          <span>请管理员在后台找到你的钉钉用户，并选择对应的系统企微客服账号。</span>
         </div>
       </div>
       <div class="ub-step">
         <div class="ub-step-no">2</div>
         <div class="ub-step-body">
-          <p>确认企微帐号在线</p>
-          <span>绑定完成后，如果企微设备在线且帐号已登录，就能看到该帐号接待的客户。</span>
+          <p>确认企微账号在线</p>
+          <span>绑定完成后，如果企微设备在线且账号已登录，就能看到该账号接待的客户。</span>
         </div>
       </div>
       <div class="ub-step">
@@ -690,53 +762,65 @@ input[type=file] { display:none; }
 </div>
 
 <!-- ██ LIST ██ -->
-<div class="page" id="pg-list">
-  <div class="nb">
-    <span class="nb-title">会话列表</span>
-    <div class="nb-right">
-      <div class="nb-icon-btn" onclick="focusSearch()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16" y2="16"/></svg>
+<div class="page active" id="pg-list">
+  <div class="tab-panel list-content active" id="panel-messages">
+  <div class="list-head">
+    <div class="list-search-row">
+      <div class="search-inner">
+        <i class="ri-search-line"></i>
+        <input type="text" id="list-search" placeholder="搜索" oninput="renderSessions()"/>
       </div>
+      <button class="list-filter-icon" id="list-filter-trigger" onclick="showListFilterSheet()" aria-label="筛选条件">
+        <i class="ri-filter-3-line"></i>
+      </button>
     </div>
-  </div>
-  <div class="list-meta">
-    <span class="lm-label">帐号：</span>
-    <div class="lm-select" onclick="openAccountSheet()">
-      <span id="lm-account-name">全部帐号</span>
-      <svg viewBox="0 0 12 12" fill="currentColor" width="11" height="11"><path d="M6 8L1 3h10z"/></svg>
-    </div>
-    <div class="lm-sep"></div>
-    <span class="lm-device partial" id="lm-device-status"><span class="lm-dot"></span>请选择帐号查看设备和登录状态</span>
-  </div>
-  <div class="stat-bar">
-    <div class="sb-card total on" onclick="setStatFilter('all')"><div class="sb-num" id="s-total">6</div><div class="sb-lbl">会话总量</div></div>
-    <div class="sb-card pending" onclick="setStatFilter('pending')"><div class="sb-num" id="s-pending">2</div><div class="sb-lbl">待跟进</div></div>
-    <div class="sb-card unread" onclick="setStatFilter('unread')"><div class="sb-num" id="s-unread">3</div><div class="sb-lbl">未读</div></div>
-    <div class="sb-card sensitive" onclick="setStatFilter('sensitive')"><div class="sb-num" id="s-sensitive">1</div><div class="sb-lbl">敏感词</div></div>
-  </div>
-  <div class="filter-wrap">
-    <div class="filter-row1">
-      <div class="ft on" onclick="setModeFilter(this,'all')">全部</div>
-      <div class="ft" onclick="setModeFilter(this,'human')">人工处理</div>
-      <div class="ft" onclick="setModeFilter(this,'ai')">AI处理</div>
-      <div class="ft" onclick="setModeFilter(this,'sensitive')">敏感</div>
-    </div>
-    <div class="filter-row2">
-      <div class="fp on" onclick="setReplyFilter(this,'all')">全部</div>
-      <div class="fp" onclick="setReplyFilter(this,'unread')">未读</div>
-      <div class="fp" onclick="setReplyFilter(this,'pending')">待回复</div>
-    </div>
-  </div>
-  <div class="search-bar">
-    <div class="search-inner">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16" y2="16"/></svg>
-      <input type="text" id="list-search" placeholder="搜索好友、会话或聊天记录..." oninput="renderSessions()"/>
+    <div class="list-quick-row" aria-label="会话快捷筛选">
+      <button class="list-status-pill on" id="list-status-all" onclick="setPrimaryStatus('all')">全部</button>
+      <button class="list-status-pill" id="list-status-pending" onclick="setPrimaryStatus('pending')">未回复</button>
+      <button class="list-sort-pill" onclick="showSheet('bs-list-sort')" aria-label="切换排序">
+        <i class="ri-list-settings-line"></i><span id="list-sort-label">客户最后开口</span><i class="ri-arrow-down-s-line"></i>
+      </button>
     </div>
   </div>
   <div class="sess-scroll">
     <div class="sess-list" id="sess-list"></div>
     <div class="list-end">已显示全部会话</div>
   </div>
+  </div>
+  <div class="tab-panel mine-content" id="panel-mine">
+    <section class="mine-section">
+      <button class="mine-row" onclick="openAccountSheet()">
+        <span class="mine-row-icon"><i class="ri-group-line"></i></span>
+        <span class="mine-row-main">
+          <p>全部账号</p>
+          <span id="lm-device-status"><span class="lm-dot"></span>全部设备</span>
+        </span>
+        <span class="mine-row-value" id="mine-account-value">全部账号</span>
+        <i class="ri-arrow-right-s-line"></i>
+      </button>
+    </section>
+    <section class="mine-section">
+      <button class="mine-row danger" onclick="doAccountLogout()">
+        <span class="mine-row-icon"><i class="ri-logout-box-r-line"></i></span>
+        <span class="mine-row-main">
+          <p>账号退出</p>
+          <span>退出当前移动端客服账号</span>
+        </span>
+        <i class="ri-arrow-right-s-line"></i>
+      </button>
+    </section>
+  </div>
+  <nav class="mobile-tabbar" aria-label="主导航">
+    <button class="mobile-tab on" id="tab-messages" onclick="switchListTab('messages')">
+      <i class="ri-message-3-fill"></i><span>消息</span><b class="tab-badge">3</b>
+    </button>
+    <button class="mobile-tab" id="tab-human" onclick="switchListTab('human')">
+      <i class="ri-customer-service-2-line"></i><span>人工</span>
+    </button>
+    <button class="mobile-tab" id="tab-mine" onclick="switchListTab('mine')">
+      <i class="ri-user-3-line"></i><span>我的</span>
+    </button>
+  </nav>
 </div>
 
 <!-- ██ CHAT ██ -->
@@ -744,16 +828,15 @@ input[type=file] { display:none; }
   <div class="nb">
     <div class="nb-back" onclick="goBack()">
       <svg viewBox="0 0 10 17" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 1L1 8.5 9 16"/></svg>
-      <span>返回</span>
+      <span>30</span>
     </div>
-    <div class="nb-center"><h2 id="chat-name">客户</h2></div>
+    <div class="chat-heading"><h2 id="chat-name">客户</h2><span>@ 微信</span></div>
     <div class="nb-right">
-      <div class="mode-badge human" id="mode-badge" onclick="showSheet('bs-mode')">人工</div>
-      <div class="nb-icon-btn" onclick="showSheet('bs-chat-more')">
-        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+      <button class="nb-icon-btn chat-call-btn" onclick="showToast('正在发起客户通话…')" aria-label="发起通话"><i class="ri-video-on-fill"></i></button>
+      <button class="nb-icon-btn chat-more-btn" onclick="openChatSidebar()" aria-label="打开工具侧边栏"><i class="ri-more-fill"></i></button>
+      <div class="mode-badge human" id="mode-badge" onclick="showSheet('bs-mode')" style="display:none">人工</div>
       </div>
     </div>
-  </div>
   <div class="msgs-wrap" id="msgs-wrap"></div>
 
   <!-- Input area -->
@@ -761,30 +844,29 @@ input[type=file] { display:none; }
     <!-- Plus panel (above input) -->
     <div class="plus-panel" id="plus-panel">
       <div class="plus-grid">
+        <div class="plus-item" onclick="hidePlus();showEmoji()">
+          <div class="plus-item-icon" style="background:#F5B800"><i class="ri-emotion-happy-line"></i></div>
+          <span>表情</span>
+        </div>
         <div class="plus-item" onclick="hidePlus();document.getElementById('img-input').click()">
-          <div class="plus-item-icon" style="background:#FF6B6B">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-          </div>
-          <span>发图片</span>
+          <div class="plus-item-icon" style="background:#35B975"><i class="ri-image-line"></i></div>
+          <span>图片</span>
         </div>
         <div class="plus-item" onclick="hidePlus();document.getElementById('video-input').click()">
-          <div class="plus-item-icon" style="background:#5B8CFF">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-          </div>
-          <span>发视频</span>
+          <div class="plus-item-icon" style="background:#4E8DF5"><i class="ri-camera-line"></i></div>
+          <span>拍摄</span>
         </div>
         <div class="plus-item" onclick="hidePlus();document.getElementById('file-input').click()">
-          <div class="plus-item-icon" style="background:#FF9F43">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          </div>
-          <span>发文件</span>
+          <div class="plus-item-icon" style="background:#8C73E6"><i class="ri-folder-3-line"></i></div>
+          <span>文件</span>
         </div>
+        <div class="plus-item" onclick="hidePlus();showToast('请选择转账金额')"><div class="plus-item-icon" style="background:#25B96D"><i class="ri-exchange-cny-line"></i></div><span>转账</span></div>
+        <div class="plus-item" onclick="hidePlus();showToast('收款功能已打开')"><div class="plus-item-icon" style="background:#1ABB64"><i class="ri-money-cny-circle-line"></i></div><span>收款</span></div>
         <div class="plus-item" onclick="hidePlus();showSheet('bs-quickreply')">
-          <div class="plus-item-icon" style="background:#1DD1A1">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          </div>
+          <div class="plus-item-icon" style="background:#F1B91E"><i class="ri-chat-quote-line"></i></div>
           <span>快捷回复</span>
         </div>
+        <div class="plus-item" onclick="hidePlus();openChatSidebar()"><div class="plus-item-icon" style="background:#4E8DF5"><i class="ri-layout-right-line"></i></div><span>侧边栏</span></div>
       </div>
     </div>
     <!-- Plus overlay (click outside to close) -->
@@ -806,16 +888,13 @@ input[type=file] { display:none; }
     </div>
     <div class="emoji-overlay" id="emoji-overlay" onclick="hideEmoji()"></div>
 
-    <!-- Quick bar: 图1 layout -->
+    <!-- Business tool bar above the composer -->
     <div class="ci-quick-bar">
-      <div class="ci-quick-btn cust" onclick="openCustDetail()">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-        客户详情
-      </div>
-      <div class="ci-quick-btn order" onclick="openOrders()">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-        订单记录
-      </div>
+      <button class="ci-quick-btn sidebar" onclick="openChatSidebar()"><i class="ri-layout-right-2-line"></i>客户详情</button>
+      <button class="ci-quick-btn money" onclick="showToast('客户转账入口已打开')"><i class="ri-swap-2-line"></i>客户转账</button>
+      <button class="ci-quick-btn money" onclick="showToast('请输入收款金额')"><i class="ri-money-cny-circle-line"></i>发起收款</button>
+      <button class="ci-quick-btn reply" onclick="showSheet('bs-quickreply')"><i class="ri-chat-quote-line"></i>快捷回复</button>
+      <button class="ci-quick-btn reply" onclick="showToast('已打开客服推荐')"><i class="ri-user-star-line"></i>推荐客服</button>
     </div>
 
     <!-- Input row: 图1 layout — voice | textbox | emoji | plus -->
@@ -851,6 +930,30 @@ input[type=file] { display:none; }
     </div>
   </div>
 </div>
+
+<!-- Chat tools sidebar -->
+<div class="chat-side-mask" id="chat-side-mask" onclick="closeChatSidebar()"></div>
+<aside class="chat-side-drawer" id="chat-side-drawer" aria-label="会话工具侧边栏">
+  <div class="side-drawer-hd"><strong>会话工具</strong><button class="side-close" onclick="closeChatSidebar()" aria-label="关闭"><i class="ri-close-line"></i></button></div>
+  <div class="side-customer">
+    <div class="side-customer-avatar" id="side-customer-avatar">客</div>
+    <div class="side-customer-info"><strong id="side-customer-name">客户</strong><span>@ 微信 · 今日活跃</span></div>
+    <span class="side-status">人工</span>
+  </div>
+  <div class="side-tool-grid">
+    <button class="side-tool" onclick="closeChatSidebar();openCustDetail()"><i class="ri-user-3-line"></i><span>客户资料</span></button>
+    <button class="side-tool" onclick="closeChatSidebar();openOrders()"><i class="ri-file-list-3-line"></i><span>订单记录</span></button>
+    <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-quickreply')"><i class="ri-chat-quote-line"></i><span>快捷回复</span></button>
+    <button class="side-tool" onclick="showToast('标签管理已打开')"><i class="ri-price-tag-3-line"></i><span>客户标签</span></button>
+    <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-transfer')"><i class="ri-user-shared-line"></i><span>转接客服</span></button>
+    <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-mode')"><i class="ri-robot-2-line"></i><span>接待模式</span></button>
+  </div>
+  <div class="side-section">
+    <button class="side-row" onclick="showToast('已开启消息免打扰')"><i class="ri-notification-off-line"></i><span>消息免打扰</span><small>关闭</small></button>
+    <button class="side-row" onclick="showToast('已打开聊天记录')"><i class="ri-history-line"></i><span>查找聊天记录</span><i class="ri-arrow-right-s-line"></i></button>
+    <button class="side-row" onclick="showDlg('dlg-end')"><i class="ri-logout-box-r-line"></i><span style="color:var(--red)">结束会话</span></button>
+  </div>
+</aside>
 
 <!-- ██ CUSTOMER DETAIL ██ -->
 <div class="page" id="pg-cust">
@@ -1150,9 +1253,68 @@ input[type=file] { display:none; }
 
 <div class="bs" id="bs-account" style="max-height:72vh">
   <div class="bs-handle"></div>
-  <div class="bs-title">切换帐号</div>
+  <div class="bs-title">企微账号列表</div>
   <div class="bs-body" id="account-list"></div>
   <div class="bs-cancel" onclick="closeSheet()">取消</div>
+</div>
+
+<div class="bs" id="bs-list-sort" style="max-height:46vh">
+  <div class="bs-handle"></div>
+  <div class="bs-title">排序方式</div>
+  <div class="bs-body">
+    <button class="sort-option on" data-sort="customerLastOpen" onclick="setListSort(this,'customerLastOpen')"><span>客户最后开口</span><i class="ri-check-line"></i></button>
+    <button class="sort-option" data-sort="lastReplyDesc" onclick="setListSort(this,'lastReplyDesc')"><span>最后回复时间</span><i class="ri-check-line"></i></button>
+    <button class="sort-option" data-sort="addDesc" onclick="setListSort(this,'addDesc')"><span>加微时间最新</span><i class="ri-check-line"></i></button>
+    <button class="sort-option" data-sort="addAsc" onclick="setListSort(this,'addAsc')"><span>加微时间最早</span><i class="ri-check-line"></i></button>
+  </div>
+  <div class="bs-cancel" onclick="closeSheet()">取消</div>
+</div>
+
+<div class="bs filter-sheet" id="bs-list-filter" style="max-height:72vh">
+  <div class="filter-sheet-head">
+    <span>筛选</span>
+    <button class="filter-sheet-reset" onclick="resetListFilters()">重置</button>
+  </div>
+  <div class="bs-body">
+    <div class="sheet-section">
+      <div class="sheet-caption">开口状态</div>
+      <div class="sheet-chip-row">
+        <button class="sheet-chip on" data-filter-group="opening" data-filter-value="all" onclick="setListFilter(this,'opening','all')">全部</button>
+        <button class="sheet-chip" data-filter-group="opening" data-filter-value="opened" onclick="setListFilter(this,'opening','opened')">已开口</button>
+        <button class="sheet-chip" data-filter-group="opening" data-filter-value="unopened" onclick="setListFilter(this,'opening','unopened')">未开口</button>
+      </div>
+    </div>
+    <div class="sheet-section">
+      <div class="sheet-caption">客户状态</div>
+      <div class="sheet-chip-row">
+        <button class="sheet-chip on" data-filter-group="deal" data-filter-value="all" onclick="setListFilter(this,'deal','all')">全部</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="undealt" onclick="setListFilter(this,'deal','undealt')">未成交</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="paid" onclick="setListFilter(this,'deal','paid')">已付款</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="pendingDeal" onclick="setListFilter(this,'deal','pendingDeal')">待定中</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="waitingQueue" onclick="setListFilter(this,'deal','waitingQueue')">待排客</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="queued" onclick="setListFilter(this,'deal','queued')">已排客</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="timeout" onclick="setListFilter(this,'deal','timeout')">已超时</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="visited" onclick="setListFilter(this,'deal','visited')">已到店</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="done" onclick="setListFilter(this,'deal','done')">已完成</button>
+        <button class="sheet-chip" data-filter-group="deal" data-filter-value="refund" onclick="setListFilter(this,'deal','refund')">已流退</button>
+      </div>
+    </div>
+    <div class="sheet-section">
+      <div class="sheet-caption">加微时间</div>
+      <div class="sheet-chip-row">
+        <button class="sheet-chip on" data-filter-group="addTime" data-filter-value="all" onclick="setListFilter(this,'addTime','all')">全部</button>
+        <button class="sheet-chip" data-filter-group="addTime" data-filter-value="today" onclick="setListFilter(this,'addTime','today')">今天</button>
+        <button class="sheet-chip" data-filter-group="addTime" data-filter-value="yesterday" onclick="setListFilter(this,'addTime','yesterday')">昨天</button>
+        <button class="sheet-chip" data-filter-group="addTime" data-filter-value="7d" onclick="setListFilter(this,'addTime','7d')">近7天</button>
+        <button class="sheet-chip" data-filter-group="addTime" data-filter-value="30d" onclick="setListFilter(this,'addTime','30d')">近30天</button>
+        <button class="sheet-chip" data-filter-group="addTime" data-filter-value="custom" onclick="setListFilter(this,'addTime','custom')">自定义</button>
+      </div>
+      <div class="sheet-date-range" id="mobile-add-date-range">
+        <input id="mobile-add-date-start" type="date" value="2026-07-01" onchange="renderSessions()">
+        <input id="mobile-add-date-end" type="date" value="2026-08-28" onchange="renderSessions()">
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="bs" id="bs-chat-more">
@@ -1307,13 +1469,15 @@ input[type=file] { display:none; }
 
 /* ── STATE ── */
 const S = {
-  currentPage:'pg-login', pageStack:['pg-login'],
+  currentPage:'pg-list', pageStack:['pg-list'],
   loginMethod:'ding', dingBound:false,
   currentChat:null, currentMode:'human',
   currentAccount:'all',
   lpTargetMsgId:null, retractMsgId:null,
   transferTarget:'', fwSelected:new Set(),
-  modeFilter:'all', replyFilter:'all', statFilter:'all',
+  primaryStatus:'all', sortMode:'customerLastOpen',
+  listFilters:{opening:'all', deal:'all', addTime:'all'},
+  bottomTab:'messages',
   plusOpen:false, emojiOpen:false,
   voiceRecording:false, voiceSeconds:0, voiceTimer:null, voiceCancelled:false, voiceStartY:0,
   custTags:[],
@@ -1322,19 +1486,19 @@ const S = {
 
 /* ── SESSION DATA ── */
 const ACCOUNTS = [
-  {id:'all', name:'全部帐号', deviceText:'全部设备', deviceOnline:null, wecomText:'企微登录汇总', wecomLogged:null, color:'#8C9BAB'},
+  {id:'all', name:'全部账号', deviceText:'全部设备', deviceOnline:null, wecomText:'企微登录汇总', wecomLogged:null, color:'#8C9BAB'},
   {id:'acc1', name:'企微主号', deviceText:'设备在线', deviceOnline:true, wecomText:'企微已登录', wecomLogged:true, color:'#07C160'},
   {id:'acc2', name:'太原小店号', deviceText:'设备在线', deviceOnline:true, wecomText:'企微已登录', wecomLogged:true, color:'#1677FF'},
   {id:'acc3', name:'备用接待号', deviceText:'设备离线', deviceOnline:false, wecomText:'企微未登录', wecomLogged:false, color:'#FF8F1F'},
 ];
 
 const SESSIONS = [
-  {id:'s1',accountId:'acc1',name:'呆呆.',color:'#E8624A',initial:'呆',mode:'human',replied:'pending',time:'18:00',preview:'您好，想了解一下价格',unread:0,sensitive:false,openid:'wmanZQSQAAcnuCe0BZEinWEis2ebqtCg',device:'53af562ef355a5c1'},
-  {id:'s2',accountId:'acc1',name:'月颜 🌙',color:'#9B59B6',initial:'月',mode:'human',replied:'pending',time:'15:45',preview:'我们不限制到店时间，这段时间到...',unread:1,sensitive:false,openid:'wmanABC123',device:'a1b2c3d4'},
-  {id:'s3',accountId:'acc2',name:'계 형 만 🐾',color:'#E67E22',initial:'계',mode:'human',replied:'replied',time:'12:30',preview:'我们全国有300多家门店',unread:0,sensitive:false,openid:'wmanXYZ789',device:'f6e5d4c3'},
-  {id:'s4',accountId:'acc2',name:'吴世民·绝技健康',color:'#27AE60',initial:'吴',mode:'human',replied:'replied',time:'11:40',preview:'亲 您的名字电话发我一下',unread:2,sensitive:true,openid:'wman111222',device:'1a2b3c4d'},
-  {id:'s5',accountId:'acc3',name:'等风来F',color:'#2980B9',initial:'等',mode:'human',replied:'replied',time:'10:39',preview:'预订方式：点击上方小程序',unread:0,sensitive:false,openid:'wman555666',device:'6f5e4d3c'},
-  {id:'s6',accountId:'acc3',name:'人生如梦',color:'#C0392B',initial:'人',mode:'ai',replied:'replied',time:'09:39',preview:'这是现场做完的效果对比',unread:1,sensitive:false,openid:'wman999000',device:'未绑定'},
+  {id:'s1',accountId:'acc1',name:'呆呆.',color:'#E8624A',initial:'呆',mode:'human',replied:'pending',time:'18:00',preview:'您好，想了解一下价格',unread:0,sensitive:false,openid:'wmanZQSQAAcnuCe0BZEinWEis2ebqtCg',device:'53af562ef355a5c1',hasOpening:true,dealStatus:'undealt',addDate:'2026-08-28',lastReplyAt:'2026-08-28T18:00:00',customerLastOpenAt:'2026-08-28T17:58:00',followPriority:96},
+  {id:'s2',accountId:'acc1',name:'月颜 🌙',color:'#9B59B6',initial:'月',mode:'human',replied:'pending',time:'15:45',preview:'我们不限制到店时间，这段时间到...',unread:1,sensitive:false,openid:'wmanABC123',device:'a1b2c3d4',hasOpening:true,dealStatus:'paid',addDate:'2026-08-27',lastReplyAt:'2026-08-28T15:45:00',customerLastOpenAt:'2026-08-28T15:44:00',followPriority:88},
+  {id:'s3',accountId:'acc2',name:'계 형 만 🐾',color:'#E67E22',initial:'계',mode:'human',replied:'replied',time:'12:30',preview:'我们全国有300多家门店',unread:0,sensitive:false,openid:'wmanXYZ789',device:'f6e5d4c3',hasOpening:false,dealStatus:'queued',addDate:'2026-08-24',lastReplyAt:'2026-08-28T12:30:00',customerLastOpenAt:'2026-08-27T19:22:00',followPriority:52},
+  {id:'s4',accountId:'acc2',name:'吴世民·绝技健康',color:'#27AE60',initial:'吴',mode:'human',replied:'replied',time:'11:40',preview:'亲 您的名字电话发我一下',unread:2,sensitive:true,openid:'wman111222',device:'1a2b3c4d',hasOpening:true,dealStatus:'visited',addDate:'2026-08-18',lastReplyAt:'2026-08-28T11:40:00',customerLastOpenAt:'2026-08-28T11:38:00',followPriority:74},
+  {id:'s5',accountId:'acc3',name:'等风来F',color:'#2980B9',initial:'等',mode:'human',replied:'replied',time:'10:39',preview:'预订方式：点击上方小程序',unread:0,sensitive:false,openid:'wman555666',device:'6f5e4d3c',hasOpening:true,dealStatus:'done',addDate:'2026-08-03',lastReplyAt:'2026-08-28T10:39:00',customerLastOpenAt:'2026-08-26T10:16:00',followPriority:34},
+  {id:'s6',accountId:'acc3',name:'人生如梦',color:'#C0392B',initial:'人',mode:'ai',replied:'replied',time:'09:39',preview:'这是现场做完的效果对比',unread:1,sensitive:false,openid:'wman999000',device:'未绑定',hasOpening:false,dealStatus:'refund',addDate:'2026-07-22',lastReplyAt:'2026-08-28T09:39:00',customerLastOpenAt:'2026-08-25T09:30:00',followPriority:41},
 ];
 
 /* ── MESSAGES ── */
@@ -1404,7 +1568,7 @@ function showPage(id){
   next.classList.add('active');
   S.pageStack.push(id);
   S.currentPage=id;
-  closeSheet();closeLpMenu();hidePlus();
+  closeSheet();closeLpMenu();hidePlus();closeChatSidebar();
 }
 function goBack(){
   if(S.pageStack.length<=1)return;
@@ -1414,6 +1578,7 @@ function goBack(){
   setTimeout(()=>{cur.style.transform='';},320);
   S.currentPage=S.pageStack[S.pageStack.length-1];
   document.getElementById(S.currentPage).classList.remove('behind');
+  closeChatSidebar();
 }
 
 /* ── LOGIN ── */
@@ -1436,7 +1601,7 @@ function doDingLogin(){
 function doLogin(){
   const u=document.getElementById('inp-user').value.trim();
   const p=document.getElementById('inp-pwd').value.trim();
-  if(!u||!p){showToast('请输入帐号和密码');return;}
+  if(!u||!p){showToast('请输入账号和密码');return;}
   showToast('登录中...');
   setTimeout(()=>{renderSessions();showPage('pg-list');},700);
 }
@@ -1466,9 +1631,9 @@ function accountStatusText(acc){
 }
 function renderAccountMeta(){
   const acc=ACCOUNTS.find(a=>a.id===S.currentAccount)||ACCOUNTS[0];
-  const nameEl=document.getElementById('lm-account-name');
   const statusEl=document.getElementById('lm-device-status');
-  if(nameEl)nameEl.textContent=acc.name;
+  const valueEl=document.getElementById('mine-account-value');
+  if(valueEl)valueEl.textContent=acc.name;
   if(statusEl){
     statusEl.classList.remove('offline','partial');
     if(acc.id==='all')statusEl.classList.add('partial');
@@ -1502,18 +1667,109 @@ function setAccount(id){
   closeSheet();
   renderSessions();
 }
+const LIST_SORT_LABELS = {
+  customerLastOpen:'客户最后开口',
+  lastReplyDesc:'最后回复时间',
+  addDesc:'加微时间最新',
+  addAsc:'加微时间最早'
+};
+const LIST_FILTER_LABELS = {
+  opening:{opened:'已开口', unopened:'未开口'},
+  deal:{undealt:'未成交', paid:'已付款', pendingDeal:'待定中', waitingQueue:'待排客', queued:'已排客', timeout:'已超时', visited:'已到店', done:'已完成', refund:'已流退'},
+  addTime:{today:'今天', yesterday:'昨天', '7d':'近7天', '30d':'近30天', custom:'自定义'}
+};
+const LIST_TODAY = new Date('2026-08-28T00:00:00');
+function tabScopedSessions(){
+  let list=accountSessions();
+  if(S.bottomTab==='human')list=list.filter(s=>s.mode==='human');
+  return list;
+}
+function matchesListAddTime(sess){
+  const mode=S.listFilters.addTime;
+  if(mode==='all')return true;
+  const addDate=new Date(`${sess.addDate}T00:00:00`);
+  const dayMs=24*60*60*1000;
+  const diffDays=Math.floor((LIST_TODAY-addDate)/dayMs);
+  if(mode==='today')return diffDays===0;
+  if(mode==='yesterday')return diffDays===1;
+  if(mode==='7d')return diffDays>=0&&diffDays<=6;
+  if(mode==='30d')return diffDays>=0&&diffDays<=29;
+  if(mode==='custom'){
+    const startVal=(document.getElementById('mobile-add-date-start')||{}).value;
+    const endVal=(document.getElementById('mobile-add-date-end')||{}).value;
+    const start=startVal?new Date(`${startVal}T00:00:00`):null;
+    const end=endVal?new Date(`${endVal}T23:59:59`):null;
+    if(start&&addDate<start)return false;
+    if(end&&addDate>end)return false;
+  }
+  return true;
+}
+function applyListFilters(list){
+  return list.filter(s=>{
+    if(S.primaryStatus==='unread'&&s.unread<=0)return false;
+    if(S.primaryStatus==='pending'&&s.replied!=='pending')return false;
+    const f=S.listFilters;
+    if(f.opening==='opened'&&!s.hasOpening)return false;
+    if(f.opening==='unopened'&&s.hasOpening)return false;
+    if(f.deal!=='all'&&s.dealStatus!==f.deal)return false;
+    if(!matchesListAddTime(s))return false;
+    return true;
+  });
+}
+function sortListSessions(list){
+  const sorted=[...list];
+  sorted.sort((a,b)=>{
+    if(S.sortMode==='customerLastOpen')return new Date(b.customerLastOpenAt)-new Date(a.customerLastOpenAt);
+    if(S.sortMode==='lastReplyDesc')return new Date(b.lastReplyAt)-new Date(a.lastReplyAt);
+    if(S.sortMode==='addDesc')return new Date(b.addDate)-new Date(a.addDate);
+    if(S.sortMode==='addAsc')return new Date(a.addDate)-new Date(b.addDate);
+    return b.followPriority-a.followPriority;
+  });
+  return sorted;
+}
+function activeAdvancedFilterCount(){
+  return Object.values(S.listFilters).filter(v=>v!=='all').length;
+}
+function syncListControls(visibleCount){
+  ['all','pending'].forEach(v=>{
+    const el=document.getElementById(`list-status-${v}`);
+    if(el)el.classList.toggle('on',S.primaryStatus===v);
+  });
+  document.querySelectorAll('#bs-list-sort .sort-option').forEach(item=>{
+    item.classList.toggle('on',item.dataset.sort===S.sortMode);
+  });
+  document.querySelectorAll('#bs-list-filter [data-filter-group]').forEach(item=>{
+    const group=item.dataset.filterGroup;
+    item.classList.toggle('on',S.listFilters[group]===item.dataset.filterValue);
+  });
+  const range=document.getElementById('mobile-add-date-range');
+  if(range)range.classList.toggle('show',S.listFilters.addTime==='custom');
+  const sortLabel=LIST_SORT_LABELS[S.sortMode]||LIST_SORT_LABELS.customerLastOpen;
+  const sortEl=document.getElementById('list-sort-label');
+  if(sortEl)sortEl.textContent=sortLabel;
+  const filterCount=activeAdvancedFilterCount();
+  const filterBtn=document.getElementById('list-filter-trigger');
+  if(filterBtn)filterBtn.classList.toggle('has-filter',filterCount>0);
+  const pieces=[S.primaryStatus==='pending'?'未回复':'全部', sortLabel];
+  Object.keys(S.listFilters).forEach(group=>{
+    const value=S.listFilters[group];
+    if(value!=='all')pieces.push((LIST_FILTER_LABELS[group]||{})[value]||value);
+  });
+  if(Number.isFinite(visibleCount))pieces.push(`${visibleCount}个客户`);
+  return pieces.join(' · ');
+}
 function renderSessions(){
   const el=document.getElementById('sess-list');
   renderAccountMeta();
   updateStats();
-  let list=accountSessions();
-  if(S.modeFilter==='human')list=list.filter(s=>s.mode==='human');
-  else if(S.modeFilter==='ai')list=list.filter(s=>s.mode==='ai');
-  else if(S.modeFilter==='sensitive')list=list.filter(s=>s.sensitive);
-  if(S.replyFilter==='unread')list=list.filter(s=>s.unread>0);
-  else if(S.replyFilter==='pending')list=list.filter(s=>s.replied==='pending');
+  let list=applyListFilters(tabScopedSessions());
   const kw=(document.getElementById('list-search')||{}).value||'';
-  if(kw.trim())list=list.filter(s=>s.name.includes(kw)||s.preview.includes(kw));
+  if(kw.trim())list=list.filter(s=>{
+    const text=`${s.name} ${s.preview} ${s.openid} ${s.device}`.toLowerCase();
+    return text.includes(kw.trim().toLowerCase());
+  });
+  list=sortListSessions(list);
+  syncListControls(list.length);
   if(!list.length){el.innerHTML='<div style="text-align:center;padding:52px 0;font-size:13px;color:var(--c3)">暂无匹配会话</div>';return;}
   el.innerHTML=list.map((s,i)=>`
     <div class="si-clip" id="sw${i}">
@@ -1545,46 +1801,69 @@ function renderSessions(){
     </div>`).join('');
 }
 function updateStats(){
-  const base=accountSessions();
+  const base=tabScopedSessions();
   const total=base.length;
   const pending=base.filter(s=>s.replied==='pending').length;
-  const unread=base.filter(s=>s.unread>0).length;
-  const sensitive=base.filter(s=>s.sensitive).length;
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-  set('s-total',total);set('s-pending',pending);set('s-unread',unread);set('s-sensitive',sensitive);
+  set('s-total',total);set('s-pending',pending);
 }
-function setStatFilter(v){
-  S.statFilter=v;
-  document.querySelectorAll('.sb-card').forEach(e=>e.classList.remove('on'));
-  const active=document.querySelector(`.sb-card.${v==='all'?'total':v}`);
-  if(active)active.classList.add('on');
-  document.querySelectorAll('.filter-row1 .ft,.filter-row2 .fp').forEach(e=>e.classList.remove('on'));
-  const modeAll=document.querySelector('.filter-row1 .ft');
-  const replyAll=document.querySelector('.filter-row2 .fp');
-  if(modeAll)modeAll.classList.add('on');
-  if(replyAll)replyAll.classList.add('on');
-  S.modeFilter='all';S.replyFilter='all';
-  if(v==='pending'){
-    S.replyFilter='pending';
-    document.querySelectorAll('.filter-row2 .fp').forEach(e=>{if(e.textContent.trim()==='待回复')e.classList.add('on');else if(e!==replyAll)e.classList.remove('on');});
-    if(replyAll)replyAll.classList.remove('on');
-  }
-  if(v==='unread'){
-    S.replyFilter='unread';
-    document.querySelectorAll('.filter-row2 .fp').forEach(e=>{if(e.textContent.trim()==='未读')e.classList.add('on');else if(e!==replyAll)e.classList.remove('on');});
-    if(replyAll)replyAll.classList.remove('on');
-  }
-  if(v==='sensitive'){
-    S.modeFilter='sensitive';
-    document.querySelectorAll('.filter-row1 .ft').forEach(e=>{if(e.textContent.trim()==='敏感')e.classList.add('on');else if(e!==modeAll)e.classList.remove('on');});
-    if(modeAll)modeAll.classList.remove('on');
-  }
+function setPrimaryStatus(v){
+  S.primaryStatus=v;
   renderSessions();
 }
-function clearStatActive(){S.statFilter='custom';document.querySelectorAll('.sb-card').forEach(e=>e.classList.remove('on'));}
-function setModeFilter(el,v){clearStatActive();document.querySelectorAll('.filter-row1 .ft').forEach(e=>e.classList.remove('on'));el.classList.add('on');S.modeFilter=v;renderSessions();}
-function setReplyFilter(el,v){clearStatActive();document.querySelectorAll('.filter-row2 .fp').forEach(e=>e.classList.remove('on'));el.classList.add('on');S.replyFilter=v;renderSessions();}
+function setListSort(button,mode){
+  S.sortMode=mode;
+  syncListControls();
+  closeSheet();
+  renderSessions();
+  showToast(`排序：${LIST_SORT_LABELS[mode]||LIST_SORT_LABELS.customerLastOpen}`);
+}
+function showListFilterSheet(){
+  syncListControls();
+  showSheet('bs-list-filter');
+}
+function setListFilter(button,group,value){
+  S.listFilters[group]=value;
+  syncListControls();
+  renderSessions();
+}
+function resetListFilters(){
+  S.listFilters={opening:'all',deal:'all',addTime:'all'};
+  syncListControls();
+  renderSessions();
+  showToast('已重置筛选');
+}
+function setStatFilter(v){setPrimaryStatus(v);}
+function clearStatActive(){}
+function setModeFilter(el,v){S.listFilters.mode=v;renderSessions();}
+function setReplyFilter(el,v){setPrimaryStatus(v);}
 function focusSearch(){document.getElementById('list-search').focus();}
+function switchListTab(tab){
+  S.bottomTab=tab;
+  document.getElementById('tab-messages').classList.toggle('on',tab==='messages');
+  document.getElementById('tab-human').classList.toggle('on',tab==='human');
+  document.getElementById('tab-mine').classList.toggle('on',tab==='mine');
+  document.getElementById('panel-messages').classList.toggle('active',tab!=='mine');
+  document.getElementById('panel-mine').classList.toggle('active',tab==='mine');
+  if(tab==='mine')renderAccountMeta();
+  else renderSessions();
+}
+function doAccountLogout(){
+  closeSheet();closeLpMenu();hidePlus();hideEmoji();closeChatSidebar();
+  showToast('已退出账号');
+  setTimeout(()=>{
+    document.querySelectorAll('.page').forEach(p=>{
+      p.classList.remove('active','behind');
+      p.style.transform='';
+    });
+    S.currentPage='pg-login';
+    S.pageStack=['pg-login'];
+    S.currentChat=null;
+    S.currentAccount='all';
+    switchListTab('messages');
+    document.getElementById('pg-login').classList.add('active');
+  },450);
+}
 
 /* ── SWIPE ── */
 const swState={};
@@ -1618,6 +1897,10 @@ function openChat(id){
   if(!sess)return;
   S.currentChat=sess;S.currentMode=sess.mode;
   document.getElementById('chat-name').textContent=sess.name;
+  document.getElementById('side-customer-name').textContent=sess.name;
+  const sideAvatar=document.getElementById('side-customer-avatar');
+  sideAvatar.textContent=sess.initial;
+  sideAvatar.style.background=sess.color;
   updateModeBadge();renderMsgs(id);
   showPage('pg-chat');
   setTimeout(scrollBottom,60);
@@ -1667,6 +1950,19 @@ function bubHtml(m,isMe){
 }
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 function scrollBottom(){const w=document.getElementById('msgs-wrap');if(w)w.scrollTop=w.scrollHeight;}
+
+/* ── CHAT TOOL SIDEBAR ── */
+function openChatSidebar(){
+  hidePlus();hideEmoji();closeSheet();
+  document.getElementById('chat-side-mask').classList.add('show');
+  document.getElementById('chat-side-drawer').classList.add('show');
+}
+function closeChatSidebar(){
+  const mask=document.getElementById('chat-side-mask');
+  const drawer=document.getElementById('chat-side-drawer');
+  if(mask)mask.classList.remove('show');
+  if(drawer)drawer.classList.remove('show');
+}
 
 /* ── PLUS PANEL ── */
 function togglePlus(){S.plusOpen?hidePlus():showPlus();}
@@ -2178,7 +2474,7 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.chat-input-area')&&S.emojiOpen)hideEmoji();
 });
 document.addEventListener('touchmove',e=>{
-  if(!e.target.closest('.sess-scroll,.msgs-wrap,.bs-body,.bs,.voice-sheet,.cust-scroll,.orders-scroll,.od-scroll,.emoji-grid'))e.preventDefault();
+  if(!e.target.closest('.sess-scroll,.msgs-wrap,.bs-body,.bs,.voice-sheet,.cust-scroll,.orders-scroll,.od-scroll,.emoji-grid,.chat-side-drawer,.mine-content'))e.preventDefault();
 },{passive:false});
 
 document.addEventListener('DOMContentLoaded',()=>{renderEmojiPanel();renderSessions();});
