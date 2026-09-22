@@ -4,57 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>企微会话中心 - 多选转发与消息引用回复演示</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 基础样式及图标使用本地资源，避免 CDN 不可用时布局失效。 -->
+    <link rel="stylesheet" href="./assets/chat-pc/phosphor/regular/style.css">
+    <link rel="stylesheet" href="./assets/chat-pc/phosphor/fill/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Microsoft YaHei', 'sans-serif']
-                    },
-                    colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8'
-                        },
-                        surface: {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            200: '#e2e8f0',
-                            300: '#cbd5e1',
-                            400: '#94a3b8',
-                            500: '#64748b',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a'
-                        },
-                        wechat: {
-                            green: '#07C160',
-                            greenHover: '#06B054',
-                            bg: '#F3F3F3',
-                            border: '#E2E2E2',
-                            textDark: '#333333',
-                            textGray: '#999999',
-                            activeBlue: '#C5D9E8',
-                            lightBlue: '#F2F6F9',
-                            bubbleSelf: '#C6E6FC',
-                            bubbleOther: '#FFFFFF'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         :root {
             --ui-bg: #f5f7fb;
@@ -2303,6 +2256,50 @@
             box-shadow: 0 6px 14px rgba(22, 163, 74, .18);
         }
 
+
+        /* 预约开单：客户校验、订单与排客在同一侧栏内连续处理。 */
+        #detail-content-booking { gap: 12px; }
+        #detail-content-booking .pc-detail-module-desc { font-size: 10px; line-height: 1.5; }
+        #detail-content-booking .pc-detail-current-name { font-weight: 500; }
+        #detail-content-booking .pc-detail-mini-label { margin-bottom: 5px; font-size: 10px; }
+        #detail-content-booking .pc-detail-alert { font-size: 12px; border-radius: 8px; }
+        .pc-booking-card { padding: 12px; border: 1px solid #e8eef6; border-radius: 11px; background: #fff; box-shadow: 0 4px 14px rgba(30,41,59,.025); }
+        .pc-booking-card-title { display: flex; align-items: center; gap: 8px; margin: 0; color: #25324a; font-size: 12px; font-weight: 600; line-height: 18px; }
+        .pc-booking-card-title i { color: #655cff; font-size: 14px; }
+        .pc-booking-card-title i.is-success { color: #00bd83; }
+        .pc-booking-card-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: -2px -12px 12px; padding: 0 12px 10px; border-bottom: 1px solid #f1f5f9; }
+        .pc-booking-status { flex-shrink: 0; padding: 2px 8px; border: 1px solid #bed6ff; border-radius: 12px; background: #f1f7ff; color: #3879ff; font-size: 10px; line-height: 16px; }
+        .pc-booking-facts { display: grid; gap: 7px; margin: 9px 0 0; font-size: 11px; line-height: 16px; }
+        .pc-booking-facts > div { display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 6px; align-items: start; }
+        .pc-booking-facts dt { color: #94a6c2; }
+        .pc-booking-facts dd { margin: 0; color: #253654; text-align: right; overflow-wrap: anywhere; }
+        .pc-booking-item { display: flex; align-items: flex-start; gap: 6px; font-size: 12px; line-height: 18px; color: #16243a; }
+        .pc-booking-item-tag { flex-shrink: 0; padding: 0 4px; color: #16886f; background: #ebfbf4; font-size: 10px; }
+        .pc-booking-item-name { flex: 1; min-width: 0; }
+        .pc-booking-item strong { flex-shrink: 0; font-weight: 600; }
+        .pc-booking-item-meta { display: flex; align-items: center; gap: 4px; margin-top: 5px; color: #7d8daa; font-size: 11px; }
+        .pc-booking-text-btn { padding: 0 6px; color: #4a79ff; font-size: 11px; text-decoration: underline; }
+        .pc-booking-schedule > .pc-booking-card-title { margin-bottom: 14px; }
+        .pc-booking-form-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 14px; margin-bottom: 14px; }
+        #detail-content-booking .pc-detail-field label { font-size: 11px; font-weight: 400; color: #7c8daa; line-height: 16px; margin-bottom: 5px; }
+        #detail-content-booking .pc-detail-input, #detail-content-booking .pc-detail-select, #detail-content-booking .pc-detail-textarea { min-width: 0; border-color: #e8eef6; border-radius: 10px; font-size: 12px; box-shadow: 0 3px 10px rgba(30,41,59,.025); }
+        #detail-content-booking .pc-detail-input, #detail-content-booking .pc-detail-select { height: 36px; }
+        #detail-content-booking input[type="date"] { padding: 0 8px; }
+        #detail-content-booking .pc-detail-select { appearance: auto; }
+        #detail-content-booking .pc-detail-textarea { min-height: 50px; height: 50px; }
+        #detail-content-booking .pc-detail-input:disabled, #detail-content-booking .pc-detail-select:disabled { background: #f6f8fb; color: #94a3b8; cursor: not-allowed; }
+        .pc-booking-submit { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 34px; padding: 0 12px; background: #6960ff; color: #fff; border-radius: 8px; font-size: 12px; }
+        .pc-booking-submit:hover { background: #574ce8; }
+        .pc-booking-footer { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+        .pc-booking-footer button { display: flex; align-items: center; justify-content: center; gap: 5px; height: 38px; border: 1px solid #dce5f1; border-radius: 8px; background: #fff; color: #35445e; font-size: 12px; box-shadow: 0 2px 4px rgba(30,41,59,.035); }
+        .pc-booking-footer button:hover { background: #f5f7fb; }
+        .pc-booking-footer .is-recharge { color: #168c6b; border-color: #96efc7; background: #ecfcf4; font-weight: 600; }
+        .pc-booking-inline-form { display: grid; gap: 10px; margin-top: 12px; }
+        .pc-booking-inline-form[hidden], .pc-booking-result[hidden] { display: none; }
+        .pc-booking-inline-actions { display: flex; align-items: center; gap: 8px; }
+        .pc-booking-result { margin: 10px 0 0; color: #16886f; font-size: 11px; line-height: 18px; }
+        #detail-content-booking button:focus-visible { outline: 2px solid #8780ff; outline-offset: 2px; }
+
         .pc-store-search-row {
             display: flex;
             align-items: center;
@@ -2834,6 +2831,21 @@
             white-space: nowrap;
         }
 
+        .pc-assignment-hint {
+            margin: 0 0 9px;
+            color: #7a879a;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .pc-list-badge.pc-assignment-tag {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .pc-rail-nav > span { white-space: nowrap; }
+
         .pc-list-badge.is-manual {
             border-color: #ffedd5;
             background: #fff7ed;
@@ -2968,6 +2980,8 @@
             box-shadow: 0 2px 6px rgba(239, 68, 68, .28);
         }
     </style>
+    <!-- 保持原 CDN 将工具样式追加在自定义样式之后的覆盖顺序。 -->
+    <link rel="stylesheet" href="./assets/chat-pc/tailwind.css">
 </head>
 <body class="font-sans overflow-hidden h-screen w-screen flex flex-col select-none">
 
@@ -3042,19 +3056,19 @@
 
             <div class="pc-rail-divider"></div>
 
-            <button type="button" onclick="setHandlingMode(this, 'all')" class="pc-rail-nav pc-mode-control is-active" title="全部消息">
+            <button type="button" onclick="setConversationView('all')" data-conversation-view="all" class="pc-rail-nav pc-mode-control is-active" title="全部" aria-pressed="true">
                 <span class="pc-rail-nav-mark">
                     <i class="ph-fill ph-chats-circle"></i>
                 </span>
-                <span>消息</span>
-                <span class="pc-rail-unread" aria-label="12条未读消息">12</span>
+                <span>全部</span>
+                <span id="all-conversations-unread" class="pc-rail-unread hidden"></span>
             </button>
-            <button type="button" onclick="setHandlingMode(this, 'manual')" class="pc-rail-nav pc-mode-control" title="人工消息">
+            <button type="button" onclick="setConversationView('new')" data-conversation-view="new" class="pc-rail-nav pc-mode-control" title="新分配" aria-pressed="false">
                 <span class="pc-rail-nav-mark">
-                    <i class="ph-fill ph-headset"></i>
+                    <i class="ph-fill ph-user-plus"></i>
                 </span>
-                <span>人工</span>
-                <span class="pc-rail-unread" aria-label="4条人工未读消息">4</span>
+                <span>新分配</span>
+                <span id="new-assignment-count" class="pc-rail-unread hidden" aria-live="polite"></span>
             </button>
 
             <div class="pc-rail-spacer"></div>
@@ -3068,7 +3082,8 @@
         <div id="conversation-panel" class="pc-conversation-panel pc-side-panel border-r flex flex-col flex-shrink-0">
             <!-- 会话列表头部：只保留高频操作，复杂筛选收进浮层 -->
             <div class="pc-list-toolbar">
-                <div class="pc-list-title">会话中心</div>
+                <div id="conversation-list-title" class="pc-list-title">全部</div>
+                <p id="new-assignment-hint" class="pc-assignment-hint hidden">首次发送成功后自动移出，查看不会移出</p>
                 <div class="pc-search-row">
                     <div class="relative flex-1 min-w-0">
                         <input id="conversation-search-input" type="text" placeholder="搜索" oninput="applyConversationControls()" class="pc-search-input w-full pl-8 pr-3 text-xs focus:outline-none">
@@ -3109,37 +3124,6 @@
                     </button>
                 </div>
 
-                <div id="manual-type-dropdown" class="pc-inline-dropdown mt-2 hidden">
-                    <button id="manual-type-trigger" type="button" onclick="toggleManualTypeDropdown(event)" class="pc-inline-trigger">
-                        <span class="flex items-center gap-2 min-w-0">
-                            <span class="text-slate-500">分类</span>
-                            <span id="manual-type-label" class="font-semibold text-slate-700 truncate">已选2类</span>
-                        </span>
-                        <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    <div id="manual-type-menu" class="pc-inline-menu hidden" onclick="event.stopPropagation()">
-                        <div class="pc-manual-type-list">
-                            <label class="pc-check-filter">
-                                <input type="checkbox" checked class="pc-filter-checkbox manual-type-option" onchange="updateManualTypeFilter()">
-                                <span>客户开口</span>
-                            </label>
-                            <label class="pc-check-filter">
-                                <input type="checkbox" checked class="pc-filter-checkbox manual-type-option" onchange="updateManualTypeFilter()">
-                                <span>AI轮次未转化</span>
-                            </label>
-                            <label class="pc-check-filter">
-                                <input type="checkbox" class="pc-filter-checkbox manual-type-option" onchange="updateManualTypeFilter()">
-                                <span>跟进到期</span>
-                            </label>
-                            <label class="pc-check-filter">
-                                <input type="checkbox" class="pc-filter-checkbox manual-type-option" onchange="updateManualTypeFilter()">
-                                <span>手动接管</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
                 <div id="filter-popover" class="pc-filter-popover hidden" onclick="event.stopPropagation()">
                     <div class="pc-filter-header">
                         <div class="pc-filter-title">筛选</div>
@@ -3533,10 +3517,10 @@
 
                 <div id="detail-content-booking" class="pc-detail-content hidden" data-detail-content="booking">
                     <div class="pc-detail-module-head">
-                        <span class="pc-detail-module-icon is-blue"><i class="ph ph-calendar-plus"></i></span>
+                        <span class="pc-detail-module-icon is-blue"><i class="ph ph-calendar-plus" aria-hidden="true"></i></span>
                         <div>
                             <div class="pc-detail-module-title">预约开单</div>
-                            <div class="pc-detail-module-desc">客户校验、预约建单、收付与排客一体处理</div>
+                            <div class="pc-detail-module-desc">客户校验、预约建单、改价与排客一体化处理</div>
                         </div>
                     </div>
 
@@ -3547,51 +3531,78 @@
                     </div>
 
                     <div class="pc-detail-alert">
-                        <i class="ph ph-info"></i>
-                        <span>未识别到平台客户资料，将仅向设备发送预约开单跳转，不会创建平台订单。</span>
+                        <i class="ph ph-info" aria-hidden="true"></i>
+                        <span>平台返回该客户已有进行中的订单，请优先修改或排客。</span>
                     </div>
 
-                    <div class="pc-detail-card p-3">
-                        <div class="pc-detail-form">
-                            <div class="pc-detail-field">
-                                <label>选择门店 *</label>
-                                <select class="pc-detail-select">
-                                    <option>请选择门店</option>
-                                    <option>上海奢悦店</option>
-                                    <option>厦门百草德雷站</option>
-                                </select>
-                            </div>
-                            <div class="pc-detail-field">
-                                <label>意向项目</label>
-                                <select class="pc-detail-select">
-                                    <option>请选择（可选）</option>
-                                    <option>补水美白体验</option>
-                                    <option>皮肤管理套餐</option>
-                                </select>
-                            </div>
-                            <div class="pc-detail-field">
-                                <label>预约金（元） *</label>
-                                <input id="booking-amount-input" class="pc-detail-input" placeholder="请选择快捷预约金或手动输入">
-                            </div>
-                            <div>
-                                <div class="pc-detail-quick-label">快捷预约金</div>
-                                <div class="pc-detail-amount-grid">
-                                    <button type="button" class="pc-detail-amount-btn" onclick="setDetailInputValue('booking-amount-input', '20.00')">¥20.00</button>
-                                    <button type="button" class="pc-detail-amount-btn" onclick="setDetailInputValue('booking-amount-input', '10.00')">¥10.00</button>
-                                    <button type="button" class="pc-detail-amount-btn" onclick="setDetailInputValue('booking-amount-input', '0.01')">¥0.01</button>
-                                </div>
-                            </div>
-                            <div class="pc-detail-field">
-                                <label>备注</label>
-                                <textarea class="pc-detail-textarea" placeholder="可填写预约备注（选填）"></textarea>
-                            </div>
+                    <section class="pc-booking-card" aria-labelledby="booking-check-heading">
+                        <h3 id="booking-check-heading" class="pc-booking-card-title"><i class="ph ph-check-circle is-success" aria-hidden="true"></i>平台客户校验</h3>
+                        <dl class="pc-booking-facts">
+                            <div><dt>平台客户ID</dt><dd>6161153</dd></div>
+                            <div><dt>加微记录ID</dt><dd>21259806</dd></div>
+                            <div><dt>手机号</dt><dd>159****0281</dd></div>
+                            <div><dt>外部联系人ID</dt><dd>wmanZQSQAA1yNBbFKBpu06JJXZfinBqQ</dd></div>
+                            <div><dt>是否可新建</dt><dd>存在进行中订单</dd></div>
+                        </dl>
+                    </section>
+
+                    <section class="pc-booking-card" aria-labelledby="booking-order-heading">
+                        <div class="pc-booking-card-heading">
+                            <h3 id="booking-order-heading" class="pc-booking-card-title">订单信息</h3>
+                            <span id="booking-order-status" class="pc-booking-status">待排客</span>
                         </div>
-                    </div>
+                        <dl class="pc-booking-facts">
+                            <div><dt>所属门店</dt><dd id="booking-store-name">泉州百星丰泽店</dd></div>
+                            <div><dt>下单时间</dt><dd>2025/7/6 22:55</dd></div>
+                            <div><dt>订单意向</dt><dd>皮肤熨斗(皮肤熨斗（6选1）)</dd></div>
+                            <div><dt>订单号</dt><dd>2507062255559151</dd></div>
+                            <div><dt>预约金额</dt><dd id="booking-deposit-value">10.00</dd></div>
+                        </dl>
+                        <form id="booking-order-edit" class="pc-booking-inline-form" hidden onsubmit="saveBookingOrder(event)">
+                            <div class="pc-detail-field"><label for="booking-store-input">所属门店</label><input id="booking-store-input" class="pc-detail-input" value="泉州百星丰泽店" required></div>
+                            <div class="pc-detail-field"><label for="booking-deposit-input">预约金额（元）</label><input id="booking-deposit-input" class="pc-detail-input" type="number" min="0" step="0.01" value="10.00" required></div>
+                            <div class="pc-booking-inline-actions"><button class="pc-booking-submit" type="submit">保存修改</button><button class="pc-booking-text-btn" type="button" onclick="toggleBookingEditor('booking-order-edit', false)">取消</button></div>
+                        </form>
+                    </section>
 
-                    <button type="button" class="pc-detail-primary-btn" onclick="showToast('已创建预约开单发送任务')">
-                        <i class="ph ph-paper-plane-tilt"></i>
-                        <span>创建并发送</span>
-                    </button>
+                    <section class="pc-booking-card" aria-labelledby="booking-item-heading">
+                        <div class="pc-booking-card-heading"><h3 id="booking-item-heading" class="pc-booking-card-title">订单项目</h3></div>
+                        <div class="pc-booking-item">
+                            <span class="pc-booking-item-tag">消费</span>
+                            <span class="pc-booking-item-name">皮肤熨斗(皮肤熨斗（6选1）)</span>
+                            <strong id="booking-item-total">¥380.00</strong>
+                        </div>
+                        <div class="pc-booking-item-meta">单价：<span id="booking-item-price">¥380.00</span><button type="button" class="pc-booking-text-btn" onclick="toggleBookingEditor('booking-price-edit')">修改</button><span>数量：1</span></div>
+                        <form id="booking-price-edit" class="pc-booking-inline-form" hidden onsubmit="saveBookingPrice(event)">
+                            <div class="pc-detail-field"><label for="booking-price-input">项目单价（元）</label><input id="booking-price-input" class="pc-detail-input" type="number" min="0" step="0.01" value="380.00" required></div>
+                            <div class="pc-booking-inline-actions"><button class="pc-booking-submit" type="submit">保存单价</button><button class="pc-booking-text-btn" type="button" onclick="toggleBookingEditor('booking-price-edit', false)">取消</button></div>
+                        </form>
+                    </section>
+
+                    <section class="pc-booking-card pc-booking-schedule" aria-labelledby="booking-schedule-heading">
+                        <h3 id="booking-schedule-heading" class="pc-booking-card-title"><i class="ph ph-calendar-check" aria-hidden="true"></i>排客与改约</h3>
+                        <form id="booking-schedule-form" onsubmit="submitBookingSchedule(event)">
+                            <div class="pc-booking-form-grid">
+                                <div class="pc-detail-field"><label for="booking-customer-type">客户类型</label><select id="booking-customer-type" class="pc-detail-select" required onchange="changeBookingCustomerType()"><option value="">请选择客户类型</option><option value="老客">老客</option><option value="新客">新客</option></select></div>
+                                <div class="pc-detail-field"><label for="booking-date">排客日期</label><input id="booking-date" class="pc-detail-input" type="date" required disabled onchange="refreshBookingTimes()"></div>
+                                <div class="pc-detail-field"><label for="booking-time">排客时间</label><select id="booking-time" class="pc-detail-select" required disabled><option value="">请先选择排客日期</option></select></div>
+                                <div class="pc-detail-field"><label for="booking-note">排客备注</label><textarea id="booking-note" class="pc-detail-textarea" placeholder="例如客户要求上午到店"></textarea></div>
+                            </div>
+                            <button id="booking-schedule-submit" type="submit" class="pc-booking-submit"><i class="ph ph-calendar-check" aria-hidden="true"></i><span>立即排客</span></button>
+                            <p id="booking-schedule-result" class="pc-booking-result" role="status" hidden></p>
+                        </form>
+                    </section>
+
+                    <form id="booking-recharge" class="pc-booking-card pc-booking-inline-form" hidden onsubmit="submitBookingRecharge(event)">
+                        <h3 class="pc-booking-card-title">客户充值</h3>
+                        <div class="pc-detail-field"><label for="booking-recharge-amount">充值金额（元）</label><input id="booking-recharge-amount" class="pc-detail-input" type="number" min="0.01" step="0.01" placeholder="请输入充值金额" required></div>
+                        <div class="pc-booking-inline-actions"><button class="pc-booking-submit" type="submit">确认充值</button><button class="pc-booking-text-btn" type="button" onclick="toggleBookingEditor('booking-recharge', false)">取消</button></div>
+                    </form>
+                    <div class="pc-booking-footer">
+                        <button type="button" onclick="showToast('预约资料已刷新（演示）')"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i>刷新</button>
+                        <button type="button" class="is-recharge" onclick="toggleBookingEditor('booking-recharge')">充值</button>
+                        <button type="button" onclick="toggleBookingEditor('booking-order-edit')">修改</button>
+                    </div>
                 </div>
 
                 <div id="detail-content-orders" class="pc-detail-content hidden" data-detail-content="orders">
@@ -3870,6 +3881,63 @@
         };
 
         const conversationOrder = ['jua', 'top', 'luojie', 'kai', 'two', 'nine'];
+        // 静态原型的分配样例：包含无未读消息、已有历史回复的客户。
+        // 新分配状态属于本次分配，不能由聊天历史或未读数推断。
+        const conversationAssignments = {
+            luojie: { id: 'demo-luojie-1', firstContactAt: null },
+            kai: { id: 'demo-kai-1', firstContactAt: null },
+            nine: { id: 'demo-nine-1', firstContactAt: null }
+        };
+
+        function isNewAssignment(key) {
+            const assignment = conversationAssignments[key];
+            return Boolean(assignment && !assignment.firstContactAt);
+        }
+
+        // 后续接入分配事件时传入客户 key 和本次分配 ID；重复事件不重置联系状态。
+        function receiveCustomerAssignment(key, assignmentId) {
+            if (!conversations[key] || !assignmentId || conversationAssignments[key]?.id === assignmentId) return;
+            conversationAssignments[key] = { id: assignmentId, firstContactAt: null };
+            if (retainedAssignmentKey === key) retainedAssignmentKey = null;
+            applyConversationControls(true);
+        }
+
+        function updateAssignmentIndicators() {
+            const count = conversationOrder.filter(isNewAssignment).length;
+            const badge = document.getElementById('new-assignment-count');
+            badge.textContent = count > 99 ? '99+' : String(count);
+            badge.classList.toggle('hidden', count === 0);
+            badge.setAttribute('aria-label', `${count}位新分配客户`);
+            badge.parentElement.title = `新分配：${count}位客户尚未联系`;
+
+            const unread = conversationOrder.reduce((total, key) => total + Number(conversations[key].unreadCount || 0), 0);
+            const unreadBadge = document.getElementById('all-conversations-unread');
+            unreadBadge.textContent = unread > 99 ? '99+' : String(unread);
+            unreadBadge.classList.toggle('hidden', unread === 0);
+            unreadBadge.setAttribute('aria-label', `${unread}条未读消息`);
+
+            conversationOrder.forEach(key => {
+                const item = document.getElementById(`conv-${key}`);
+                const badges = item?.querySelector('.pc-list-badge')?.parentElement;
+                if (!badges) return;
+                let tag = badges.querySelector('.pc-assignment-tag');
+                if (isNewAssignment(key) && !tag) {
+                    tag = document.createElement('span');
+                    tag.className = 'pc-list-badge pc-assignment-tag';
+                    tag.textContent = '新分配';
+                    badges.prepend(tag);
+                } else if (!isNewAssignment(key) && tag) {
+                    tag.remove();
+                }
+            });
+
+            const hint = document.getElementById('new-assignment-hint');
+            hint.classList.toggle('hidden', currentConversationView !== 'new');
+            hint.textContent = retainedAssignmentKey === activeConvKey
+                ? '已联系，切换会话后从此列表移出'
+                : '首次发送成功后自动移出，查看不会移出';
+        }
+
         const sendSourceMeta = {
             ai: { label: 'AI回复', className: 'is-ai' },
             sop: { label: 'SOP', className: 'is-sop' },
@@ -3998,6 +4066,8 @@
             cancelReply();
             closeMessageActions();
 
+            const removeRetainedAssignment = retainedAssignmentKey !== null && key !== activeConvKey;
+            if (removeRetainedAssignment) retainedAssignmentKey = null;
             activeConvKey = key;
             const conv = conversations[key];
             const relation = customerRelationMeta[conv.relationStatus || 'normal'] || customerRelationMeta.normal;
@@ -4039,6 +4109,8 @@
             // 重新渲染聊天信息流
             renderChatMessages();
             scrollToBottom();
+            if (removeRetainedAssignment) applyConversationControls(true);
+            updateAssignmentIndicators();
         }
 
         function updateConversationUnreadBadges() {
@@ -4386,6 +4458,12 @@
             }
 
             conv.messages.push(newMsg);
+            // 仅当前员工本次发送成功才算联系；历史回复和失败消息不消除新分配。
+            if (newMsg.sendStatus === 'sent' && isNewAssignment(activeConvKey)) {
+                conversationAssignments[activeConvKey].firstContactAt = new Date().toISOString();
+                if (currentConversationView === 'new') retainedAssignmentKey = activeConvKey;
+                updateAssignmentIndicators();
+            }
 
             // 清空 textarea 内容
             textarea.value = '';
@@ -4676,7 +4754,9 @@
         }
 
         // 23. 筛选交互
-        let currentHandlingMode = 'all';
+        let currentConversationView = 'all';
+        // 已联系的当前会话暂留原位，切换客户或离开入口后再移出。
+        let retainedAssignmentKey = null;
         let currentReplyStatus = '全部';
         let currentSortMode = 'followPriority';
         const currentConversationFilters = {
@@ -4687,7 +4767,7 @@
         let headerHandlingMode = 'ai';
         let sendMode = 'auto';
         let activeDetailTab = 'customer';
-        let pendingNewConversationCount = 3;
+        let pendingNewConversationCount = 0;
 
         function toggleSortPopover(event) {
             event.stopPropagation();
@@ -4698,7 +4778,7 @@
 
             const shouldOpen = popover.classList.contains('hidden');
             closeFilterPopover();
-            closeManualTypeDropdown();
+
             closeRailAccountMenu();
             closeSendModeMenu();
             popover.classList.toggle('hidden', !shouldOpen);
@@ -4722,7 +4802,7 @@
             const shouldOpen = popover.classList.contains('hidden');
 
             closeSortPopover();
-            closeManualTypeDropdown();
+
             closeRailAccountMenu();
             closeSendModeMenu();
             popover.classList.toggle('hidden', !shouldOpen);
@@ -4747,7 +4827,7 @@
 
             closeFilterPopover();
             closeSortPopover();
-            closeManualTypeDropdown();
+
             closeSendModeMenu();
             menu.classList.toggle('hidden', !shouldOpen);
             trigger.classList.toggle('is-open', shouldOpen);
@@ -4756,30 +4836,6 @@
         function closeRailAccountMenu() {
             const trigger = document.getElementById('rail-account-trigger');
             const menu = document.getElementById('rail-account-menu');
-
-            if (!trigger || !menu) return;
-
-            menu.classList.add('hidden');
-            trigger.classList.remove('is-open');
-        }
-
-        function toggleManualTypeDropdown(event) {
-            event.stopPropagation();
-            const trigger = document.getElementById('manual-type-trigger');
-            const menu = document.getElementById('manual-type-menu');
-            const shouldOpen = menu.classList.contains('hidden');
-
-            closeFilterPopover();
-            closeSortPopover();
-            closeRailAccountMenu();
-            closeSendModeMenu();
-            menu.classList.toggle('hidden', !shouldOpen);
-            trigger.classList.toggle('is-open', shouldOpen);
-        }
-
-        function closeManualTypeDropdown() {
-            const trigger = document.getElementById('manual-type-trigger');
-            const menu = document.getElementById('manual-type-menu');
 
             if (!trigger || !menu) return;
 
@@ -4809,26 +4865,20 @@
             applyConversationControls();
         }
 
-        function setHandlingMode(button, mode) {
-            currentHandlingMode = mode;
-
-            document.querySelectorAll('.pc-mode-control').forEach(item => {
-                item.classList.remove('is-active');
+        function setConversationView(view) {
+            if (view === currentConversationView) return;
+            currentConversationView = view;
+            retainedAssignmentKey = null;
+            document.querySelectorAll('[data-conversation-view]').forEach(item => {
+                const active = item.dataset.conversationView === view;
+                item.classList.toggle('is-active', active);
+                item.setAttribute('aria-pressed', String(active));
             });
-            button.classList.add('is-active');
-
-            const manualTypeDropdown = document.getElementById('manual-type-dropdown');
-            if (manualTypeDropdown) {
-                manualTypeDropdown.classList.toggle('hidden', mode !== 'manual');
-            }
-            if (mode !== 'manual') {
-                closeManualTypeDropdown();
-            }
-
-            const modeText = mode === 'manual' ? '人工处理' : mode === 'ai' ? 'AI处理' : '全部';
-            updateFilterSummary();
-            applyConversationControls();
-            showToast(`已切换到${modeText}会话`);
+            document.getElementById('conversation-list-title').textContent = view === 'new' ? '新分配' : '全部';
+            closeFilterPopover();
+            closeSortPopover();
+            // 进入入口时清除旧筛选，避免角标有数量却看不到新客户。
+            resetConversationFilters(false);
         }
 
         function setSortMode(button, mode) {
@@ -4861,7 +4911,7 @@
             applyConversationControls();
         }
 
-        function resetConversationFilters() {
+        function resetConversationFilters(showTip = true) {
             currentSortMode = 'followPriority';
             currentReplyStatus = '全部';
             currentConversationFilters.opening = 'all';
@@ -4890,7 +4940,7 @@
             if (customRange) customRange.classList.add('hidden');
 
             applyConversationControls();
-            showToast('已重置列表条件');
+            if (showTip) showToast('已重置列表条件');
         }
 
         function matchesAddTimeFilter(meta) {
@@ -4926,6 +4976,7 @@
             const searchValue = (document.getElementById('conversation-search-input')?.value || '').trim().toLowerCase();
 
             if (!conv || !meta) return false;
+            if (currentConversationView === 'new' && !isNewAssignment(key) && key !== retainedAssignmentKey) return false;
 
             if (searchValue) {
                 const searchable = `${conv.name} ${conv.wechat} ${conv.id} ${conv.guid}`.toLowerCase();
@@ -5044,7 +5095,7 @@
             return loadMoreState;
         }
 
-        function applyConversationControls() {
+        function applyConversationControls(preserveActive = false) {
             const list = document.getElementById('conversation-list');
             const emptyState = ensureConversationEmptyState();
             const loadMoreState = ensureConversationLoadMoreState();
@@ -5068,19 +5119,24 @@
             });
 
             if (emptyState) {
+                const pendingAssignments = conversationOrder.some(isNewAssignment);
+                emptyState.textContent = currentConversationView === 'new' && !pendingAssignments
+                    ? '暂无新分配客户，已联系的客户可在「全部」中查看'
+                    : '暂无符合条件的客户';
                 emptyState.classList.toggle('hidden', visibleKeys.length > 0);
                 list.appendChild(emptyState);
             }
 
             if (loadMoreState) {
-                loadMoreState.classList.toggle('hidden', visibleKeys.length === 0);
+                loadMoreState.classList.toggle('hidden', currentConversationView === 'new' || visibleKeys.length === 0);
                 list.appendChild(loadMoreState);
             }
 
-            if (visibleKeys.length > 0 && !visibleKeys.includes(activeConvKey)) {
+            if (!preserveActive && visibleKeys.length > 0 && !visibleKeys.includes(activeConvKey)) {
                 selectConversation(visibleKeys[0]);
             }
 
+            updateAssignmentIndicators();
             updateFilterSummary(visibleKeys.length);
             updateNewConversationNotice();
         }
@@ -5115,7 +5171,7 @@
             const shouldOpen = menu.classList.contains('hidden');
             closeSortPopover();
             closeFilterPopover();
-            closeManualTypeDropdown();
+
             closeRailAccountMenu();
             menu.classList.toggle('hidden', !shouldOpen);
             selector.classList.toggle('is-open', shouldOpen);
@@ -5203,18 +5259,6 @@
             showToast(collapsed ? '已收起客户详情' : '已展开客户详情');
         }
 
-        function updateManualTypeFilter() {
-            const label = document.getElementById('manual-type-label');
-            const checkedCount = document.querySelectorAll('.manual-type-option:checked').length;
-
-            if (label) {
-                label.innerText = checkedCount === 0 ? '未选择' : `已选${checkedCount}类`;
-            }
-
-            updateFilterSummary();
-            showToast(checkedCount === 0 ? '未选择分类' : `已选择 ${checkedCount} 个分类`);
-        }
-
         function setDetailTab(tab) {
             activeDetailTab = tab;
 
@@ -5240,6 +5284,87 @@
                 const node = document.getElementById(id);
                 if (node) node.innerText = text;
             });
+        }
+
+        // 本地交互演示，不请求平台接口或产生真实订单、充值。
+        function changeBookingCustomerType() {
+            const type = document.getElementById('booking-customer-type').value;
+            const date = document.getElementById('booking-date');
+            date.value = '';
+            date.disabled = !type;
+            refreshBookingTimes();
+        }
+
+        function refreshBookingTimes() {
+            const type = document.getElementById('booking-customer-type').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time');
+            const ready = Boolean(type && date);
+            time.replaceChildren(new Option(ready ? '请选择排客时间' : '请先选择排客日期', ''));
+            time.disabled = !ready;
+            if (ready) {
+                // 未配置门店营业时段，原型提供全天每15分钟的时间选项。
+                for (let minutes = 0; minutes < 24 * 60; minutes += 15) {
+                    const label = `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+                    time.add(new Option(label, label));
+                }
+            }
+            document.getElementById('booking-schedule-result').hidden = true;
+        }
+
+        function submitBookingSchedule(event) {
+            event.preventDefault();
+            if (!document.getElementById('booking-schedule-form').reportValidity()) return;
+            const type = document.getElementById('booking-customer-type').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const result = document.getElementById('booking-schedule-result');
+            result.textContent = `已安排${type} ${date.replaceAll('-', '/')} ${time} 到店（演示）。`;
+            result.hidden = false;
+            document.getElementById('booking-order-status').textContent = '已排客';
+            document.querySelector('#booking-schedule-submit span').textContent = '确认改约';
+            showToast('排客安排已保存（演示）');
+        }
+
+        function toggleBookingEditor(id, visible) {
+            const form = document.getElementById(id);
+            const open = visible === undefined ? form.hidden : visible;
+            form.hidden = !open;
+            if (open) {
+                if (id === 'booking-order-edit') {
+                    document.getElementById('booking-store-input').value = document.getElementById('booking-store-name').textContent;
+                    document.getElementById('booking-deposit-input').value = document.getElementById('booking-deposit-value').textContent;
+                }
+                if (id === 'booking-price-edit') document.getElementById('booking-price-input').value = document.getElementById('booking-item-price').textContent.slice(1);
+                form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                form.querySelector('input')?.focus({ preventScroll: true });
+            }
+        }
+
+        function saveBookingPrice(event) {
+            event.preventDefault();
+            const amount = `¥${Number(document.getElementById('booking-price-input').value).toFixed(2)}`;
+            document.getElementById('booking-item-price').textContent = amount;
+            document.getElementById('booking-item-total').textContent = amount;
+            toggleBookingEditor('booking-price-edit', false);
+            showToast('项目单价已修改（演示）');
+        }
+
+        function saveBookingOrder(event) {
+            event.preventDefault();
+            const store = document.getElementById('booking-store-input');
+            if (!store.value.trim()) { store.focus(); return; }
+            document.getElementById('booking-store-name').textContent = store.value.trim();
+            document.getElementById('booking-deposit-value').textContent = Number(document.getElementById('booking-deposit-input').value).toFixed(2);
+            toggleBookingEditor('booking-order-edit', false);
+            showToast('订单信息已修改（演示）');
+        }
+
+        function submitBookingRecharge(event) {
+            event.preventDefault();
+            const amount = Number(document.getElementById('booking-recharge-amount').value).toFixed(2);
+            toggleBookingEditor('booking-recharge', false);
+            showToast(`充值 ¥${amount} 演示完成，未发生实际扣款`);
         }
 
         function setDetailInputValue(inputId, value) {
@@ -5287,8 +5412,8 @@
                 sortLabelNode.innerText = currentSortLabel;
             }
 
-            if (currentHandlingMode === 'manual') {
-                pieces.push('人工');
+            if (currentConversationView === 'new') {
+                pieces.push('新分配');
             }
             if (currentConversationFilters.opening !== 'all') {
                 pieces.push(filterLabels.opening[currentConversationFilters.opening]);
@@ -5351,7 +5476,7 @@
             document.addEventListener('click', function() {
                 closeSortPopover();
                 closeFilterPopover();
-                closeManualTypeDropdown();
+
                 closeRailAccountMenu();
                 closeMessageActions();
                 closeSendModeMenu();

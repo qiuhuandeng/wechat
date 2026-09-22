@@ -149,9 +149,6 @@ button { cursor:pointer; }
 /* ── SESSION LIST ── */
 .sess-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--white); }
 .si-clip { position:relative; overflow:hidden; border-bottom:1px solid var(--border); background:var(--white); }
-.si-actions { position:absolute; right:0; top:0; bottom:0; display:flex; z-index:0; }
-.sia { width:74px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:#fff; cursor:pointer; }
-.sia.blue { background:var(--blue); } .sia.red { background:var(--red); }
 .si { display:flex; align-items:center; padding:13px 16px; gap:12px; background:var(--white); position:relative; z-index:1; transition:transform .22s; cursor:pointer; touch-action:pan-y; }
 .si:active { background:#FAFAFA; }
 .si-av-wrap { position:relative; width:48px; height:48px; flex-shrink:0; }
@@ -224,8 +221,9 @@ button { cursor:pointer; }
 .mrow.me .mbub.human-bub { background:#BFE1FA; border-top-right-radius:4px; color:#171A1F; box-shadow:0 1px 3px rgba(38,97,135,.12); }
 .mrow.me .mbub.ai-bub { background:#EDFBF1; border-top-right-radius:4px; color:var(--c1); border:1px solid #C3EDD0; }
 .msender { font-size:10px; padding:2px 7px; border-radius:10px; margin-bottom:3px; display:inline-flex; align-items:center; gap:3px; font-weight:600; }
-.msender.human-tag { background:var(--blue-bg); color:var(--blue); }
-.msender.ai-tag { background:var(--green-bg); color:var(--green); }
+.msender.platform-tag { background:var(--green-bg); color:var(--green); }
+.msender.wecom-tag { background:var(--red-bg); color:var(--red); }
+.msender.ai-tag { background:var(--blue-bg); color:var(--blue); }
 .mstat { font-size:10px; color:var(--c4); padding:0 4px; display:flex; align-items:center; gap:2px; }
 .mbub.img-bub { padding:3px; background:transparent!important; border:none!important; box-shadow:none!important; }
 .msg-img { max-width:190px; border-radius:12px; overflow:hidden; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.1); }
@@ -610,6 +608,90 @@ button { cursor:pointer; }
 .toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
 
 input[type=file] { display:none; }
+
+/* ── CUSTOMER HANDOFF ── */
+[hidden] { display:none !important; }
+.handoff-sheet button:focus-visible,.select-entry:focus-visible,.si:focus-visible,.batch-bar button:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+.select-entry { min-width:44px; min-height:44px; color:var(--blue); font-size:14px; font-weight:650; }
+.demo-account-section { padding:14px; }
+.demo-account-title { font-size:14px; font-weight:650; color:var(--c1); }
+.demo-identity { display:flex; gap:8px; margin-top:10px; }
+.demo-identity button { flex:1; min-height:40px; padding:8px; border-radius:8px; color:#738399; background:#EEF2F7; font-size:13px; }
+.demo-identity button.on { color:var(--blue); background:var(--blue-bg); font-weight:650; }
+.customer-empty { padding:42px 20px; text-align:center; color:var(--c3); font-size:13px; line-height:1.8; }
+.customer-empty strong { display:block; font-size:15px; color:var(--c2); margin-bottom:6px; }
+.customer-empty .handoff-actions { justify-content:center; margin-top:16px; }
+.customer-empty .handoff-actions button { flex:0 1 auto; }
+.selection-head { display:flex; align-items:center; justify-content:space-between; min-height:48px; gap:12px; }
+.selection-head strong { font-size:16px; }
+.selection-head small { display:block; color:var(--c3); font-size:12px; margin-top:3px; font-weight:400; }
+.selection-head button { min-height:44px; color:var(--blue); padding:0 8px; }
+.si[role=checkbox] { padding-left:14px; gap:10px; }
+.si[aria-checked=true] { background:#F0F6FF; }
+.si[aria-disabled=true] { opacity:.55; cursor:default; }
+.pick-circle { width:22px; height:22px; flex-shrink:0; border:1.5px solid #C5CFDB; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; }
+.si[aria-checked=true] .pick-circle { background:var(--blue); border-color:var(--blue); }
+.si[aria-disabled=true] .pick-circle { background:#EFF1F4; }
+.si-name { max-width:none; flex:1; min-width:0; }
+.si-bot { flex-wrap:wrap; }
+.si-prev { min-width:80px; }
+.si-handoff { font-size:11px; color:var(--orange); margin-top:6px; line-height:1.4; }
+.si-handoff.new { color:var(--blue); }
+.batch-bar { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px calc(12px + var(--sab)); background:#fff; border-top:1px solid var(--border2); }
+.batch-bar label { display:flex; align-items:center; gap:7px; min-height:44px; font-size:13px; }
+input[type=checkbox] { accent-color:var(--blue); width:18px; height:18px; flex-shrink:0; }
+.handoff-btn { min-height:44px; padding:10px 16px; border-radius:9px; background:var(--blue); color:#fff; font-size:14px; font-weight:650; }
+.handoff-btn.secondary { background:#F0F4F9; color:#526B86; }
+.handoff-btn.danger { color:var(--red); background:var(--red-bg); }
+.handoff-btn:disabled { opacity:.4; cursor:default; }
+.handoff-notices { background:#F8FAFC; padding:0 14px; flex-shrink:0; }
+.handoff-notice { width:100%; min-height:44px; display:flex; align-items:center; gap:8px; text-align:left; padding:10px 12px; margin-bottom:8px; background:var(--blue-bg); color:#2364AE; border-radius:8px; font-size:13px; line-height:1.45; }
+.handoff-notice span { flex:1; }
+.handoff-notice.outgoing { background:var(--orange-bg); color:#AA641F; }
+.handoff-notice.result { background:var(--green-bg); color:#288052; }
+.chat-handoff { flex-shrink:0; padding:10px 14px; display:flex; align-items:center; gap:8px; background:var(--orange-bg); color:#9C5A1F; font-size:12px; line-height:1.5; }
+.chat-handoff span { flex:1; }
+.chat-handoff button { color:var(--blue); min-height:40px; flex-shrink:0; }
+.handoff-sheet .bs-body { padding:0 16px 16px; min-height:0; overscroll-behavior:contain; }
+.handoff-sheet .bs-title { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.handoff-close { width:44px; height:44px; color:var(--c3); font-size:23px; }
+.handoff-summary { padding:12px; border-radius:10px; background:#F4F7FB; margin-bottom:14px; font-size:13px; line-height:1.7; color:#526B86; overflow-wrap:anywhere; }
+.handoff-sheet #transfer-summary { max-height:112px; overflow-y:auto; }
+.handoff-summary strong { color:var(--c1); display:block; }
+.handoff-label { display:block; font-size:13px; color:var(--c2); margin:14px 0 8px; }
+.handoff-search,.handoff-note { width:100%; padding:12px; font-size:14px; background:var(--bg); border:1px solid var(--border2); border-radius:9px; }
+.handoff-note { min-height:80px; resize:vertical; }
+.staff-option { width:100%; display:flex; align-items:center; gap:11px; padding:12px 0; min-height:64px; border-bottom:1px solid var(--border); text-align:left; color:var(--c1); }
+.staff-option:disabled { opacity:.5; cursor:default; }
+.staff-option .tr-info { flex:1; }
+.staff-option .tr-name { display:block; }
+.staff-option .tr-stat { margin-top:4px; line-height:1.5; }
+.staff-option .pick-circle { border-radius:50%; }
+.staff-option[aria-checked=true] .pick-circle { color:#fff; background:var(--blue); border-color:var(--blue); }
+.handoff-footer { border-top:1px solid var(--border2); padding:12px 16px; background:#fff; flex-shrink:0; }
+.handoff-footer p { font-size:12px; line-height:1.6; color:var(--c3); margin-bottom:10px; }
+.handoff-footer .handoff-btn { width:100%; }
+.handoff-empty { padding:36px 12px; text-align:center; color:var(--c3); font-size:13px; line-height:1.8; }
+.handoff-tabs { display:flex; gap:8px; margin-bottom:14px; }
+.handoff-tabs button { flex:1; min-height:40px; border-radius:8px; background:#F4F6F8; color:#667085; }
+.handoff-tabs button.on { color:var(--blue); background:var(--blue-bg); font-weight:650; }
+.handoff-card { padding:14px; border:1px solid var(--border2); border-radius:12px; margin-bottom:12px; background:#fff; }
+.handoff-card h3 { font-size:14px; line-height:1.5; }
+.handoff-meta { color:var(--c3); font-size:12px; margin:5px 0 10px; line-height:1.6; }
+.handoff-card .handoff-summary { margin-bottom:8px; }
+.handoff-customer { display:flex; align-items:center; gap:8px; padding:11px 0; border-top:1px solid var(--border); }
+.handoff-customer label { flex:1; display:flex; align-items:center; gap:9px; min-height:44px; min-width:0; font-size:14px; }
+.handoff-customer label span { min-width:0; overflow-wrap:anywhere; }
+.handoff-customer button { color:var(--blue); font-size:12px; min-height:44px; padding:0 5px; }
+.handoff-status { font-size:11px; color:var(--c3); flex-shrink:0; }
+.handoff-status.pending { color:var(--orange); }
+.handoff-status.accepted { color:var(--green); }
+.handoff-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:9px; }
+.handoff-actions button { flex:1; white-space:nowrap; }
+.handoff-preview { padding:10px 12px; background:#F5F7FA; border-radius:8px; font-size:13px; line-height:1.6; margin:8px 0; overflow-wrap:anywhere; }
+.handoff-preview small { display:block; color:var(--c3); margin-bottom:4px; }
+@media (max-width:360px) { .batch-bar { padding-left:10px; padding-right:10px; } .batch-bar label { font-size:12px; } .si { padding-right:12px; gap:9px; } .si-tags { gap:3px; } .si-tag { padding:2px 5px; } }
+
 </style>
 </head>
 <body>
@@ -765,6 +847,7 @@ input[type=file] { display:none; }
 <div class="page active" id="pg-list">
   <div class="tab-panel list-content active" id="panel-messages">
   <div class="list-head">
+    <div class="selection-head" id="selection-head" hidden><div><strong id="selection-count">已选 0 位</strong><small>仅选择当前筛选结果</small></div><button onclick="exitSelection()">取消</button></div>
     <div class="list-search-row">
       <div class="search-inner">
         <i class="ri-search-line"></i>
@@ -773,6 +856,7 @@ input[type=file] { display:none; }
       <button class="list-filter-icon" id="list-filter-trigger" onclick="showListFilterSheet()" aria-label="筛选条件">
         <i class="ri-filter-3-line"></i>
       </button>
+      <button class="select-entry" id="select-entry" onclick="startSelection()">选择</button>
     </div>
     <div class="list-quick-row" aria-label="会话快捷筛选">
       <button class="list-status-pill on" id="list-status-all" onclick="setPrimaryStatus('all')">全部</button>
@@ -782,12 +866,27 @@ input[type=file] { display:none; }
       </button>
     </div>
   </div>
+  <div class="handoff-notices" id="handoff-notices" aria-live="polite"></div>
   <div class="sess-scroll">
     <div class="sess-list" id="sess-list"></div>
-    <div class="list-end">已显示全部会话</div>
+    <div class="list-end" id="list-end">已显示全部会话</div>
   </div>
+  </div>
+  <div class="batch-bar" id="batch-bar" hidden>
+    <label><input type="checkbox" id="batch-all" onchange="toggleAllCustomers(this.checked)">全选当前结果</label>
+    <button class="handoff-btn" id="batch-transfer" onclick="openTransfer([...H.selected])" disabled>转交客户（0）</button>
   </div>
   <div class="tab-panel mine-content" id="panel-mine">
+    <section class="mine-section demo-account-section">
+      <p class="demo-account-title">演示账号切换</p>
+    <div class="demo-identity" id="demo-identity" aria-label="演示账号">
+      <button id="demo-outgoing" onclick="switchDemoStaff('zhang')">转出账号 · 张三</button>
+      <button id="demo-incoming" onclick="switchDemoStaff('li')">转入账号 · 李晓</button>
+    </div>
+    </section>
+    <section class="mine-section">
+      <button class="mine-row" onclick="openTransferRecords('outgoing')"><span class="mine-row-icon"><i class="ri-user-shared-line"></i></span><span class="mine-row-main"><p>客户转交记录</p><span>我转出的 · 我接收的</span></span><i class="ri-arrow-right-s-line"></i></button>
+    </section>
     <section class="mine-section">
       <button class="mine-row" onclick="openAccountSheet()">
         <span class="mine-row-icon"><i class="ri-group-line"></i></span>
@@ -837,6 +936,7 @@ input[type=file] { display:none; }
       <div class="mode-badge human" id="mode-badge" onclick="showSheet('bs-mode')" style="display:none">人工</div>
       </div>
     </div>
+  <div class="chat-handoff" id="chat-handoff" hidden aria-live="polite"></div>
   <div class="msgs-wrap" id="msgs-wrap"></div>
 
   <!-- Input area -->
@@ -945,7 +1045,7 @@ input[type=file] { display:none; }
     <button class="side-tool" onclick="closeChatSidebar();openOrders()"><i class="ri-file-list-3-line"></i><span>订单记录</span></button>
     <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-quickreply')"><i class="ri-chat-quote-line"></i><span>快捷回复</span></button>
     <button class="side-tool" onclick="showToast('标签管理已打开')"><i class="ri-price-tag-3-line"></i><span>客户标签</span></button>
-    <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-transfer')"><i class="ri-user-shared-line"></i><span>转接客服</span></button>
+    <button class="side-tool" onclick="closeChatSidebar();openSingleTransfer()"><i class="ri-user-shared-line"></i><span>转交客户</span></button>
     <button class="side-tool" onclick="closeChatSidebar();showSheet('bs-mode')"><i class="ri-robot-2-line"></i><span>接待模式</span></button>
   </div>
   <div class="side-section">
@@ -1321,11 +1421,11 @@ input[type=file] { display:none; }
   <div class="bs-handle"></div>
   <div class="bs-title">更多操作</div>
   <div class="bs-body">
-    <div class="bs-item" onclick="closeSheet();showSheet('bs-transfer')">
+    <div class="bs-item" onclick="closeSheet();openSingleTransfer()">
       <div class="bs-item-icon" style="background:var(--blue)">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 1l4 4-4 4V7H3V5h14V1zm-4 18H3v-2h10v-2l4 4-4 4v-2z"/></svg>
       </div>
-      <div class="bs-item-text"><p>转接会话</p><span>将会话转接给其他客服</span></div>
+      <div class="bs-item-text"><p>转交客户</p><span>由同门店员工接受后接待</span></div>
       <svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" width="8" height="14" style="color:var(--c4)"><path d="M1 1l6 6-6 6"/></svg>
     </div>
     <div class="bs-item danger" onclick="closeSheet();showDlg('dlg-end')">
@@ -1357,35 +1457,25 @@ input[type=file] { display:none; }
   <div class="bs-cancel" onclick="closeSheet()">取消</div>
 </div>
 
-<div class="bs" id="bs-transfer" style="max-height:80vh">
+<div class="bs handoff-sheet" id="bs-transfer" role="dialog" aria-modal="true" aria-labelledby="transfer-title">
   <div class="bs-handle"></div>
-  <div class="bs-title">转接会话</div>
-  <div class="tr-search">
-    <div class="tr-sbox">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16" y2="16"/></svg>
-      <input type="text" placeholder="搜索客服名称"/>
-    </div>
-  </div>
+  <div class="bs-title"><span id="transfer-title">转交客户</span><button class="handoff-close" onclick="closeSheet()" aria-label="关闭"><i class="ri-close-line"></i></button></div>
   <div class="bs-body">
-    <div class="tr-section">在线客服 (2)</div>
-    <div class="tr-item" onclick="doTransfer('Alice')">
-      <div class="tr-av" style="background:#4A90D9">A</div>
-      <div class="tr-info"><div class="tr-name">Alice</div><div class="tr-stat"><div class="dot-g"></div>在线 · 接待3人</div></div>
-      <span class="tr-action">转接</span>
-    </div>
-    <div class="tr-item" onclick="doTransfer('Bob')">
-      <div class="tr-av" style="background:#50A060">B</div>
-      <div class="tr-info"><div class="tr-name">Bob</div><div class="tr-stat"><div class="dot-g"></div>在线 · 接待1人</div></div>
-      <span class="tr-action">转接</span>
-    </div>
-    <div class="tr-section">离线客服 (1)</div>
-    <div class="tr-item">
-      <div class="tr-av" style="background:var(--c4)">C</div>
-      <div class="tr-info"><div class="tr-name">Charlie</div><div class="tr-stat"><div class="dot-gray"></div>离线</div></div>
-      <span class="tr-action disabled">离线</span>
-    </div>
+    <div class="handoff-summary" id="transfer-summary"></div>
+    <input class="handoff-search" id="transfer-search" placeholder="搜索同门店员工姓名" aria-label="搜索同门店员工" oninput="renderTransferStaff()">
+    <div id="transfer-staff" role="radiogroup" aria-label="接收员工"></div>
+    <label class="handoff-label" for="transfer-note">交接备注（选填，最多 200 字）</label>
+    <textarea class="handoff-note" id="transfer-note" maxlength="200" placeholder="例如：已沟通套餐价格，客户想约明天下午"></textarea>
   </div>
-  <div class="bs-cancel" onclick="closeSheet()">取消</div>
+  <div class="handoff-footer"><p>对方接受前，仍由你负责接待。请求 24 小时内有效，可随时撤销。</p><button class="handoff-btn" id="transfer-submit" onclick="submitTransfer()" disabled>发送转交请求</button></div>
+</div>
+<div class="bs handoff-sheet" id="bs-handoff-hub" role="dialog" aria-modal="true" aria-labelledby="handoff-hub-title">
+  <div class="bs-handle"></div><div class="bs-title"><span id="handoff-hub-title">客户转交</span><button class="handoff-close" onclick="closeSheet()" aria-label="关闭"><i class="ri-close-line"></i></button></div>
+  <div class="bs-body" id="handoff-hub-body"></div>
+</div>
+<div class="bs handoff-sheet" id="bs-handoff-detail" role="dialog" aria-modal="true" aria-labelledby="handoff-detail-title">
+  <div class="bs-handle"></div><div class="bs-title"><span id="handoff-detail-title">交接详情</span><button class="handoff-close" onclick="returnHandoffHub()" aria-label="返回转交列表"><i class="ri-close-line"></i></button></div>
+  <div class="bs-body" id="handoff-detail-body"></div>
 </div>
 
 <div class="bs" id="bs-quickreply" style="max-height:76vh">
@@ -1419,12 +1509,6 @@ input[type=file] { display:none; }
   <div class="dlg">
     <div class="dlg-bd"><div class="dlg-t">结束会话</div><div class="dlg-d">确认结束与该客户的会话？</div></div>
     <div class="dlg-btns"><div class="dlg-btn" onclick="closeDlg('dlg-end')">取消</div><div class="dlg-btn red" onclick="doEndSession()">结束</div></div>
-  </div>
-</div>
-<div class="dlg-mask" id="dlg-transfer">
-  <div class="dlg">
-    <div class="dlg-bd"><div class="dlg-t" id="dlg-transfer-title">转接给</div><div class="dlg-d">确认将当前会话转接给该客服？</div></div>
-    <div class="dlg-btns"><div class="dlg-btn" onclick="closeDlg('dlg-transfer')">取消</div><div class="dlg-btn" onclick="confirmTransfer()">确认转接</div></div>
   </div>
 </div>
 <div class="dlg-mask" id="dlg-retract">
@@ -1474,7 +1558,7 @@ const S = {
   currentChat:null, currentMode:'human',
   currentAccount:'all',
   lpTargetMsgId:null, retractMsgId:null,
-  transferTarget:'', fwSelected:new Set(),
+  fwSelected:new Set(),
   primaryStatus:'all', sortMode:'customerLastOpen',
   listFilters:{opening:'all', deal:'all', addTime:'all'},
   bottomTab:'messages',
@@ -1505,15 +1589,15 @@ const SESSIONS = [
 const MSGS = {
   s1:[
     {id:'m1',from:'customer',type:'text',text:'您好，想了解一下价格',time:'13:40'},
-    {id:'m2',from:'agent',mode:'human',type:'text',text:'您好！我们现在有优惠活动，380元抗衰套餐，原价1980元，感兴趣吗？',time:'13:42'},
+    {id:'m2',from:'agent',source:'platform',mode:'human',type:'text',text:'您好！我们现在有优惠活动，380元抗衰套餐，原价1980元，感兴趣吗？',time:'13:42'},
     {id:'m3',from:'customer',type:'text',text:'可以说详细一点吗',time:'13:44'},
-    {id:'m4',from:'agent',mode:'human',type:'text',text:'包含免费总监位置+清洁+抗衰+补水，前30名只需预约金10元即可享受！',time:'13:45'},
+    {id:'m4',from:'agent',source:'wecom',mode:'human',type:'text',text:'包含免费总监位置+清洁+抗衰+补水，前30名只需预约金10元即可享受！',time:'13:45'},
     {id:'m5',from:'customer',type:'text',text:'好的，我考虑一下',time:'13:46'},
   ],
   s2:[
-    {id:'m1',from:'agent',mode:'ai',type:'text',text:'您好！欢迎咨询，我是AI客服，请问有什么可以帮您？',time:'15:44'},
+    {id:'m1',from:'agent',source:'ai',mode:'ai',type:'text',text:'您好！欢迎咨询，我是AI客服，请问有什么可以帮您？',time:'15:44'},
     {id:'m2',from:'customer',type:'text',text:'你们几点营业？',time:'15:44'},
-    {id:'m3',from:'agent',mode:'ai',type:'text',text:'我们不限制到店时间，这段时间到店均可接受服务。',time:'15:44'},
+    {id:'m3',from:'agent',source:'ai',mode:'ai',type:'text',text:'我们不限制到店时间，这段时间到店均可接受服务。',time:'15:44'},
   ],
   s3:[],s4:[],s5:[],s6:[],
 };
@@ -1579,6 +1663,7 @@ function goBack(){
   S.currentPage=S.pageStack[S.pageStack.length-1];
   document.getElementById(S.currentPage).classList.remove('behind');
   closeChatSidebar();
+  if(S.currentPage==='pg-list')renderSessions();
 }
 
 /* ── LOGIN ── */
@@ -1619,7 +1704,7 @@ function demoBoundLogin(){
 
 /* ── SESSION LIST ── */
 function accountSessions(){
-  return S.currentAccount==='all' ? [...SESSIONS] : SESSIONS.filter(s=>s.accountId===S.currentAccount);
+  return SESSIONS.filter(s=>s.ownerId===H.staffId && (S.currentAccount==='all'||s.accountId===S.currentAccount));
 }
 function accountStatusText(acc){
   if(acc.id==='all'){
@@ -1646,7 +1731,7 @@ function renderAccountList(){
   if(!el)return;
   el.innerHTML=ACCOUNTS.map(acc=>{
     const isAll=acc.id==='all';
-    const count=isAll?SESSIONS.length:SESSIONS.filter(s=>s.accountId===acc.id).length;
+    const count=SESSIONS.filter(s=>s.ownerId===H.staffId&&(isAll||s.accountId===acc.id)).length;
     const online=acc.id==='all'||(acc.deviceOnline&&acc.wecomLogged);
     return `<div class="bs-item account-option ${S.currentAccount===acc.id?'on':''}" onclick="setAccount('${acc.id}')">
       <div class="bs-item-icon" style="background:${acc.color}">
@@ -1758,47 +1843,64 @@ function syncListControls(visibleCount){
   if(Number.isFinite(visibleCount))pieces.push(`${visibleCount}个客户`);
   return pieces.join(' · ');
 }
+function visibleCustomers(){
+  let list=applyListFilters(tabScopedSessions());
+  const kw=document.getElementById('list-search').value.trim().toLowerCase();
+  if(kw)list=list.filter(s=>`${s.name} ${s.preview} ${s.openid} ${s.device}`.toLowerCase().includes(kw));
+  return sortListSessions(list);
+}
 function renderSessions(){
   const el=document.getElementById('sess-list');
   renderAccountMeta();
   updateStats();
-  let list=applyListFilters(tabScopedSessions());
-  const kw=(document.getElementById('list-search')||{}).value||'';
-  if(kw.trim())list=list.filter(s=>{
-    const text=`${s.name} ${s.preview} ${s.openid} ${s.device}`.toLowerCase();
-    return text.includes(kw.trim().toLowerCase());
-  });
-  list=sortListSessions(list);
+  expireTransfers();
+  const list=visibleCustomers();
+  const allowed=new Set(list.filter(canSelectCustomer).map(s=>s.id));
+  H.selected.forEach(id=>{if(!allowed.has(id))H.selected.delete(id);});
+  renderHandoffChrome(list);
   syncListControls(list.length);
-  if(!list.length){el.innerHTML='<div style="text-align:center;padding:52px 0;font-size:13px;color:var(--c3)">暂无匹配会话</div>';return;}
-  el.innerHTML=list.map((s,i)=>`
-    <div class="si-clip" id="sw${i}">
-      <div class="si-actions">
-        <div class="sia blue" onclick="event.stopPropagation();showSheet('bs-transfer')">转接</div>
-        <div class="sia red" onclick="event.stopPropagation();showDlg('dlg-end')">结束</div>
-      </div>
-      <div class="si" onclick="openChat('${s.id}')"
-        ontouchstart="swStart(event,${i})" ontouchmove="swMove(event,${i})" ontouchend="swEnd(event,${i})">
+  if(!list.length){el.innerHTML=customerEmptyState();return;}
+  el.innerHTML=list.map(s=>`
+    <div class="si-clip">
+      <div class="si" role="${H.selecting?'checkbox':'button'}" tabindex="${H.selecting&&!canSelectCustomer(s)?'-1':'0'}"
+        ${H.selecting?`aria-checked="${H.selected.has(s.id)}" aria-disabled="${!canSelectCustomer(s)}"`:''}
+        aria-label="${esc(s.name)}${H.selecting&&pendingTransfer(s.id)?'，转交中，不可重复选择':''}"
+        onclick="customerRowClick('${s.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();customerRowClick('${s.id}');}">
+        ${H.selecting?`<span class="pick-circle" aria-hidden="true">${H.selected.has(s.id)?'<i class="ri-check-line"></i>':''}</span>`:''}
         <div class="si-av-wrap">
           <div class="si-av" style="background:${s.color}">${s.initial}</div>
           ${s.unread>0?`<div class="av-badge">${s.unread}</div>`:''}
         </div>
         <div class="si-body">
           <div class="si-top">
-            <span class="si-name">${s.name}</span>
+            <span class="si-name">${esc(s.name)}</span>
             <span class="si-time">${s.time}</span>
           </div>
           <div class="si-bot">
-            <span class="si-prev">${s.preview}</span>
+            <span class="si-prev">${esc(s.preview)}</span>
             <div class="si-tags">
               <span class="si-tag ${s.mode}">${s.mode==='human'?'人工处理':'AI处理'}</span>
               <span class="si-tag ${s.replied==='pending'?'pending':'replied'}">${s.replied==='pending'?'待回复':'已回复'}</span>
               ${s.sensitive?'<span class="si-tag sensitive">敏感</span>':''}
             </div>
           </div>
+          ${pendingTransfer(s.id)?`<div class="si-handoff">转交中 · 等待${esc(staffName(pendingTransfer(s.id).to))}接受</div>`:s.newTransfer?'<div class="si-handoff new">新转入</div>':''}
         </div>
       </div>
     </div>`).join('');
+}
+function customerEmptyState(){
+  const owned=SESSIONS.filter(s=>s.ownerId===H.staffId);
+  const incoming=H.transfers.filter(t=>t.to===H.staffId&&t.status==='pending');
+  if(owned.length){
+    return `<div class="customer-empty"><strong>当前筛选下暂无客户</strong>你共有 ${owned.length} 位客户，可以清除搜索、账号及其他筛选后查看。<div class="handoff-actions"><button class="handoff-btn secondary" onclick="clearCustomerFilters()">查看全部客户</button></div></div>`;
+  }
+  const detail=incoming.length?`有 ${incoming.length} 位客户等待你接受。`:'当前账号暂无客户，可切换另一个演示账号查看。';
+  return `<div class="customer-empty"><strong>${esc(staffName(H.staffId))}暂无接待中的客户</strong>${detail}<div class="handoff-actions">${incoming.length?'<button class="handoff-btn" onclick="openTransferInbox()">查看待接收客户</button>':`<button class="handoff-btn secondary" onclick="switchDemoStaff('${H.staffId==='zhang'?'li':'zhang'}')">查看${H.staffId==='zhang'?'转入':'转出'}账号</button>`}</div></div>`;
+}
+function clearCustomerFilters(){
+  S.currentAccount='all';S.primaryStatus='all';S.listFilters={opening:'all',deal:'all',addTime:'all'};
+  document.getElementById('list-search').value='';exitSelection();switchListTab('messages');
 }
 function updateStats(){
   const base=tabScopedSessions();
@@ -1839,6 +1941,7 @@ function setModeFilter(el,v){S.listFilters.mode=v;renderSessions();}
 function setReplyFilter(el,v){setPrimaryStatus(v);}
 function focusSearch(){document.getElementById('list-search').focus();}
 function switchListTab(tab){
+  if(H.selecting)exitSelection();
   S.bottomTab=tab;
   document.getElementById('tab-messages').classList.toggle('on',tab==='messages');
   document.getElementById('tab-human').classList.toggle('on',tab==='human');
@@ -1865,36 +1968,12 @@ function doAccountLogout(){
   },450);
 }
 
-/* ── SWIPE ── */
-const swState={};
-function swStart(e,i){const t=e.touches[0];swState[i]={x:t.clientX,y:t.clientY,moved:false};}
-function swMove(e,i){
-  const s=swState[i];if(!s)return;
-  const dx=e.touches[0].clientX-s.x,dy=e.touches[0].clientY-s.y;
-  if(!s.moved&&Math.abs(dy)>Math.abs(dx)){delete swState[i];return;}
-  s.moved=true;
-  const el=document.querySelector(`#sw${i} .si`);
-  const aw=document.querySelector(`#sw${i} .si-actions`).offsetWidth;
-  el.style.transform=`translateX(${Math.max(-aw,Math.min(0,dx))}px)`;
-  el.style.transition='none';e.preventDefault();
-}
-function swEnd(e,i){
-  const s=swState[i];if(!s||!s.moved){delete swState[i];return;}
-  const el=document.querySelector(`#sw${i} .si`);
-  const aw=document.querySelector(`#sw${i} .si-actions`).offsetWidth;
-  const dx=e.changedTouches[0].clientX-s.x;
-  el.style.transition='transform .22s';
-  el.style.transform=dx<-aw*.35?`translateX(-${aw}px)`:'translateX(0)';
-  delete swState[i];
-}
-document.addEventListener('touchstart',e=>{
-  if(!e.target.closest('.si-clip'))document.querySelectorAll('.si').forEach(el=>{el.style.transition='transform .22s';el.style.transform='translateX(0)';});
-},{passive:true});
-
 /* ── OPEN CHAT ── */
 function openChat(id){
+  expireTransfers();
   const sess=SESSIONS.find(s=>s.id===id);
-  if(!sess)return;
+  if(!sess||sess.ownerId!==H.staffId){showToast('该客户已不在你的接待列表');return;}
+  sess.newTransfer=false;
   S.currentChat=sess;S.currentMode=sess.mode;
   document.getElementById('chat-name').textContent=sess.name;
   document.getElementById('side-customer-name').textContent=sess.name;
@@ -1903,10 +1982,24 @@ function openChat(id){
   sideAvatar.style.background=sess.color;
   updateModeBadge();renderMsgs(id);
   showPage('pg-chat');
+  syncChatHandoff();renderSessions();
   setTimeout(scrollBottom,60);
 }
 
 /* ── RENDER MESSAGES ── */
+const MESSAGE_SEND_TYPES = {
+  platform:{label:'平台端',className:'platform-tag'},
+  wecom:{label:'企微端',className:'wecom-tag'},
+  ai:{label:'AI回复',className:'ai-tag'}
+};
+function messageSource(m){
+  return Object.prototype.hasOwnProperty.call(MESSAGE_SEND_TYPES,m.source)?m.source:(m.mode==='ai'?'ai':'platform');
+}
+function messageSourceTag(m){
+  const type=MESSAGE_SEND_TYPES[messageSource(m)];
+  return `<span class="msender ${type.className}">${type.label}</span>`;
+}
+
 function renderMsgs(sid){
   const msgs=MSGS[sid]||[];
   const sess=S.currentChat;
@@ -1921,11 +2014,11 @@ function renderMsgs(sid){
           <div class="mstat">${m.time}</div>
         </div></div>`;
     } else {
-      const isAI=m.mode==='ai';
+      const isAI=messageSource(m)==='ai';
       html+=`<div class="mrow me" data-id="${m.id}">
         <div class="mav" style="background:${isAI?'linear-gradient(135deg,#07C160,#00A851)':'#1677FF'}">${isAI?'AI':'Me'}</div>
         <div class="mbody">
-          <div class="msender ${isAI?'ai-tag':'human-tag'}">${isAI?'AI回复':'人工回复'}</div>
+          ${messageSourceTag(m)}
           ${bubHtml(m,true)}
           <div class="mstat">${m.time} · 已发送</div>
         </div></div>`;
@@ -1941,18 +2034,19 @@ function renderMsgs(sid){
   });
 }
 function bubHtml(m,isMe){
-  const cls=isMe?(m.mode==='ai'?'ai-bub':'human-bub'):'';
+  const cls=isMe?(messageSource(m)==='ai'?'ai-bub':'human-bub'):'';
   if(m.type==='text')return`<div class="mbub ${cls}">${esc(m.text)}</div>`;
   if(m.type==='image')return`<div class="mbub img-bub ${cls}"><div class="msg-img"><img src="${m.imgUrl}" loading="lazy" alt=""/></div></div>`;
   if(m.type==='voice')return`<div class="mbub voice-bub ${cls}"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg><div class="voice-wave"><span></span><span></span><span></span><span></span></div><span class="voice-dur">${m.duration||'3"'}</span></div>`;
   if(m.type==='file')return`<div class="mbub file-bub ${cls}"><div class="file-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div><div><div class="file-name">${m.fileName}</div><div class="file-size">${m.fileSize}</div></div></div>`;
   return`<div class="mbub ${cls}">[消息]</div>`;
 }
-function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/\n/g,'<br>');}
 function scrollBottom(){const w=document.getElementById('msgs-wrap');if(w)w.scrollTop=w.scrollHeight;}
 
 /* ── CHAT TOOL SIDEBAR ── */
 function openChatSidebar(){
+  if(!canSendToCurrentCustomer())return;
   hidePlus();hideEmoji();closeSheet();
   document.getElementById('chat-side-mask').classList.add('show');
   document.getElementById('chat-side-drawer').classList.add('show');
@@ -2045,24 +2139,31 @@ function onCiInput(){
 }
 function onCiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function sendMsg(){
+  if(!canSendToCurrentCustomer())return;
   const box=document.getElementById('ci-box');
   const text=box.value.trim();
   if(!text||!S.currentChat)return;
   hideEmoji();
-  appendMsg({id:'n'+Date.now(),from:'agent',mode:S.currentMode,type:'text',text,time:nowTime()});
+  appendMsg({id:'n'+Date.now(),from:'agent',source:'platform',mode:'human',type:'text',text,time:nowTime()});
   box.value='';box.style.height='auto';
   document.getElementById('ci-send').classList.remove('show');
   scrollBottom();
 }
 function appendMsg(m){
+  if(!canSendToCurrentCustomer())return;
+  (MSGS[S.currentChat.id]||(MSGS[S.currentChat.id]=[])).push(m);
+  S.currentChat.preview=m.text||({image:'[图片]',voice:'[语音]',file:'[文件]'}[m.type]||'[消息]');
+  S.currentChat.replied='replied';S.currentChat.unread=0;
+  S.currentChat.lastReplyAt=new Date().toISOString();
+  renderSessions();
   const wrap=document.getElementById('msgs-wrap');
   const div=document.createElement('div');
-  const isAI=m.mode==='ai';
+  const isAI=messageSource(m)==='ai';
   div.className='mrow me';div.dataset.id=m.id;
   div.innerHTML=`
     <div class="mav" style="background:${isAI?'linear-gradient(135deg,#07C160,#00A851)':'#1677FF'}">${isAI?'AI':'Me'}</div>
     <div class="mbody">
-      <div class="msender ${isAI?'ai-tag':'human-tag'}">${isAI?'AI回复':'人工回复'}</div>
+      ${messageSourceTag(m)}
       ${bubHtml(m,true)}
       <div class="mstat">${m.time} · 已发送</div>
     </div>`;
@@ -2085,29 +2186,14 @@ function handleFileUpload(e,type){
   const size=file.size>1024*1024?(file.size/1024/1024).toFixed(1)+' MB':Math.round(file.size/1024)+' KB';
   if(type==='video'){appendMediaMsg(null,true);}
   else{
-    appendMsg({id:'n'+Date.now(),from:'agent',mode:S.currentMode,type:'file',fileName:file.name,fileSize:size,time:nowTime()});
+    appendMsg({id:'n'+Date.now(),from:'agent',source:'platform',mode:'human',type:'file',fileName:file.name,fileSize:size,time:nowTime()});
     scrollBottom();
   }
   e.target.value='';
 }
 function appendMediaMsg(src,isVideo=false){
-  const wrap=document.getElementById('msgs-wrap');
-  const div=document.createElement('div');
-  div.className='mrow me';
-  const bContent=isVideo
-    ?`<div class="mbub human-bub" style="padding:10px;font-size:13px;color:#fff">🎬 视频已发送</div>`
-    :`<div class="mbub img-bub"><div class="msg-img"><img src="${src}" loading="lazy" alt=""/></div></div>`;
-  div.innerHTML=`
-    <div class="mav" style="background:#1677FF">Me</div>
-    <div class="mbody">
-      <div class="msender human-tag">人工回复</div>
-      ${bContent}
-      <div class="mstat">${nowTime()} · 已发送</div>
-    </div>`;
-  if(!isVideo){
-    div.querySelector('img').addEventListener('click',e=>{e.stopPropagation();openImgPreview(src);});
-  }
-  wrap.appendChild(div);scrollBottom();
+  appendMsg({id:'n'+Date.now(),from:'agent',source:'platform',mode:'human',type:isVideo?'text':'image',text:isVideo?'[视频]':undefined,imgUrl:src,time:nowTime()});
+  scrollBottom();
 }
 
 /* ── MODE ── */
@@ -2119,8 +2205,9 @@ function updateModeBadge(){
   document.getElementById('check-ai').style.display=S.currentMode==='ai'?'block':'none';
 }
 function setMode(m){
+  if(!canSendToCurrentCustomer())return;
   S.currentMode=m;if(S.currentChat)S.currentChat.mode=m;
-  updateModeBadge();closeSheet();
+  updateModeBadge();renderSessions();closeSheet();
   showToast(m==='human'?'已切换为人工处理':'已切换为AI处理');
 }
 
@@ -2355,7 +2442,7 @@ function endRecording(e){
 }
 function sendVoice(){
   const dur=`${S.voiceSeconds}"`;closeVoiceSheet();
-  appendMsg({id:'n'+Date.now(),from:'agent',mode:S.currentMode,type:'voice',duration:dur,time:nowTime()});
+  appendMsg({id:'n'+Date.now(),from:'agent',source:'platform',mode:'human',type:'voice',duration:dur,time:nowTime()});
   scrollBottom();
 }
 function cancelRecording(){closeVoiceSheet();}
@@ -2397,7 +2484,7 @@ function lpQuote(){
   closeLpMenu();showToast('已引用');
 }
 function lpForward(){
-  const list=SESSIONS.filter(s=>s.id!==(S.currentChat&&S.currentChat.id));
+  const list=accountSessions().filter(s=>s.id!==(S.currentChat&&S.currentChat.id));
   S.fwSelected.clear();
   document.getElementById('fw-list').innerHTML=list.map(s=>`
     <div class="fw-item" onclick="toggleFw('${s.id}',this)">
@@ -2428,13 +2515,214 @@ function confirmRetract(){
 function qrCat(el){document.querySelectorAll('#bs-quickreply .qr-cat').forEach(e=>e.classList.remove('on'));el.classList.add('on');}
 function useReply(text){closeSheet();const b=document.getElementById('ci-box');b.value=text;onCiInput();b.focus();}
 
-/* ── TRANSFER ── */
-function doTransfer(name){
-  S.transferTarget=name;closeSheet();
-  document.getElementById('dlg-transfer-title').textContent=`转接给 ${name}`;
-  setTimeout(()=>showDlg('dlg-transfer'),80);
+/* ── CUSTOMER HANDOFF DEMO ──
+ * Local prototype only: production must use authenticated server-side store/channel
+ * permissions and an atomic pending -> accepted + owner update with idempotency.
+ * Staff switching is explicitly a demo entry; no customer-facing message is sent.
+ */
+const STORES=[{id:'shop1',name:'迎泽门店'}];
+const STAFF=[
+  {id:'zhang',name:'张三',stores:['shop1'],accounts:['acc1','acc2','acc3'],online:true,active:true,color:'#1677FF'},
+  {id:'li',name:'李晓',stores:['shop1'],accounts:['acc1','acc2','acc3'],online:true,active:true,color:'#07A870'}
+];
+const H={staffId:'zhang',selecting:false,selected:new Set(),draft:[],target:'',transfers:[],hub:'incoming',reviewSelected:new Set(),seen:{},detailId:null};
+const HANDOFF_LABELS={pending:'待接受',accepted:'已接受',rejected:'已拒绝',cancelled:'已撤销',expired:'已过期',invalid:'已失效'};
+// 两个固定演示账号；操作在本页内联动，刷新即回到初始场景。
+SESSIONS.forEach(s=>{s.ownerId=['s5','s6'].includes(s.id)?'li':'zhang';s.storeId='shop1';s.newTransfer=false;});
+function initHandoffDemo(){
+  const now=Date.now(),customer=SESSIONS.find(s=>s.id==='s2');
+  H.transfers=[{id:'demo-request',batchId:'demo-batch',customerId:customer.id,customerName:customer.name,storeId:'shop1',accountId:customer.accountId,from:'zhang',to:'li',note:'已沟通营业时间，请继续跟进客户到店安排。',status:'pending',createdAt:now,updatedAt:now,expiresAt:now+24*60*60*1000}];
 }
-function confirmTransfer(){closeDlg('dlg-transfer');showToast(`已转接给 ${S.transferTarget}`);setTimeout(()=>goBack(),800);}
+function staffName(id){return STAFF.find(s=>s.id===id)?.name||'员工';}
+function storeName(id){return STORES.find(s=>s.id===id)?.name||'门店';}
+function pendingTransfer(id){return H.transfers.find(t=>t.customerId===id&&t.status==='pending');}
+function handoffTime(ts){return new Date(ts).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});}
+function expireTransfers(){
+  let changed=false;
+  H.transfers.forEach(t=>{if(t.status==='pending'&&t.expiresAt<=Date.now()){t.status='expired';t.updatedAt=Date.now();changed=true;}});
+  return changed;
+}
+function canSelectCustomer(s){return s.ownerId===H.staffId&&!pendingTransfer(s.id);}
+function customerRowClick(id){
+  if(!H.selecting){openChat(id);return;}
+  const s=SESSIONS.find(s=>s.id===id);
+  if(!s||!canSelectCustomer(s)){showToast('该客户正在转交中，不能重复选择');return;}
+  H.selected.has(id)?H.selected.delete(id):H.selected.add(id);
+  renderSessions();
+}
+function startSelection(){
+  expireTransfers();
+  if(!visibleCustomers().length){showToast('当前没有可选择的客户');return;}
+  H.selecting=true;H.selected.clear();closeSheet();renderSessions();
+}
+function exitSelection(){H.selecting=false;H.selected.clear();renderSessions();}
+function toggleAllCustomers(checked){
+  H.selected.clear();if(checked)visibleCustomers().filter(canSelectCustomer).forEach(s=>H.selected.add(s.id));renderSessions();
+}
+function renderHandoffChrome(list){
+  document.getElementById('selection-head').hidden=!H.selecting;
+  document.getElementById('selection-count').textContent=`已选 ${H.selected.size} 位`;
+  document.getElementById('select-entry').hidden=H.selecting;
+  document.getElementById('batch-bar').hidden=!H.selecting;
+  document.querySelector('.mobile-tabbar').hidden=H.selecting;
+  const selectable=list.filter(canSelectCustomer);
+  const all=document.getElementById('batch-all');
+  all.checked=selectable.length>0&&H.selected.size===selectable.length;all.indeterminate=H.selected.size>0&&!all.checked;all.disabled=!selectable.length;
+  const submit=document.getElementById('batch-transfer');submit.disabled=!H.selected.size;submit.textContent=`转交客户（${H.selected.size}）`;
+  document.getElementById('demo-outgoing').classList.toggle('on',H.staffId==='zhang');
+  document.getElementById('demo-incoming').classList.toggle('on',H.staffId==='li');
+  document.getElementById('demo-outgoing').setAttribute('aria-pressed',String(H.staffId==='zhang'));
+  document.getElementById('demo-incoming').setAttribute('aria-pressed',String(H.staffId==='li'));
+  const incoming=H.transfers.filter(t=>t.to===H.staffId&&t.status==='pending');
+  const outgoing=H.transfers.filter(t=>t.from===H.staffId&&t.status==='pending');
+  const results=H.transfers.filter(t=>(t.from===H.staffId||t.to===H.staffId)&&t.status!=='pending'&&t.updatedAt>(H.seen[H.staffId+':'+(t.from===H.staffId?'outgoing':'received')]||0));
+  document.getElementById('handoff-notices').innerHTML=H.selecting?'':[
+    incoming.length?`<button class="handoff-notice" onclick="openTransferInbox()"><i class="ri-user-received-line"></i><span>待接收客户 · ${incoming.length}</span><i class="ri-arrow-right-s-line"></i></button>`:'',
+    outgoing.length?`<button class="handoff-notice outgoing" onclick="openTransferRecords('outgoing')"><i class="ri-time-line"></i><span>${outgoing.length} 位客户转交中 · 查看进度</span><i class="ri-arrow-right-s-line"></i></button>`:'',
+    results.length?`<button class="handoff-notice result" onclick="openTransferUpdates()"><i class="ri-checkbox-circle-line"></i><span>${results.length} 条转交结果更新 · 查看记录</span><i class="ri-arrow-right-s-line"></i></button>`:''
+  ].join('');
+  const badge=document.querySelector('#tab-messages .tab-badge');
+  const unread=SESSIONS.filter(s=>s.ownerId===H.staffId).reduce((n,s)=>n+s.unread,0);badge.textContent=unread>99?'99+':unread;badge.hidden=!unread;
+  document.getElementById('list-end').textContent=list.length?`已显示全部 ${list.length} 位客户`:'';
+}
+function openSingleTransfer(){
+  if(!canSendToCurrentCustomer())return;
+  if(pendingTransfer(S.currentChat.id)){openTransferRecords('outgoing');return;}
+  openTransfer([S.currentChat.id]);
+}
+function openTransfer(ids){
+  expireTransfers();
+  const customers=ids.map(id=>SESSIONS.find(s=>s.id===id));
+  if(!customers.length||customers.some(s=>!s||!canSelectCustomer(s))||new Set(customers.map(s=>s.storeId)).size!==1){renderSessions();showToast('客户状态已变化，请重新选择同门店客户');return;}
+  H.draft=[...new Set(ids)];H.target='';
+  document.getElementById('transfer-title').textContent=`转交 ${H.draft.length} 位客户`;
+  document.getElementById('transfer-summary').innerHTML=`<strong>将 ${H.draft.length} 位客户转交给同门店员工</strong>${storeName(customers[0].storeId)} · ${customers.map(s=>esc(s.name)).join('、')}`;
+  document.getElementById('transfer-search').value='';document.getElementById('transfer-note').value='';
+  renderTransferStaff();showSheet('bs-transfer');
+}
+function eligibleStaff(staff,customers){return staff&&staff.active&&staff.online&&staff.id!==H.staffId&&customers.length>0&&customers.every(s=>s&&staff.stores.includes(s.storeId)&&staff.accounts.includes(s.accountId));}
+function renderTransferStaff(){
+  const customers=H.draft.map(id=>SESSIONS.find(s=>s.id===id));
+  const keyword=document.getElementById('transfer-search').value.trim().toLowerCase();
+  const list=STAFF.filter(staff=>staff.id!==H.staffId&&staff.active&&staff.stores.includes(customers[0]?.storeId)&&staff.name.toLowerCase().includes(keyword)).sort((a,b)=>Number(eligibleStaff(b,customers))-Number(eligibleStaff(a,customers)));
+  document.getElementById('transfer-staff').innerHTML=list.map(staff=>{
+    const allowed=eligibleStaff(staff,customers);
+    const reason=!staff.online?'离线，暂不可接收':!allowed?'无部分客户企微渠道接待权限':`在线 · 接待 ${SESSIONS.filter(s=>s.ownerId===staff.id).length} 位客户`;
+    return `<button class="staff-option" role="radio" aria-checked="${H.target===staff.id}" ${allowed?'':'disabled'} onclick="chooseTransferStaff('${staff.id}')"><span class="tr-av" style="background:${staff.color}">${staff.name[0]}</span><span class="tr-info"><span class="tr-name">${staff.name}</span><span class="tr-stat">${reason}</span></span><span class="pick-circle">${H.target===staff.id?'<i class="ri-check-line"></i>':''}</span></button>`;
+  }).join('')||'<div class="handoff-empty">没有符合条件的同门店员工</div>';
+  const target=STAFF.find(s=>s.id===H.target);document.getElementById('transfer-submit').disabled=!eligibleStaff(target,customers);
+  document.getElementById('transfer-submit').textContent=target?`发送给${target.name}（${H.draft.length} 位）`:'发送转交请求';
+}
+function chooseTransferStaff(id){H.target=id;renderTransferStaff();}
+function submitTransfer(){
+  expireTransfers();
+  const customers=H.draft.map(id=>SESSIONS.find(s=>s.id===id));
+  if(!eligibleStaff(STAFF.find(s=>s.id===H.target),customers)||customers.some(s=>!canSelectCustomer(s))||new Set(customers.map(s=>s.storeId)).size!==1){closeSheet();renderSessions();showToast('客户或员工状态已变化，请重新选择');return;}
+  const now=Date.now(),batchId='b'+now+'-'+Math.random().toString(36).slice(2,8);
+  const note=document.getElementById('transfer-note').value.trim().slice(0,200);
+  customers.forEach((s,i)=>H.transfers.push({id:batchId+'-'+i,batchId,customerId:s.id,customerName:s.name,storeId:s.storeId,accountId:s.accountId,from:H.staffId,to:H.target,note,status:'pending',createdAt:now,updatedAt:now,expiresAt:now+24*60*60*1000}));
+  closeSheet();exitSelection();syncChatHandoff();showToast(`已发送 ${customers.length} 位客户的转交请求，等待对方接受`,3500);
+}
+function openTransferInbox(){expireTransfers();H.hub='incoming';H.reviewSelected.clear();renderHandoffHub();showSheet('bs-handoff-hub');}
+function openTransferUpdates(){
+  const latest=H.transfers.filter(t=>(t.from===H.staffId||t.to===H.staffId)&&t.status!=='pending'&&t.updatedAt>(H.seen[H.staffId+':'+(t.from===H.staffId?'outgoing':'received')]||0)).sort((a,b)=>b.updatedAt-a.updatedAt)[0];
+  openTransferRecords(latest?.from===H.staffId?'outgoing':'received');
+}
+function openTransferRecords(view='outgoing'){
+  expireTransfers();H.hub=view;H.reviewSelected.clear();H.seen[H.staffId+':'+view]=Date.now();renderHandoffHub();renderSessions();showSheet('bs-handoff-hub');
+}
+function recordTabs(){return `<div class="handoff-tabs"><button class="${H.hub==='outgoing'?'on':''}" onclick="openTransferRecords('outgoing')">我转出的</button><button class="${H.hub==='received'?'on':''}" onclick="openTransferRecords('received')">我接收的</button></div>`;}
+function renderHandoffHub(){
+  expireTransfers();
+  const inbox=H.hub==='incoming';
+  document.getElementById('handoff-hub-title').textContent=inbox?'待接收客户':'客户转交记录';
+  let list=H.transfers.filter(t=>inbox?t.to===H.staffId&&t.status==='pending':H.hub==='outgoing'?t.from===H.staffId:t.to===H.staffId);
+  const groups=new Map();list.sort((a,b)=>b.createdAt-a.createdAt).forEach(t=>{if(!groups.has(t.batchId))groups.set(t.batchId,[]);groups.get(t.batchId).push(t);});
+  const cards=[...groups.values()].map(rows=>{
+    const first=rows[0],allRows=H.transfers.filter(t=>t.batchId===first.batchId),pending=rows.filter(t=>t.status==='pending');
+    const selected=pending.filter(t=>H.reviewSelected.has(t.id));
+    const outgoing=first.from===H.staffId;
+    const summary=Object.entries(HANDOFF_LABELS).map(([status,label])=>{const n=allRows.filter(t=>t.status===status).length;return n?`${n} 位${label}`:'';}).filter(Boolean).join(' · ');
+    return `<section class="handoff-card"><h3>${outgoing?`转交给${esc(staffName(first.to))}`:`${esc(staffName(first.from))}向你转交`} · ${allRows.length} 位客户</h3><p class="handoff-meta">${storeName(first.storeId)} · ${handoffTime(first.createdAt)}<br>${summary}</p>${first.note?`<div class="handoff-summary">${esc(first.note)}</div>`:''}
+      ${rows.map(t=>`<div class="handoff-customer"><label>${!outgoing&&t.status==='pending'?`<input type="checkbox" ${H.reviewSelected.has(t.id)?'checked':''} onchange="toggleReview('${t.id}',this.checked)">`:''}<span>${esc(t.customerName)}</span></label><span class="handoff-status ${t.status}">${HANDOFF_LABELS[t.status]}</span>${t.status==='pending'?`<button onclick="openHandoffDetail('${t.id}')">${outgoing?'查看进度':'查看交接'}</button>`:''}</div>`).join('')}
+      ${pending.length?`<div class="handoff-actions">${outgoing?`<button class="handoff-btn secondary" onclick="actOnBatch('${first.batchId}','cancelled')">撤销待接受的 ${pending.length} 位</button>`:`<button class="handoff-btn secondary" onclick="actOnBatch('${first.batchId}','rejected')">${selected.length?'拒绝所选（'+selected.length+'）':'全部拒绝'}</button><button class="handoff-btn" onclick="actOnBatch('${first.batchId}','accepted')">${selected.length?'接受所选（'+selected.length+'）':'全部接受'}</button>`}</div>`:''}</section>`;
+  }).join('');
+  document.getElementById('handoff-hub-body').innerHTML=(inbox?'<div class="handoff-summary">接受后客户进入你的列表，并切换为人工接待。可逐个查看、勾选部分处理，或全部接受。</div>':recordTabs())+(cards||`<div class="handoff-empty">${inbox?'暂无待接收客户':'暂无转交记录'}</div>`);
+}
+function toggleReview(id,checked){checked?H.reviewSelected.add(id):H.reviewSelected.delete(id);renderHandoffHub();}
+function actOnBatch(batchId,status){
+  const pending=H.transfers.filter(t=>t.batchId===batchId&&t.status==='pending');
+  const selected=pending.filter(t=>H.reviewSelected.has(t.id));
+  decideTransfers((status==='cancelled'||!selected.length?pending:selected).map(t=>t.id),status);
+}
+function openHandoffDetail(id){
+  expireTransfers();
+  const t=H.transfers.find(t=>t.id===id);
+  if(!t||t.status!=='pending'||(t.from!==H.staffId&&t.to!==H.staffId)){returnHandoffHub();showToast('请求已处理，请查看最新记录');return;}
+  H.detailId=id;const s=SESSIONS.find(s=>s.id===t.customerId),outgoing=t.from===H.staffId;
+  document.getElementById('handoff-detail-title').textContent=outgoing?'转交进度':'交接详情';
+  document.getElementById('handoff-detail-body').innerHTML=`<div class="handoff-summary"><strong>${esc(t.customerName)}</strong>${storeName(t.storeId)} · ${esc(staffName(t.from))} → ${esc(staffName(t.to))}<br>待接受 · ${handoffTime(t.expiresAt)} 前有效<br>${s.replied==='pending'?'客户消息待回复':'已回复客户'} · ${s.unread} 条未读</div><p class="handoff-label">交接备注</p><div class="handoff-summary">${esc(t.note||'未填写交接备注')}</div><p class="handoff-label">近期聊天（仅查看，接受后可回复）</p>${(MSGS[t.customerId]||[]).slice(-6).map(m=>`<div class="handoff-preview"><small>${m.from==='customer'?'客户':messageSourceTag(m)} · ${esc(m.time)}</small>${esc(m.type==='text'?m.text:({image:'[图片]',voice:'[语音]',file:'[文件]'}[m.type]||'[消息]'))}</div>`).join('')||'<div class="handoff-empty">暂无聊天记录</div>'}<div class="handoff-actions"><button class="handoff-btn secondary" onclick="returnHandoffHub()">返回列表</button>${outgoing?`<button class="handoff-btn danger" onclick="decideTransfers(['${id}'],'cancelled')">撤销转交</button>`:`<button class="handoff-btn secondary" onclick="decideTransfers(['${id}'],'rejected')">拒绝</button><button class="handoff-btn" onclick="decideTransfers(['${id}'],'accepted',true)">接受并接待</button>`}</div>`;
+  showSheet('bs-handoff-detail');
+}
+function returnHandoffHub(){H.detailId=null;renderHandoffHub();showSheet('bs-handoff-hub');}
+function decideTransfers(ids,status,openAfter=false){
+  if(!['accepted','rejected','cancelled'].includes(status))return;
+  expireTransfers();
+  let done=0,lastCustomer=null;
+  [...new Set(ids)].forEach(id=>{
+    const t=H.transfers.find(t=>t.id===id);if(!t||t.status!=='pending')return;
+    if(status==='cancelled'?t.from!==H.staffId:t.to!==H.staffId)return;
+    const customer=SESSIONS.find(s=>s.id===t.customerId),recipient=STAFF.find(s=>s.id===t.to);
+    if(!customer||customer.ownerId!==t.from||customer.storeId!==t.storeId||!recipient?.active||!recipient.stores.includes(t.storeId)||!recipient.accounts.includes(customer.accountId)){
+      t.status='invalid';t.updatedAt=Date.now();return;
+    }
+    if(status==='accepted'){customer.ownerId=t.to;customer.mode='human';customer.newTransfer=true;lastCustomer=customer.id;}
+    t.status=status;t.updatedAt=Date.now();H.reviewSelected.delete(t.id);done++;
+  });
+  renderSessions();syncChatHandoff();
+  if(openAfter&&done&&lastCustomer){closeSheet();returnToCustomerList();openChat(lastCustomer);}
+  else {H.detailId=null;renderHandoffHub();showSheet('bs-handoff-hub');}
+  showToast(done?`${done} 位客户${HANDOFF_LABELS[status]}${status==='accepted'?'，已加入你的列表':''}`:'请求已处理或已失效，请查看最新状态',3000);
+}
+function syncChatHandoff(){
+  const banner=document.getElementById('chat-handoff'),input=document.getElementById('chat-input-area');
+  if(!S.currentChat){banner.hidden=true;input.hidden=false;return;}
+  const owned=S.currentChat.ownerId===H.staffId,t=pendingTransfer(S.currentChat.id);
+  banner.hidden=owned&&!t;input.hidden=!owned;
+  document.querySelector('.chat-more-btn').disabled=!owned;document.querySelector('.chat-call-btn').disabled=!owned;
+  if(!owned){
+    hidePlus();hideEmoji();closeChatSidebar();closeLpMenu();
+    if(['pg-cust','pg-orders','pg-order-detail'].includes(S.currentPage)){returnToCustomerList();showToast('客户已完成交接，已返回列表');return;}
+    document.getElementById('ci-box').value='';
+    document.getElementById('msgs-wrap').innerHTML='<div class="handoff-empty">客户已完成交接，后续由接收员工接待。</div>';
+    banner.innerHTML=`<span>${esc(staffName(S.currentChat.ownerId))}已接受该客户，你已结束接待。</span><button onclick="returnToCustomerList()">返回列表</button>`;
+  }else if(t){banner.innerHTML=`<span>等待${esc(staffName(t.to))}接受 · 你仍可继续接待</span><button onclick="openTransferRecords('outgoing')">查看 / 撤销</button>`;}
+}
+function canSendToCurrentCustomer(){
+  expireTransfers();
+  if(!S.currentChat||S.currentChat.ownerId!==H.staffId){syncChatHandoff();showToast('客户已转交，无法继续接待');return false;}
+  return true;
+}
+function returnToCustomerList(){
+  closeSheet();closeChatSidebar();closeLpMenu();hidePlus();hideEmoji();
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active','behind');p.style.transform='';});
+  S.currentPage='pg-list';S.pageStack=['pg-list'];S.currentChat=null;
+  document.getElementById('pg-list').classList.add('active');switchListTab('messages');syncChatHandoff();
+}
+function switchDemoStaff(id){
+  if(!STAFF.some(staff=>staff.id===id&&staff.active))return;
+  expireTransfers();H.staffId=id;H.selecting=false;H.selected.clear();H.reviewSelected.clear();
+  S.currentAccount='all';S.primaryStatus='all';S.listFilters={opening:'all',deal:'all',addTime:'all'};document.getElementById('list-search').value='';
+  document.getElementById('ci-box').value='';returnToCustomerList();showToast(`已切换为${staffName(id)}`);
+}
+setInterval(()=>{
+  if(expireTransfers()){
+    renderSessions();syncChatHandoff();
+    if(_activeSheet==='bs-handoff-hub'&&['incoming','outgoing','received'].includes(H.hub))renderHandoffHub();
+    if(_activeSheet==='bs-handoff-detail'&&H.detailId)openHandoffDetail(H.detailId);
+  }
+},30000);
+
 
 /* ── END SESSION ── */
 function doEndSession(){closeDlg('dlg-end');showToast('会话已结束');if(S.currentPage==='pg-chat')setTimeout(()=>goBack(),600);}
@@ -2477,7 +2765,7 @@ document.addEventListener('touchmove',e=>{
   if(!e.target.closest('.sess-scroll,.msgs-wrap,.bs-body,.bs,.voice-sheet,.cust-scroll,.orders-scroll,.od-scroll,.emoji-grid,.chat-side-drawer,.mine-content'))e.preventDefault();
 },{passive:false});
 
-document.addEventListener('DOMContentLoaded',()=>{renderEmojiPanel();renderSessions();});
+document.addEventListener('DOMContentLoaded',()=>{initHandoffDemo();renderEmojiPanel();renderSessions();});
 </script>
 </body>
 </html>
