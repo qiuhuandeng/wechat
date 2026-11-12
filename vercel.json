@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
-    { "source": "/", "destination": "/企微后台.html" },
-    { "source": "/index.html", "destination": "/企微后台.html" }
+    { "source": "/聊天移动.html", "destination": "/index.html" }
   ]
 }
