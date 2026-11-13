@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>客情助手系统入口 · WEID智慧美业</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231677ff'/%3E%3Cpath d='m7 10 4 13 5-9 5 9 4-13' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body { margin: 0; min-width: 280px; background: #f0f2f5; color: #333; font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .header { height: 56px; padding: 0 32px; display: flex; align-items: center; background: #fff; border-bottom: 1px solid #e8edf2; }
+    .brand { display: inline-flex; align-items: baseline; gap: 6px; font-size: 16px; font-weight: 600; color: #1a2332; }
+    .brand strong { color: #1677ff; font-size: 20px; letter-spacing: -.5px; }
+    main { width: min(1040px, 100%); margin: 80px auto; padding: 0 24px; }
+    h1 { margin: 0 0 8px; font-size: 24px; line-height: 1.4; font-weight: 600; color: #1a2332; }
+    .intro { margin: 0 0 28px; color: #7a8699; }
+    .systems { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .system { display: flex; flex-direction: column; min-width: 0; padding: 24px; background: #fff; border: 1px solid #e8edf2; border-radius: 8px; color: inherit; text-decoration: none; transition: border-color .16s, box-shadow .16s; }
+    .system:hover { border-color: #91caff; box-shadow: 0 4px 16px rgb(22 119 255 / 6%); }
+    .system:focus-visible { outline: 3px solid #1677ff; outline-offset: 4px; }
+    .icon { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 20px; border-radius: 8px; background: #eef5ff; color: #1677ff; }
+    svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .system h2 { margin: 0 0 8px; color: #1a2332; font-size: 18px; font-weight: 600; }
+    .description { margin: 0 0 28px; color: #7a8699; font-size: 13px; }
+    .open { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; color: #1677ff; font-weight: 500; }
+    .open svg { width: 18px; height: 18px; }
+    @media (max-width: 700px) {
+      .header { padding: 0 20px; }
+      main { margin: 32px auto; padding: 0 20px; }
+      h1 { font-size: 22px; }
+      .intro { margin-bottom: 20px; }
+      .systems { grid-template-columns: 1fr; }
+      .system { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 0 16px; padding: 20px; }
+      .icon { grid-row: 1 / 3; margin: 0; }
+      .system h2 { margin-bottom: 4px; }
+      .description { margin: 0; }
+      .open { grid-column: 2; margin-top: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .system { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="header"><span class="brand"><strong>WEID</strong>智慧美业</span></header>
+  <main>
+    <h1>系统入口</h1>
+    <p class="intro">选择需要使用的端，各页面将在新标签页打开</p>
+    <nav class="systems" aria-label="选择系统">
+      <a class="system" href="h5.html" target="_blank" rel="noopener noreferrer" aria-label="移动端 H5，在新标签页打开">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10 5h4M11 18.5h2"/></svg></span>
+        <h2>移动端 H5</h2>
+        <p class="description">移动客情服务与员工工作台</p>
+        <span class="open">进入系统<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+      <a class="system" href="chat.html" target="_blank" rel="noopener noreferrer" aria-label="会话中心 PC，在新标签页打开">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8 21h8M12 16.5V21M2.5 12.5h19"/></svg></span>
+        <h2>会话中心 PC</h2>
+        <p class="description">企微会话、客户沟通与消息管理</p>
+        <span class="open">进入系统<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+      <a class="system" href="admin.html" target="_blank" rel="noopener noreferrer" aria-label="管理后台，在新标签页打开">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+        <h2>管理后台</h2>
+        <p class="description">客服帐号、企微帐号与会话管理</p>
+        <span class="open">进入系统<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>
